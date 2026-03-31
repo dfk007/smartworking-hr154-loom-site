@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCode Loom Script Guide</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121936;
+      --panel-2: #192246;
+      --text: #e8ecf8;
+      --muted: #aab4d6;
+      --accent: #6ea8fe;
+      --accent-2: #8cf0c6;
+      --border: #2a3769;
+      --good: #173d2b;
+      --warn: #453210;
+      --code: #0e1530;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #09101f 0%, #0f1730 100%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(110, 168, 254, 0.18), rgba(140, 240, 198, 0.08));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 10px;
+    }
+
+    h1 {
+      font-size: 32px;
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-top: 24px;
+    }
+
+    h3 {
+      font-size: 17px;
+      margin-top: 18px;
+    }
+
+    p {
+      margin: 8px 0;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0 16px;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #111831;
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #08101f;
+      border-color: var(--accent);
+    }
+
+    .tab-panel {
+      display: none;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+
+    ul, ol {
+      margin: 10px 0 0 20px;
+      padding: 0;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: rgba(110, 168, 254, 0.09);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+
+    .good {
+      border-left-color: var(--accent-2);
+      background: rgba(140, 240, 198, 0.10);
+    }
+
+    .warn {
+      border-left-color: #ffc857;
+      background: rgba(255, 200, 87, 0.10);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 0;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--code);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .kpi .card strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent-2);
+    }
+
+    .asset-list {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .asset-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .media-card {
+      grid-column: span 6;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .media-card.full {
+      grid-column: span 12;
+    }
+
+    audio,
+    video {
+      width: 100%;
+      margin-top: 12px;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .embed-frame {
+      width: 100%;
+      min-height: 900px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #09101f;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .span-8, .span-6, .span-4 {
+        grid-column: span 12;
+      }
+
+      .media-card,
+      .media-card.full {
+        grid-column: span 12;
+      }
+
+      .kpi {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .kpi {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>OpenCode Loom Video Guide for Daud Farzand</h1>
+      <p class="muted">Built from the Smart Working guide, the sample Loom transcript, your resume, the role JD, and the context from your earlier Smart Working conversation.</p>
+      <div class="pill-row">
+        <div class="pill">Role: DevOps Engineer - GCP & Terraform [HR154]</div>
+        <div class="pill">Target length: 4:40 to 4:55</div>
+        <div class="pill">Main story: platform ownership on GCP</div>
+        <div class="pill">Primary theme: Terraform + Cloud platforms + reliability</div>
+      </div>
+      <div class="kpi">
+        <div class="card">
+          <strong>5:41</strong>
+          <span class="small">Sample video runtime. Useful structure, but too long to copy exactly.</span>
+        </div>
+        <div class="card">
+          <strong>3</strong>
+          <span class="small">Strengths the sample candidate states early. This is worth copying.</span>
+        </div>
+        <div class="card">
+          <strong>1</strong>
+          <span class="small">Flagship project story should dominate the middle of your video.</span>
+        </div>
+        <div class="card">
+          <strong>0</strong>
+          <span class="small">Do not show resume or LinkedIn on screen. Show project material only.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="sample">Sample Video Breakdown</button>
+      <button class="tab-btn" data-tab="improvements">Why The Script Needed Updating</button>
+      <button class="tab-btn" data-tab="your-script">What You Should Say</button>
+      <button class="tab-btn" data-tab="screen-share">Screen Share Plan</button>
+      <button class="tab-btn" data-tab="delivery">Delivery And Positioning</button>
+      <button class="tab-btn" data-tab="practice">Practice Scripts</button>
+      <button class="tab-btn" data-tab="media">Media Library</button>
+      <button class="tab-btn" data-tab="recording">Recording Checklist</button>
+      <button class="tab-btn" data-tab="claude">Claude Version</button>
+    </div>
+
+    <section id="sample" class="tab-panel active">
+      <h2>What The Sample Video Does</h2>
+      <p>The sample candidate uses a very clear sales structure. It is not a casual self-introduction. It is a compressed technical pitch designed to prove role-fit quickly.</p>
+
+      <div class="grid">
+        <div class="card span-12">
+          <h3>Exact Structure</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>What the person says</th>
+                <th>What it accomplishes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0:00 - 1:27</td>
+                <td>Introduces himself as a senior DevOps and cloud engineer, names cloud platforms, says why the role fits, then summarizes three strengths.</td>
+                <td>Creates immediate credibility and mirrors the JD vocabulary from the first minute.</td>
+              </tr>
+              <tr>
+                <td>1:27 - 4:32</td>
+                <td>Walks through one recent platform project: context, responsibilities, challenge, Terraform design, Kubernetes deployment, event-driven architecture, CI/CD, observability, and results.</td>
+                <td>Shows ownership, architecture thinking, and practical execution instead of only listing tools.</td>
+              </tr>
+              <tr>
+                <td>4:32 - 5:41</td>
+                <td>Explains why he is a strong fit, mentions end-to-end ownership, remote async work, interest in GCP services, and ends with a thank you.</td>
+                <td>Closes the loop on fit, communication style, and motivation.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card span-6">
+          <h3>How The Sample Candidate Describes Himself</h3>
+          <ul>
+            <li>Senior DevOps and Cloud Engineer.</li>
+            <li>Multi-cloud background across AWS, Azure, and GCP.</li>
+            <li>Interested in the role because it matches both current experience and future growth.</li>
+            <li>Strong in three areas: Terraform infrastructure, scalable container platforms, and CI/CD automation.</li>
+            <li>Frames himself as someone who builds reliable, scalable, production-ready cloud platforms.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>Talking Strategy Used In The Sample</h3>
+          <ul>
+            <li>Uses job-description keywords repeatedly.</li>
+            <li>Moves quickly from identity to proof.</li>
+            <li>Centers the middle on one project, not many disconnected examples.</li>
+            <li>Explains challenge, design choice, implementation, and result in order.</li>
+            <li>Closes with ownership, remote readiness, and motivation.</li>
+          </ul>
+        </div>
+
+        <div class="card span-8">
+          <h3>What The Sample Video Covers In Detail</h3>
+          <ul>
+            <li>Reusable Terraform modules for networking, compute, IAM, and storage.</li>
+            <li>Multiple environments including production, staging, and customer-specific deployments.</li>
+            <li>Containerized workloads on Kubernetes, with attention to stateless services and autoscaling.</li>
+            <li>Event-driven architecture concepts such as retries, acknowledgement handling, and dead-letter patterns.</li>
+            <li>CI/CD using GitHub Actions and GitOps-style deployment automation.</li>
+            <li>Observability using Prometheus, Grafana, OpenTelemetry, plus SLI/SLO language.</li>
+            <li>Results in terms of deployment speed, uptime, scalability, and cost efficiency.</li>
+          </ul>
+        </div>
+
+        <div class="card span-4">
+          <h3>Important Limitation To Copy Carefully</h3>
+          <div class="callout warn">
+            The sample video runs about 5 minutes 41 seconds. Smart Working's guide says your video should not be longer than 5 minutes. Copy the structure, not the runtime.
+          </div>
+        </div>
+
+        <div class="card span-12">
+          <h3>Condensed Transcript-Based Summary Of The Full Video</h3>
+          <pre>Opening: "I am a senior DevOps and cloud engineer... this role fits my background in GCP, Terraform, serverless architecture, Cloud Run and observability."
+
+Strengths: reusable Terraform modules, scalable container systems, CI/CD and GitOps automation.
+
+Project section: a multi-cloud platform across AWS and GCP; ownership of architecture and deployment; challenge was managing production, staging and customer-specific environments; solution used Terraform modules, Kubernetes, event-driven design, CI/CD, observability, SRE practices, and automation.
+
+Results: better deployment speed, stronger uptime, scalable platform support, improved reliability and cost efficiency.
+
+Close: strong fit because of Terraform, scalable cloud infrastructure, production ownership, remote async communication, and motivation to work more deeply with GCP services.</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="improvements" class="tab-panel">
+      <h2>Why The Original Claude Script Should Be Updated</h2>
+      <p>Yes, it should be updated. The original draft was solid, but the sample video reveals a stronger structure and sharper positioning style.</p>
+
+      <div class="grid">
+        <div class="card span-6">
+          <h3>What Was Good In The Original</h3>
+          <ul>
+            <li>It correctly emphasized GCP and Terraform.</li>
+            <li>It used your strongest recent experience.</li>
+            <li>It included CI/CD and observability, which matter for the role.</li>
+            <li>It was already reasonably close to a 5-minute format.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>What Needed To Change</h3>
+          <ul>
+            <li>It opened with a biography, but not with the sample's sharper "three strengths" framing.</li>
+            <li>It was too centered on AI and LLM specifics instead of broader platform ownership.</li>
+            <li>The project section read more like a stack list than a challenge-to-outcome story.</li>
+            <li>It did not emphasize customer-specific environments and multi-environment Terraform strongly enough.</li>
+            <li>It did not answer "why should we hire you" as directly as the guide requests.</li>
+          </ul>
+        </div>
+
+        <div class="card span-12">
+          <h3>How The Updated Version Improves Your Positioning</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Original Claude Version</th>
+                <th>Updated OpenCode Version</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Opening</td>
+                <td>Intro plus background.</td>
+                <td>Intro plus role-fit plus three strengths in the first minute.</td>
+              </tr>
+              <tr>
+                <td>Role alignment</td>
+                <td>Strong on GCP and Terraform, but still very AI-heavy.</td>
+                <td>More clearly framed as DevOps, platform engineering, reliability, automation, and cloud operations.</td>
+              </tr>
+              <tr>
+                <td>Project walkthrough</td>
+                <td>Feature list and tool list.</td>
+                <td>Challenge -> implementation -> ownership -> result.</td>
+              </tr>
+              <tr>
+                <td>JD vocabulary</td>
+                <td>Partially mirrored.</td>
+                <td>More directly mirrors multi-environment, customer-specific deployments, cost efficiency, observability, remote async work.</td>
+              </tr>
+              <tr>
+                <td>Close</td>
+                <td>Polite CTA.</td>
+                <td>More directly explains why you are hireable and ready to contribute.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card span-12">
+          <div class="callout good">
+            Best positioning decision: present yourself as a platform and infrastructure engineer who happens to have strong AI-platform experience, not as someone only suitable for LLM-specific work. That makes you fit this role better.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="your-script" class="tab-panel">
+      <h2>What You Should Say In Your Loom</h2>
+      <p>This is the recommended version to record from. Speak from it naturally. Do not read it like a speech.</p>
+
+      <div class="grid">
+        <div class="card span-12">
+          <h3>Final Script</h3>
+          <pre>0:00 - 0:55 | Start Strong
+
+Hi, I am Daud Farzand, an AI Platform Infrastructure Engineer based in Lahore. I currently work remotely with US-based teams, and I have just over four years of production experience across DevOps, cloud infrastructure, platform engineering, and MLOps, with a strong hands-on focus on Google Cloud Platform and Terraform.
+
+I am excited about this role because it combines the kind of work I do best: building reliable cloud infrastructure, automating deployments, and operating production systems with strong observability and cost awareness.
+
+If I had to summarize my strengths in three areas, they would be: first, Terraform-based infrastructure across multiple environments; second, containerized platform operations on GCP using services like Cloud Run, GKE, and Vertex AI; and third, CI/CD and observability for production reliability.
+
+0:55 - 3:20 | Showcase Your Best Work
+
+A strong example of my work is the platform infrastructure I have built across my recent roles at Tech Prysm and Techanzy, where I was responsible for designing and operating production systems end to end.
+
+One project I am especially proud of was building and deploying a production-grade AI platform with multi-environment infrastructure, containerized services, observability, and automated delivery. The challenge was to support reliable deployments across development, staging, production, and customer-specific environments while keeping the platform secure, scalable, and cost efficient.
+
+To solve that, I used Terraform to provision and manage cloud infrastructure in a repeatable way, including IAM, networking, storage, and compute resources. On Google Cloud, I worked with Vertex AI workloads, Cloud Run for serverless API services, GKE for container orchestration, and BigQuery for usage analytics. I also used GitHub Actions for CI/CD so infrastructure and application changes could move through auditable deployment workflows instead of manual changes.
+
+On the platform side, I worked with containerized services built with FastAPI, PostgreSQL, PgBouncer, object storage, and supporting services, with health checks and deployment automation built in. In another production system, I also used Terraform, Docker Compose, Ansible, and WireGuard to provision hybrid infrastructure and reduce deployment time significantly.
+
+Observability was a major part of my ownership. I implemented Prometheus, Grafana, and OpenTelemetry to monitor latency, resource usage, and service health, and used those signals to improve reliability and performance. That work helped us maintain high availability, support production workloads with confidence, and reduce costs through better deployment discipline, prompt caching, and more efficient infrastructure usage.
+
+What is most relevant for this role is that I was not only deploying services, I was owning the environment end to end: architecture, infrastructure as code, deployment workflows, monitoring, reliability, and ongoing optimization.
+
+3:20 - 4:20 | Why I Fit This Role
+
+I believe I am a strong fit for this role because the core requirements match the work I have already been doing in production. I have hands-on experience with GCP, Terraform, Docker, Kubernetes, GitHub Actions, observability stacks, and remote collaboration.
+
+I also think my background is a good match for the platform itself. I have worked in multi-environment and multi-tenant systems, including customer-specific deployments, where reliability, access control, and cost efficiency matter every day. I am comfortable owning infrastructure beyond the initial setup, including debugging, incident response, performance tuning, and documentation.
+
+I have also been working remotely with international teams, so async communication, clear written updates, and operational documentation are already part of how I work.
+
+4:20 - 4:50 | Close
+
+What attracts me to Smart Working is the opportunity to contribute to a high-standard remote engineering environment while going deeper into the exact platform work I enjoy most on GCP and Terraform.
+
+Thank you for your time. I would be glad to discuss any part of my experience in more depth, and I would be excited to contribute to your team.</pre>
+        </div>
+
+        <div class="card span-6">
+          <h3>Best Points From Your Resume To Lean On</h3>
+          <ul>
+            <li>Production GCP work: Vertex AI, Cloud Run, GKE, BigQuery.</li>
+            <li>Terraform-driven infrastructure and CI/CD automation.</li>
+            <li>Observability: Prometheus, Grafana, OpenTelemetry.</li>
+            <li>Remote work with US-based teams.</li>
+            <li>Multi-tenant and customer-facing platform ownership.</li>
+            <li>Cost optimization and deployment-time reduction.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>What To Emphasize Less</h3>
+          <ul>
+            <li>Too much deep LLM product detail.</li>
+            <li>Too many tool names in a row without context.</li>
+            <li>Long discussion of frontend or UI work.</li>
+            <li>Anything that sounds like resume recitation.</li>
+          </ul>
+        </div>
+
+        <div class="card span-12">
+          <div class="callout">
+            Important honesty note: your resume is strongest on GCP, Terraform, Cloud Run, GKE, observability, multi-environment delivery, and platform ownership. Stay strongest there. Do not overclaim direct Pub/Sub depth if you cannot defend it in an interview.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-share" class="tab-panel">
+      <h2>Screen Share Plan</h2>
+      <p>Only share your screen if you have safe material. If you cannot share a sanitized project, record camera-only in full-screen mode as Smart Working instructed.</p>
+
+      <div class="grid">
+        <div class="card span-6">
+          <h3>Best Order If You Share Screen</h3>
+          <ol>
+            <li>Start on camera for the intro.</li>
+            <li>Switch to a simple architecture diagram for the project overview.</li>
+            <li>Show a Terraform module or folder structure.</li>
+            <li>Show a GitHub Actions workflow or deployment pipeline view.</li>
+            <li>Show a monitoring dashboard screenshot if available.</li>
+            <li>Return to camera for the closing 20 to 30 seconds.</li>
+          </ol>
+        </div>
+
+        <div class="card span-6">
+          <h3>What You Can Safely Show</h3>
+          <ul>
+            <li>Sanitized Terraform folders and modules.</li>
+            <li>Redacted architecture diagrams.</li>
+            <li>Pipeline YAML with secrets hidden.</li>
+            <li>Monitoring dashboards with names or URLs blurred.</li>
+            <li>Public-facing or mock environment screens only.</li>
+          </ul>
+        </div>
+
+        <div class="card span-12">
+          <h3>What Not To Show</h3>
+          <ul>
+            <li>Resume or LinkedIn profile.</li>
+            <li>Internal client names if they are confidential.</li>
+            <li>Secrets, URLs, tokens, IPs, project IDs, production hostnames, or customer data.</li>
+            <li>Messy desktop tabs and unrelated windows.</li>
+          </ul>
+        </div>
+
+        <div class="card span-12">
+          <h3>Suggested Visual Sequence To Match Your Script</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Script section</th>
+                <th>Visual</th>
+                <th>Why it helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Opening</td>
+                <td>Face camera only</td>
+                <td>Builds trust and lets them assess your communication clearly.</td>
+              </tr>
+              <tr>
+                <td>Project challenge and architecture</td>
+                <td>Architecture diagram</td>
+                <td>Makes your explanation concrete without exposing code immediately.</td>
+              </tr>
+              <tr>
+                <td>Terraform and CI/CD</td>
+                <td>Repo structure or workflow file</td>
+                <td>Proves the infrastructure is real and structured.</td>
+              </tr>
+              <tr>
+                <td>Observability and results</td>
+                <td>Dashboard screenshot</td>
+                <td>Reinforces production ownership and reliability mindset.</td>
+              </tr>
+              <tr>
+                <td>Close</td>
+                <td>Back to face camera</td>
+                <td>Ends with confidence and a stronger human connection.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="delivery" class="tab-panel">
+      <h2>Delivery And Positioning</h2>
+
+      <div class="grid">
+        <div class="card span-4">
+          <h3>How You Should Sound</h3>
+          <ul>
+            <li>Calm</li>
+            <li>Direct</li>
+            <li>Professional</li>
+            <li>Confident, not salesy</li>
+            <li>Technical, but easy to follow</li>
+          </ul>
+        </div>
+
+        <div class="card span-4">
+          <h3>Positioning Sentence To Keep In Mind</h3>
+          <div class="callout good">
+            I build and operate production cloud platforms with Terraform, GCP, container platforms, CI/CD, and observability, and I already work well in remote async environments.
+          </div>
+        </div>
+
+        <div class="card span-4">
+          <h3>Best Keywords To Naturally Use</h3>
+          <ul>
+            <li>production</li>
+            <li>reliable</li>
+            <li>multi-environment</li>
+            <li>customer-specific deployments</li>
+            <li>automation</li>
+            <li>observability</li>
+            <li>cost efficiency</li>
+            <li>end-to-end ownership</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>Recording Checklist</h3>
+          <ul>
+            <li>Keep it under 5 minutes.</li>
+            <li>Quiet room, tested microphone, stable internet.</li>
+            <li>Good lighting and clean background.</li>
+            <li>Open only the windows you plan to show.</li>
+            <li>Do one rehearsal, then record a natural take.</li>
+            <li>Use your script as cues, not as a reading document.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>Avoid These Mistakes</h3>
+          <ul>
+            <li>Sounding memorized.</li>
+            <li>Listing too many tools without explaining impact.</li>
+            <li>Going too deep into AI terminology for a DevOps role.</li>
+            <li>Talking past 5 minutes.</li>
+            <li>Claiming experience you may not be able to defend later.</li>
+          </ul>
+        </div>
+
+        <div class="card span-12">
+          <h3>Final Strategy</h3>
+          <pre>1. Start with confidence and role fit.
+2. State three strengths quickly.
+3. Spend most of the video on one strong project story.
+4. Emphasize ownership, reliability, automation, and observability.
+5. Close by showing you are remote-ready and ready to contribute.</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice" class="tab-panel">
+      <h2>Practice Scripts</h2>
+      <p>This tab brings the two extra practice files directly into the HTML so you can rehearse without switching between windows.</p>
+
+      <div class="asset-list">
+        <a class="asset-link" href="./daud-loom-bullet-rehearsal.md" target="_blank" rel="noopener noreferrer">Open `daud-loom-bullet-rehearsal.md`</a>
+        <a class="asset-link" href="./daud-loom-final-4m30-spoken.md" target="_blank" rel="noopener noreferrer">Open `daud-loom-final-4m30-spoken.md`</a>
+      </div>
+
+      <div class="grid">
+        <div class="card span-6">
+          <h3>Bullet Rehearsal Version</h3>
+          <pre># Daud Loom Bullet Rehearsal Version
+
+Use this for practice, not for reading word-for-word.
+
+## Target
+
+- Total length: 4:20 to 4:40
+- Start and end on camera
+- Screen share only if your project material is safe to show
+
+## Opening - 40 to 50 seconds
+
+- Hi, I am Daud Farzand, based in Lahore
+- AI Platform Infrastructure Engineer with just over 4 years of production experience
+- Remote work with US-based teams
+- Strongest overlap with this role: GCP, Terraform, platform operations, CI/CD, observability
+- Why this role excites me: reliable cloud infrastructure, automation, end-to-end ownership
+
+## Three Strengths - 20 to 30 seconds
+
+- Terraform-based infrastructure across multiple environments
+- GCP platform operations with Cloud Run, GKE, Vertex AI, BigQuery
+- CI/CD and observability for production reliability
+
+## Main Project Story - 2 minutes to 2 minutes 20 seconds
+
+- Best example: platform infrastructure work across Tech Prysm and Techanzy
+- Goal: production-grade platform, secure, scalable, cost-aware
+- Challenge: support dev, staging, production, and customer-specific deployments reliably
+- My role: architecture, IaC, deployment workflows, monitoring, optimization
+- Terraform for IAM, networking, storage, compute
+- GCP usage: Cloud Run, GKE, Vertex AI, BigQuery
+- CI/CD with GitHub Actions and auditable deployment workflows
+- Platform stack: FastAPI, PostgreSQL, PgBouncer, object storage, health checks
+- Additional infrastructure experience: Docker Compose, Ansible, WireGuard, hybrid setup
+- Observability: Prometheus, Grafana, OpenTelemetry
+- Outcomes: high availability, faster deployments, better cost discipline, stronger operational confidence
+
+## Why I Fit - 45 to 55 seconds
+
+- Production experience already matches the work in the JD
+- Strong hands-on background with GCP, Terraform, Docker, Kubernetes, GitHub Actions
+- Comfortable with customer-specific and multi-tenant environments
+- Good at ownership beyond setup: debugging, incident response, performance tuning, documentation
+- Already remote and async-ready
+
+## Close - 20 to 25 seconds
+
+- Smart Working fits the kind of remote engineering environment I want
+- I would be excited to contribute on GCP and Terraform from day one
+- Thank you for your time
+
+## Delivery Reminders
+
+- Do not rush the first 20 seconds
+- Keep sentences short
+- Do not sound memorized
+- Explain impact, not just tools
+- Stay under 5 minutes</pre>
+        </div>
+
+        <div class="card span-6">
+          <h3>Natural 4:30 Spoken Version</h3>
+          <pre># Daud Loom Final 4:30 Spoken Version
+
+This version is optimized to sound natural aloud. Read it once or twice, then record from memory using the flow.
+
+Hi, I am Daud Farzand, and I am based in Lahore.
+
+I currently work as an AI Platform Infrastructure Engineer with US-based teams, and I have just over four years of production experience across DevOps, cloud infrastructure, platform engineering, and MLOps, with a strong hands-on focus on Google Cloud Platform and Terraform.
+
+I am excited about this role because it is very closely aligned with the kind of work I already do in production: building reliable cloud infrastructure, automating deployments, improving observability, and taking ownership of systems end to end.
+
+If I had to summarize my strengths in three areas, I would say first, building Terraform-based infrastructure across multiple environments; second, operating containerized platforms on GCP using services like Cloud Run, GKE, and Vertex AI; and third, building CI/CD and observability workflows that make production systems more reliable and easier to operate.
+
+A strong example of my work is the platform infrastructure I have built across my recent roles at Tech Prysm and Techanzy.
+
+One project I am especially proud of was building and deploying a production-grade platform that needed to support secure, scalable, and cost-aware deployments across development, staging, production, and customer-specific environments.
+
+The challenge was not just deploying services once. It was making the whole environment repeatable, observable, and maintainable over time.
+
+To solve that, I used Terraform to provision and manage infrastructure in a consistent way, including IAM, networking, storage, and compute resources. On Google Cloud, I worked with services including Cloud Run for serverless APIs, GKE for container orchestration, Vertex AI workloads, and BigQuery for analytics and usage reporting.
+
+I also built deployment workflows using GitHub Actions so that both infrastructure and application changes could move through auditable pipelines rather than manual changes.
+
+On the platform side, I worked with containerized services built around FastAPI, PostgreSQL, PgBouncer, object storage, and supporting components, with health checks and deployment automation built in from the start. In another production system, I also used Terraform, Docker Compose, Ansible, and WireGuard to provision hybrid infrastructure and reduce deployment time significantly.
+
+Observability was also a major part of my ownership. I implemented Prometheus, Grafana, and OpenTelemetry to monitor latency, resource usage, and service health, and used those signals to improve reliability and performance over time.
+
+What is most relevant for this role is that I was not only deploying workloads. I was owning the environment end to end, including architecture, infrastructure as code, deployment workflows, monitoring, reliability, and ongoing optimization.
+
+I believe I am a strong fit for this role because the core requirements are very close to the work I have already been doing. I have hands-on experience with GCP, Terraform, Docker, Kubernetes, GitHub Actions, observability stacks, and remote collaboration.
+
+I have also worked in multi-environment and multi-tenant systems, including customer-specific deployments, where reliability, access control, and cost efficiency matter every day. I am comfortable owning infrastructure beyond the initial setup, including debugging, incident response, performance tuning, and documentation.
+
+I have been working remotely with international teams as well, so async communication, clear written updates, and documentation are already part of how I work.
+
+What attracts me to Smart Working is the opportunity to contribute in a high-standard remote engineering environment while going deeper into the exact platform work I enjoy most on GCP and Terraform.
+
+Thank you for your time. I would be glad to discuss any part of my experience in more detail, and I would be excited to contribute to your team.</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="media" class="tab-panel">
+      <h2>Media Library</h2>
+      <p>All local practice media is playable directly here, including the generated spoken versions and the original sample Loom video from Smart Working.</p>
+
+      <div class="asset-list">
+        <a class="asset-link" href="./daud-loom-final-4m30-spoken.mp3" target="_blank" rel="noopener noreferrer">Open `daud-loom-final-4m30-spoken.mp3`</a>
+        <a class="asset-link" href="./daud-loom-final-4m30-spoken.mp4" target="_blank" rel="noopener noreferrer">Open `daud-loom-final-4m30-spoken.mp4`</a>
+        <a class="asset-link" href="../loom-sample/compressed-2.mp4" target="_blank" rel="noopener noreferrer">Open `compressed-2.mp4`</a>
+      </div>
+
+      <div class="media-grid">
+        <div class="media-card">
+          <h3>Generated Practice Audio</h3>
+          <p class="meta">Source: `./daud-loom-final-4m30-spoken.mp3`</p>
+          <audio controls preload="metadata">
+            <source src="./daud-loom-final-4m30-spoken.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+
+        <div class="media-card">
+          <h3>Generated Practice Video</h3>
+          <p class="meta">Source: `./daud-loom-final-4m30-spoken.mp4`</p>
+          <video controls preload="metadata">
+            <source src="./daud-loom-final-4m30-spoken.mp4" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+        </div>
+
+        <div class="media-card full">
+          <h3>Original Smart Working Sample Loom Video</h3>
+          <p class="meta">Source: `../loom-sample/compressed-2.mp4`</p>
+          <video controls preload="metadata">
+            <source src="../loom-sample/compressed-2.mp4" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+          <div class="callout warn">
+            Use this video to study structure and delivery. Do not copy its runtime because it exceeds Smart Working's stated 5-minute limit.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recording" class="tab-panel">
+      <h2>Final Pre-Recording Checklist</h2>
+      <p>Use this right before you hit record so the final Loom feels controlled, natural, and aligned with Smart Working's instructions.</p>
+
+      <div class="grid">
+        <div class="card span-6">
+          <h3>Before You Record</h3>
+          <ul>
+            <li>Keep the target runtime between 4:20 and 4:50.</li>
+            <li>Use a quiet room and test your mic first.</li>
+            <li>Keep camera at eye level with decent lighting.</li>
+            <li>Close unrelated tabs, notifications, and chat popups.</li>
+            <li>Prepare only the exact screen-share windows you will show.</li>
+            <li>Do not show your resume, LinkedIn, secrets, or customer-sensitive data.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>Mindset Before The Take</h3>
+          <ul>
+            <li>Speak like you are explaining your work to an engineering manager.</li>
+            <li>Aim for calm confidence, not high energy or sales language.</li>
+            <li>Do not try to sound perfect.</li>
+            <li>Use the bullet rehearsal version as memory anchors.</li>
+            <li>If you stumble slightly, keep going unless the mistake is major.</li>
+          </ul>
+        </div>
+
+        <div class="card span-12">
+          <h3>Best One-Pass Take Order</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>What to do</th>
+                <th>Target time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Start on face camera. Deliver your intro, role fit, and three strengths clearly.</td>
+                <td>0:00 - 0:55</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Switch to your architecture diagram or safe project view and explain the challenge.</td>
+                <td>0:55 - 1:35</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Show Terraform or deployment material and explain what you built and how you operated it.</td>
+                <td>1:35 - 2:45</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Show observability or workflow evidence and explain outcomes, reliability, and ownership.</td>
+                <td>2:45 - 3:25</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Return to camera and explain why you fit this role.</td>
+                <td>3:25 - 4:15</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>Close confidently, thank them, and stop.</td>
+                <td>4:15 - 4:40</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card span-6">
+          <h3>If You Need A Retake</h3>
+          <ul>
+            <li>Retake if you go over 5 minutes.</li>
+            <li>Retake if your opening is weak or hesitant.</li>
+            <li>Retake if you expose anything sensitive on screen.</li>
+            <li>Retake if your explanation becomes too resume-like.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3>Final Reminder</h3>
+          <div class="callout good">
+            Your strongest angle is not just that you know GCP and Terraform. It is that you have already used them in production with ownership across infrastructure, deployment workflows, observability, and remote collaboration.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="claude" class="tab-panel">
+      <h2>Claude Version</h2>
+      <p>This tab embeds Claude's HTML version inside the master file so you can compare both approaches without leaving the deployed page.</p>
+
+      <div class="asset-list">
+        <a class="asset-link" href="./claude-loom-script-final.html" target="_blank" rel="noopener noreferrer">Open `claude-loom-script-final.html`</a>
+      </div>
+
+      <div class="grid">
+        <div class="card span-12">
+          <h3>Embedded Claude Guide</h3>
+          <iframe class="embed-frame" src="./claude-loom-script-final.html" title="Claude Loom Script Final"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.getAttribute('data-tab');
+
+        buttons.forEach((b) => b.classList.remove('active'));
+        panels.forEach((p) => p.classList.remove('active'));
+
+        button.classList.add('active');
+        document.getElementById(id).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

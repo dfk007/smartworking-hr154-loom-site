@@ -1,0 +1,27 @@
+logs/
+
+# Local editor and tool state
+.cursor/
+.qwen/
+.venv/
+.venv-transcribe/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Local scratch and generated analysis
+loom-sample/.loom-analysis-frames/
+loom-sample/compressed-2.wav
+loom-sample/compressed-2.transcript.md
+*.bak
+
+# Private or reference-only source material
+references/
+EMAILS-1/
+Assessment-1/
+qwen-files-here/
+
+# Older drafts not needed for deployment
+loom-drafts/
