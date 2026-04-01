@@ -1,703 +1,819 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenCode Loom Landing</title>
-  <meta name="description" content="Animated entry landing page for the OpenCode Loom guide and practice assets.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #050714;
-      --surface: rgba(12, 18, 38, 0.72);
-      --surface-strong: rgba(10, 15, 31, 0.92);
-      --surface-border: rgba(255, 255, 255, 0.11);
-      --text: #f6f7ff;
-      --muted: #bac4e7;
-      --accent: #8ea2ff;
-      --accent-2: #7be7c7;
-      --accent-3: #f4c56c;
-      --shadow: 0 28px 100px rgba(0, 0, 0, 0.36);
-      --max: 1200px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at 10% 10%, rgba(142, 162, 255, 0.24), transparent 28%),
-        radial-gradient(circle at 85% 14%, rgba(123, 231, 199, 0.18), transparent 20%),
-        radial-gradient(circle at 76% 78%, rgba(244, 197, 108, 0.16), transparent 22%),
-        linear-gradient(180deg, #040611 0%, #070c1d 48%, #050714 100%);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 72px 72px;
-      mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.7), transparent 86%);
-      opacity: 0.28;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    :focus-visible {
-      outline: 2px solid var(--accent-3);
-      outline-offset: 3px;
-    }
-
-    .shell {
-      position: relative;
-      z-index: 1;
-      width: min(calc(100% - 32px), var(--max));
-      margin: 0 auto;
-      padding: 20px 0 64px;
-    }
-
-    .nav {
-      position: sticky;
-      top: 16px;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 18px;
-      border: 1px solid var(--surface-border);
-      border-radius: 999px;
-      background: rgba(8, 12, 26, 0.72);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.46), transparent 34%),
-        linear-gradient(135deg, rgba(142, 162, 255, 0.94), rgba(123, 231, 199, 0.88));
-      box-shadow: 0 12px 32px rgba(142, 162, 255, 0.22);
-    }
-
-    .brand strong,
-    .brand span {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .brand strong {
-      font-size: 0.94rem;
-      letter-spacing: 0.03em;
-    }
-
-    .brand span {
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .nav-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    .button,
-    .button-ghost,
-    .chip-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 18px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      font-size: 0.92rem;
-      font-weight: 600;
-      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
-    }
-
-    .button {
-      background: linear-gradient(135deg, rgba(142, 162, 255, 1), rgba(123, 231, 199, 0.92));
-      color: #07101f;
-      box-shadow: 0 18px 44px rgba(142, 162, 255, 0.3);
-    }
-
-    .button:hover,
-    .button:focus-visible,
-    .button-ghost:hover,
-    .button-ghost:focus-visible,
-    .chip-link:hover,
-    .chip-link:focus-visible {
-      transform: translateY(-2px);
-    }
-
-    .button-ghost,
-    .chip-link {
-      border-color: rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-    }
-
-    .hero {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
-      gap: 22px;
-      margin-top: 28px;
-      padding: 34px;
-      border: 1px solid var(--surface-border);
-      border-radius: 32px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
-        rgba(11, 18, 38, 0.68);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(123, 231, 199, 0.22), transparent 66%);
-      filter: blur(10px);
-      pointer-events: none;
-    }
-
-    .hero-copy,
-    .hero-panel {
-      position: relative;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
-      color: #e7ecff;
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
-      box-shadow: 0 0 18px rgba(244, 197, 108, 0.56);
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
-
-    .hero-copy h1,
-    .section-head h2 {
-      margin-top: 18px;
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: clamp(3rem, 7vw, 5.3rem);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
-    }
-
-    .section-head h2 {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1;
-    }
-
-    .hero-copy p,
-    .section-head p,
-    .card p,
-    .panel p {
-      color: var(--muted);
-      line-height: 1.75;
-    }
-
-    .hero-copy p {
-      margin-top: 16px;
-      max-width: 58ch;
-      font-size: 1.02rem;
-    }
-
-    .hero-actions,
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .hero-actions {
-      margin-top: 24px;
-    }
-
-    .chip-row {
-      margin-top: 24px;
-    }
-
-    .chip-link {
-      padding: 12px 14px;
-      border-radius: 18px;
-      align-items: flex-start;
-      flex-direction: column;
-      text-align: left;
-      min-width: 180px;
-    }
-
-    .chip-link strong {
-      color: var(--text);
-    }
-
-    .panel,
-    .card,
-    .feature {
-      border: 1px solid var(--surface-border);
-      border-radius: 24px;
-      background: rgba(10, 15, 31, 0.78);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-    }
-
-    .panel {
-      padding: 22px;
-    }
-
-    .panel h3,
-    .card h3,
-    .feature h3 {
-      margin-bottom: 10px;
-      font-size: 1.08rem;
-      line-height: 1.3;
-    }
-
-    .signal-stack {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .signal-stack div {
-      padding: 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .signal-stack strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 1.5rem;
-      color: var(--text);
-    }
-
-    .section {
-      margin-top: 28px;
-    }
-
-    .section-head {
-      margin-bottom: 18px;
-    }
-
-    .section-head p {
-      max-width: 62ch;
-      margin-top: 10px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .card,
-    .feature {
-      grid-column: span 4;
-      padding: 22px;
-    }
-
-    .card strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 2rem;
-      line-height: 1;
-    }
-
-    .card span {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      margin-bottom: 16px;
-      border-radius: 999px;
-      background: rgba(142, 162, 255, 0.14);
-      color: #e7ecff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .feature {
-      min-height: 228px;
-    }
-
-    .feature ol,
-    .feature ul {
-      margin: 14px 0 0 18px;
-      padding: 0;
-      color: #e7ecff;
-      line-height: 1.7;
-    }
-
-    .feature li + li {
-      margin-top: 8px;
-    }
-
-    .cta-band {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 18px;
-      padding: 24px;
-      margin-top: 28px;
-      border: 1px solid var(--surface-border);
-      border-radius: 28px;
-      background: linear-gradient(135deg, rgba(142, 162, 255, 0.14), rgba(123, 231, 199, 0.1));
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-    }
-
-    .footer-note {
-      margin-top: 20px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 0.92rem;
-    }
-
-    @media (max-width: 1040px) {
-      .hero {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenCode Loom Landing</title>
+    <meta
+      name="description"
+      content="Animated entry landing page for the OpenCode Loom guide and practice assets."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #050714;
+        --surface: rgba(12, 18, 38, 0.72);
+        --surface-strong: rgba(10, 15, 31, 0.92);
+        --surface-border: rgba(255, 255, 255, 0.11);
+        --text: #f6f7ff;
+        --muted: #bac4e7;
+        --accent: #8ea2ff;
+        --accent-2: #7be7c7;
+        --accent-3: #f4c56c;
+        --shadow: 0 28px 100px rgba(0, 0, 0, 0.36);
+        --max: 1200px;
       }
 
-      .card,
-      .feature {
-        grid-column: span 6;
+      * {
+        box-sizing: border-box;
       }
 
-      .cta-band {
-        grid-template-columns: 1fr;
+      html {
+        scroll-behavior: smooth;
       }
-    }
 
-    @media (max-width: 780px) {
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background:
+          radial-gradient(
+            circle at 10% 10%,
+            rgba(142, 162, 255, 0.24),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 85% 14%,
+            rgba(123, 231, 199, 0.18),
+            transparent 20%
+          ),
+          radial-gradient(
+            circle at 76% 78%,
+            rgba(244, 197, 108, 0.16),
+            transparent 22%
+          ),
+          linear-gradient(180deg, #040611 0%, #070c1d 48%, #050714 100%);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: radial-gradient(
+          circle at center,
+          rgba(0, 0, 0, 0.7),
+          transparent 86%
+        );
+        opacity: 0.28;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent-3);
+        outline-offset: 3px;
+      }
+
       .shell {
-        width: min(calc(100% - 24px), var(--max));
+        position: relative;
+        z-index: 1;
+        width: min(calc(100% - 32px), var(--max));
+        margin: 0 auto;
+        padding: 20px 0 64px;
       }
 
       .nav {
-        position: static;
-        border-radius: 28px;
-        flex-direction: column;
-        align-items: flex-start;
+        position: sticky;
+        top: 16px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        border: 1px solid var(--surface-border);
+        border-radius: 999px;
+        background: rgba(8, 12, 26, 0.72);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background:
+          radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.46),
+            transparent 34%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(142, 162, 255, 0.94),
+            rgba(123, 231, 199, 0.88)
+          );
+        box-shadow: 0 12px 32px rgba(142, 162, 255, 0.22);
+      }
+
+      .brand strong,
+      .brand span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .brand strong {
+        font-size: 0.94rem;
+        letter-spacing: 0.03em;
+      }
+
+      .brand span {
+        color: var(--muted);
+        font-size: 0.8rem;
       }
 
       .nav-actions {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .hero,
-      .panel,
-      .card,
-      .feature,
-      .cta-band {
-        padding: 22px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .shell {
-        width: min(calc(100% - 18px), var(--max));
-        padding-top: 16px;
-      }
-
-      .hero-copy h1,
-      .section-head h2 {
-        font-size: clamp(2.4rem, 15vw, 4rem);
-      }
-
-      .card,
-      .feature {
-        grid-column: span 12;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
       }
 
       .button,
       .button-ghost,
       .chip-link {
-        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 0.92rem;
+        font-weight: 600;
+        transition:
+          transform 220ms ease,
+          background 220ms ease,
+          border-color 220ms ease,
+          box-shadow 220ms ease;
       }
-    }
 
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
+      .button {
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 1),
+          rgba(123, 231, 199, 0.92)
+        );
+        color: #07101f;
+        box-shadow: 0 18px 44px rgba(142, 162, 255, 0.3);
       }
 
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition-duration: 0.01ms !important;
-        transition-delay: 0ms !important;
+      .button:hover,
+      .button:focus-visible,
+      .button-ghost:hover,
+      .button-ghost:focus-visible,
+      .chip-link:hover,
+      .chip-link:focus-visible {
+        transform: translateY(-2px);
       }
-    }
-  </style>
-</head>
-<body>
-  <div id="app"></div>
 
-  <script type="module">
-    import React from 'https://esm.sh/react@18.3.1';
-    import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
-    import { motion, useReducedMotion } from 'https://esm.sh/framer-motion@11.11.17?bundle&external=react,react-dom';
-    import htm from 'https://esm.sh/htm@3.1.1';
+      .button-ghost,
+      .chip-link {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+      }
 
-    const html = htm.bind(React.createElement);
+      @keyframes fade-lift {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
 
-    const overview = [
-      {
-        tag: 'Runtime window',
-        value: '4:20-4:50',
-        body: 'The landing and the guide both reinforce the under-5-minute target.',
-      },
-      {
-        tag: 'Structure',
-        value: '3-part story',
-        body: 'Open with fit, prove it with one project, close on why you are ready.',
-      },
-      {
-        tag: 'Chapter deck',
-        value: '9 sections',
-        body: 'From sample analysis to media playback and recording checklist.',
-      },
-    ];
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    const featureCards = [
-      {
-        title: 'Use the guide like a cinematic brief',
-        body: 'The detailed page is now a chapter-based experience with animated panel transitions, stronger hierarchy, and direct paths to the practice assets.',
-        items: ['Sample breakdown', 'Final script', 'Screen share plan', 'Recording checklist'],
-      },
-      {
-        title: 'Keep the message centered on platform ownership',
-        body: 'The redesign pushes the strongest frame to the top: GCP, Terraform, observability, remote collaboration, and end-to-end operational ownership.',
-        items: ['Role-fit first', 'One flagship project', 'Hireability close'],
-      },
-      {
-        title: 'Move straight into practice',
-        body: 'Audio, video, markdown rehearsal files, and the original sample are all available without extra navigation or redirects.',
-        items: ['Generated audio', 'Generated video', 'Practice markdown', 'Claude comparison'],
-      },
-    ];
+      @keyframes float-panel {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
 
-    function App() {
-      const reducedMotion = useReducedMotion();
+        50% {
+          transform: translateY(-8px);
+        }
+      }
 
-      const floatAnimation = reducedMotion ? {} : {
-        y: [0, -10, 0],
-        transition: { duration: 7.5, repeat: Infinity, ease: 'easeInOut' },
-      };
+      .hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+        gap: 22px;
+        margin-top: 28px;
+        padding: 34px;
+        border: 1px solid var(--surface-border);
+        border-radius: 32px;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.07),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(11, 18, 38, 0.68);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        animation: fade-lift 700ms ease-out both;
+      }
 
-      return html`
-        <main className="shell">
-          <header className="nav">
-            <div className="brand">
-              <div className="mark" aria-hidden="true"></div>
-              <div>
-                <strong>OpenCode Loom</strong>
-                <span>Animated landing page and guide entry</span>
-              </div>
-            </div>
-            <div className="nav-actions">
-              <a className="button-ghost" href="#overview">Overview</a>
-              <a className="button-ghost" href="#paths">Paths</a>
-              <a className="button" href="./2-opencode-loom/opencode-loom-script-final.html">Open master guide</a>
-            </div>
-          </header>
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: auto -80px -80px auto;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(123, 231, 199, 0.22),
+          transparent 66%
+        );
+        filter: blur(10px);
+        pointer-events: none;
+      }
 
-          <section className="hero">
-            <${motion.div}
-              className="hero-copy"
-              initial=${reducedMotion ? false : { opacity: 0, y: 28 }}
-              animate=${reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-              transition=${{ duration: 0.7, ease: 'easeOut' }}
-            >
-              <span className="eyebrow">Framer Motion entry page</span>
-              <h1>Make the first click feel intentional.</h1>
-              <p>This root page no longer drops straight into a redirect. It now works as a polished front door for the Loom package, with a clearer visual system, better hierarchy, and direct access to the master guide, practice assets, and recording path.</p>
+      .hero-copy,
+      .hero-panel {
+        position: relative;
+        z-index: 1;
+      }
 
-              <div className="hero-actions">
-                <a className="button" href="./2-opencode-loom/opencode-loom-script-final.html">Launch the guide</a>
-                <a className="button-ghost" href="./2-opencode-loom/daud-loom-final-4m30-spoken.mp4" target="_blank" rel="noopener noreferrer">Watch practice video</a>
-              </div>
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        color: #e7ecff;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
 
-              <div className="chip-row">
-                <a className="chip-link" href="./2-opencode-loom/opencode-loom-script-final.html#chapters"><strong>Chapter deck</strong><span>Open the full animated guide experience.</span></a>
-                <a className="chip-link" href="./2-opencode-loom/daud-loom-final-4m30-spoken.md" target="_blank" rel="noopener noreferrer"><strong>Spoken script</strong><span>Jump straight into the natural 4:30 version.</span></a>
-                <a className="chip-link" href="./2-opencode-loom/daud-loom-bullet-rehearsal.md" target="_blank" rel="noopener noreferrer"><strong>Rehearsal notes</strong><span>Use the memory anchors before you record.</span></a>
-              </div>
-            </${motion.div}>
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+        box-shadow: 0 0 18px rgba(244, 197, 108, 0.56);
+      }
 
-            <${motion.aside}
-              className="hero-panel"
-              initial=${reducedMotion ? false : { opacity: 0, y: 28 }}
-              animate=${reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-              transition=${{ duration: 0.8, ease: 'easeOut', delay: reducedMotion ? 0 : 0.1 }}
-            >
-              <${motion.div} className="panel" animate=${floatAnimation}>
-                <h3>What changed</h3>
-                <p>The experience now follows the UIX Pro storytelling pattern that fits this project best: a clear hook, strong trust cues, narrative chapters, and low-friction conversion into the main action.</p>
-                <div className="signal-stack">
-                  <div>
-                    <strong>01</strong>
-                    <p>Animated hero that frames the work before the user scrolls.</p>
-                  </div>
-                  <div>
-                    <strong>02</strong>
-                    <p>Visible paths into the guide, script, and practice media.</p>
-                  </div>
-                  <div>
-                    <strong>03</strong>
-                    <p>Motion kept deliberate and reduced-motion safe.</p>
-                  </div>
-                </div>
-              </${motion.div}>
-            </${motion.aside}>
-          </section>
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
 
-          <section id="overview" className="section">
-            <div className="section-head">
-              <span className="eyebrow">Fast scan</span>
-              <h2>The whole package at a glance.</h2>
-              <p>Use this page as the entry point, then drop into the detailed guide when you want the full breakdown, animated chapter switching, and embedded media.</p>
-            </div>
+      .hero-copy h1,
+      .section-head h2 {
+        margin-top: 18px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(3rem, 7vw, 5.3rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+      }
 
-            <div className="grid">
-              ${overview.map((item, index) => html`
-                <${motion.article}
-                  key=${item.tag}
-                  className="card"
-                  initial=${reducedMotion ? false : { opacity: 0, y: 24 }}
-                  whileInView=${reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                  viewport=${{ once: true, amount: 0.35 }}
-                  transition=${{ duration: 0.55, ease: 'easeOut', delay: reducedMotion ? 0 : index * 0.08 }}
-                >
-                  <span>${item.tag}</span>
-                  <strong>${item.value}</strong>
-                  <p>${item.body}</p>
-                </${motion.article}>
-              `)}
-            </div>
-          </section>
+      .section-head h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        line-height: 1;
+      }
 
-          <section id="paths" className="section">
-            <div className="section-head">
-              <span className="eyebrow">Best paths</span>
-              <h2>Choose the way you want to work.</h2>
-              <p>The root page now helps users choose whether they want the high-context guide, the raw practice files, or the media playback path without feeling like they hit a dead redirect.</p>
-            </div>
+      .hero-copy p,
+      .section-head p,
+      .card p,
+      .panel p {
+        color: var(--muted);
+        line-height: 1.75;
+      }
 
-            <div className="grid">
-              ${featureCards.map((item, index) => html`
-                <${motion.article}
-                  key=${item.title}
-                  className="feature"
-                  initial=${reducedMotion ? false : { opacity: 0, y: 28 }}
-                  whileInView=${reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                  viewport=${{ once: true, amount: 0.3 }}
-                  transition=${{ duration: 0.58, ease: 'easeOut', delay: reducedMotion ? 0 : index * 0.08 }}
-                >
-                  <h3>${item.title}</h3>
-                  <p>${item.body}</p>
-                  <ul>
-                    ${item.items.map((line) => html`<li key=${line}>${line}</li>`)}
-                  </ul>
-                </${motion.article}>
-              `)}
-            </div>
-          </section>
+      .hero-copy p {
+        margin-top: 16px;
+        max-width: 58ch;
+        font-size: 1.02rem;
+      }
 
-          <section className="cta-band">
+      .hero-actions,
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-actions {
+        margin-top: 24px;
+      }
+
+      .chip-row {
+        margin-top: 24px;
+      }
+
+      .chip-link {
+        padding: 12px 14px;
+        border-radius: 18px;
+        align-items: flex-start;
+        flex-direction: column;
+        text-align: left;
+        min-width: 180px;
+      }
+
+      .chip-link strong {
+        color: var(--text);
+      }
+
+      .panel,
+      .card,
+      .feature {
+        border: 1px solid var(--surface-border);
+        border-radius: 24px;
+        background: rgba(10, 15, 31, 0.78);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+
+      .panel {
+        padding: 22px;
+        animation: float-panel 8s ease-in-out infinite;
+      }
+
+      .panel h3,
+      .card h3,
+      .feature h3 {
+        margin-bottom: 10px;
+        font-size: 1.08rem;
+        line-height: 1.3;
+      }
+
+      .signal-stack {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .signal-stack div {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .signal-stack strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 1.5rem;
+        color: var(--text);
+      }
+
+      .section {
+        margin-top: 28px;
+      }
+
+      .section-head {
+        margin-bottom: 18px;
+      }
+
+      .section-head p {
+        max-width: 62ch;
+        margin-top: 10px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .card,
+      .feature {
+        grid-column: span 4;
+        padding: 22px;
+        animation: fade-lift 700ms ease-out both;
+      }
+
+      .grid > :nth-child(2) {
+        animation-delay: 90ms;
+      }
+
+      .grid > :nth-child(3) {
+        animation-delay: 180ms;
+      }
+
+      .card strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .card span {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        margin-bottom: 16px;
+        border-radius: 999px;
+        background: rgba(142, 162, 255, 0.14);
+        color: #e7ecff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .feature {
+        min-height: 228px;
+      }
+
+      .feature ol,
+      .feature ul {
+        margin: 14px 0 0 18px;
+        padding: 0;
+        color: #e7ecff;
+        line-height: 1.7;
+      }
+
+      .feature li + li {
+        margin-top: 8px;
+      }
+
+      .cta-band {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 18px;
+        padding: 24px;
+        margin-top: 28px;
+        border: 1px solid var(--surface-border);
+        border-radius: 28px;
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.14),
+          rgba(123, 231, 199, 0.1)
+        );
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+        animation: fade-lift 760ms ease-out both;
+        animation-delay: 220ms;
+      }
+
+      .footer-note {
+        margin-top: 20px;
+        color: var(--muted);
+        text-align: center;
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 1040px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .card,
+        .feature {
+          grid-column: span 6;
+        }
+
+        .cta-band {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 780px) {
+        .shell {
+          width: min(calc(100% - 24px), var(--max));
+        }
+
+        .nav {
+          position: static;
+          border-radius: 28px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav-actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .hero,
+        .panel,
+        .card,
+        .feature,
+        .cta-band {
+          padding: 22px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          width: min(calc(100% - 18px), var(--max));
+          padding-top: 16px;
+        }
+
+        .hero-copy h1,
+        .section-head h2 {
+          font-size: clamp(2.4rem, 15vw, 4rem);
+        }
+
+        .card,
+        .feature {
+          grid-column: span 12;
+        }
+
+        .button,
+        .button-ghost,
+        .chip-link {
+          width: 100%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <main class="shell">
+        <header class="nav">
+          <div class="brand">
+            <div class="mark" aria-hidden="true"></div>
             <div>
-              <span className="eyebrow">Primary action</span>
-              <h3 style=${{ marginTop: '14px', fontSize: '1.7rem' }}>Start with the master guide, then practice from the media tab.</h3>
-              <p style=${{ marginTop: '10px' }}>That path gives the strongest sequence: understand the structure, rehearse the spoken flow, then watch and refine the delivery.</p>
+              <strong>OpenCode Loom</strong>
+              <span>Static-first landing page and guide entry</span>
             </div>
-            <a className="button" href="./2-opencode-loom/opencode-loom-script-final.html">Enter the guide</a>
-          </section>
+          </div>
+          <div class="nav-actions">
+            <a class="button-ghost" href="#overview">Overview</a>
+            <a class="button-ghost" href="#paths">Paths</a>
+            <a
+              class="button"
+              href="./2-opencode-loom/opencode-loom-script-final.html"
+              >Open master guide</a
+            >
+          </div>
+        </header>
 
-          <p className="footer-note">Built as a lightweight static landing page with in-browser React and Framer Motion so the project keeps its single-file deployability while gaining a much stronger first impression.</p>
-        </main>
-      `;
-    }
+        <section class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow">Static-first landing</span>
+            <h1>Make the first click feel intentional.</h1>
+            <p>
+              This root page now works as a real landing page instead of a
+              redirect. It renders directly on GitHub Pages with no external
+              JavaScript runtime dependency while keeping motion and polish
+              through CSS.
+            </p>
 
-    createRoot(document.getElementById('app')).render(html`<${App} />`);
-  </script>
-</body>
+            <div class="hero-actions">
+              <a
+                class="button"
+                href="./2-opencode-loom/opencode-loom-script-final.html"
+                >Launch the guide</a
+              >
+              <a
+                class="button-ghost"
+                href="./2-opencode-loom/daud-loom-final-4m30-spoken.mp4"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Watch practice video</a
+              >
+            </div>
+
+            <div class="chip-row">
+              <a
+                class="chip-link"
+                href="./2-opencode-loom/opencode-loom-script-final.html#chapters"
+                ><strong>Chapter deck</strong
+                ><span>Open the full guide experience.</span></a
+              >
+              <a
+                class="chip-link"
+                href="./2-opencode-loom/daud-loom-final-4m30-spoken.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><strong>Spoken script</strong
+                ><span>Jump into the natural 4:30 version.</span></a
+              >
+              <a
+                class="chip-link"
+                href="./2-opencode-loom/daud-loom-bullet-rehearsal.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><strong>Rehearsal notes</strong
+                ><span>Use the memory anchors before recording.</span></a
+              >
+            </div>
+          </div>
+
+          <aside class="hero-panel">
+            <div class="panel">
+              <h3>What changed</h3>
+              <p>
+                The root page is now a proper entry experience with stronger
+                hierarchy, direct navigation, and deterministic rendering on
+                GitHub Pages.
+              </p>
+              <div class="signal-stack">
+                <div>
+                  <strong>01</strong>
+                  <p>
+                    Clear entry into the guide instead of an instant redirect.
+                  </p>
+                </div>
+                <div>
+                  <strong>02</strong>
+                  <p>Direct links to media and practice assets.</p>
+                </div>
+                <div>
+                  <strong>03</strong>
+                  <p>
+                    Motion now lives inside the page itself instead of depending
+                    on a CDN app layer.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section id="overview" class="section">
+          <div class="section-head">
+            <span class="eyebrow">Fast scan</span>
+            <h2>The whole package at a glance.</h2>
+            <p>
+              Use this as the front door, then move into the detailed master
+              guide for the full script, analysis, media, and recording
+              checklist.
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <span>Runtime window</span>
+              <strong>4:20-4:50</strong>
+              <p>
+                The target stays under 5 minutes and the guide is structured
+                around that discipline.
+              </p>
+            </article>
+            <article class="card">
+              <span>Structure</span>
+              <strong>3-part story</strong>
+              <p>
+                Open with role-fit, prove it with one project, then close on why
+                you are ready now.
+              </p>
+            </article>
+            <article class="card">
+              <span>Chapter deck</span>
+              <strong>9 sections</strong>
+              <p>
+                Sample breakdown, final script, screen-share plan, media, and
+                final recording checklist.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="paths" class="section">
+          <div class="section-head">
+            <span class="eyebrow">Best paths</span>
+            <h2>Choose the way you want to work.</h2>
+            <p>
+              The landing page is now static-first, so GitHub Pages can render
+              it deterministically without app hydration or CDN imports.
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="feature">
+              <h3>Guide-first path</h3>
+              <p>
+                Start with the full master guide to understand structure,
+                framing, and delivery.
+              </p>
+              <ul>
+                <li>Sample breakdown</li>
+                <li>Updated positioning</li>
+                <li>Final spoken script</li>
+                <li>Recording checklist</li>
+              </ul>
+            </article>
+            <article class="feature">
+              <h3>Practice-first path</h3>
+              <p>
+                Open the markdown and media files directly if you already know
+                the story and only need rehearsal support.
+              </p>
+              <ul>
+                <li>Spoken script markdown</li>
+                <li>Bullet rehearsal markdown</li>
+                <li>Generated audio</li>
+                <li>Generated video</li>
+              </ul>
+            </article>
+            <article class="feature">
+              <h3>Deterministic path</h3>
+              <p>
+                The deployed page is now designed to work directly on GitHub
+                Pages without relying on React or Framer imports.
+              </p>
+              <ul>
+                <li>No redirect dependency</li>
+                <li>Relative links only</li>
+                <li>No app hydration required</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="cta-band">
+          <div>
+            <span class="eyebrow">Primary action</span>
+            <h3 style="margin-top: 14px; font-size: 1.7rem">
+              Start with the master guide, then practice from the media tab.
+            </h3>
+            <p style="margin-top: 10px">
+              That gives the strongest sequence: understand the structure,
+              rehearse the script, then refine delivery.
+            </p>
+          </div>
+          <a
+            class="button"
+            href="./2-opencode-loom/opencode-loom-script-final.html"
+            >Enter the guide</a
+          >
+        </section>
+
+        <p class="footer-note">
+          Static-first HTML, CSS, and local JavaScript only. No external app
+          runtime required for the deployed page.
+        </p>
+      </main>
+    </div>
+  </body>
 </html>
