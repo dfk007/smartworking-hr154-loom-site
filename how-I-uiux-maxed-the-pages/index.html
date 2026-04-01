@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Static UI/UX Max Kit</title>
+    <meta
+      name="description"
+      content="A reusable static-first UI/UX kit for designing premium HTML landing pages and guide pages with strong hierarchy, tasteful motion, and GitHub Pages-safe deployment."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #040613;
+        --bg-soft: #0a1022;
+        --surface: rgba(10, 16, 34, 0.76);
+        --surface-strong: rgba(8, 13, 28, 0.94);
+        --surface-border: rgba(255, 255, 255, 0.12);
+        --text: #f7f8ff;
+        --muted: #b8c3e8;
+        --muted-strong: #dde5ff;
+        --accent: #8ea2ff;
+        --accent-2: #7be7c7;
+        --accent-3: #f4c56c;
+        --danger: #ff8b8b;
+        --shadow: 0 28px 120px rgba(0, 0, 0, 0.4);
+        --radius-xl: 34px;
+        --radius-lg: 24px;
+        --radius-md: 18px;
+        --max: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background:
+          radial-gradient(
+            circle at 10% 14%,
+            rgba(142, 162, 255, 0.24),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 84% 14%,
+            rgba(123, 231, 199, 0.18),
+            transparent 22%
+          ),
+          radial-gradient(
+            circle at 72% 82%,
+            rgba(244, 197, 108, 0.14),
+            transparent 20%
+          ),
+          linear-gradient(180deg, #03040f 0%, #08101f 42%, #040613 100%);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::before {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: radial-gradient(
+          circle at center,
+          rgba(0, 0, 0, 0.7),
+          transparent 86%
+        );
+        opacity: 0.28;
+      }
+
+      body::after {
+        background: linear-gradient(
+          180deg,
+          rgba(4, 6, 19, 0) 0%,
+          rgba(4, 6, 19, 0.88) 90%
+        );
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent-3);
+        outline-offset: 3px;
+      }
+
+      @keyframes fade-lift {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float-panel {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .shell {
+        position: relative;
+        z-index: 1;
+        width: min(calc(100% - 32px), var(--max));
+        margin: 0 auto;
+        padding: 20px 0 64px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 16px;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        border: 1px solid var(--surface-border);
+        border-radius: 999px;
+        background: rgba(8, 12, 26, 0.72);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 14px 44px rgba(0, 0, 0, 0.25);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background:
+          radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.46),
+            transparent 34%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(142, 162, 255, 0.95),
+            rgba(123, 231, 199, 0.88)
+          );
+        box-shadow: 0 12px 32px rgba(142, 162, 255, 0.22);
+      }
+
+      .brand strong,
+      .brand span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .brand strong {
+        font-size: 0.95rem;
+        letter-spacing: 0.03em;
+      }
+
+      .brand span {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .topbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .button,
+      .button-ghost,
+      .tab-button,
+      .doc-link,
+      .chip {
+        border-radius: 999px;
+        border: 1px solid transparent;
+        transition:
+          transform 220ms ease,
+          border-color 220ms ease,
+          background 220ms ease,
+          color 220ms ease,
+          box-shadow 220ms ease;
+      }
+
+      .button,
+      .button-ghost,
+      .doc-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 18px;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+
+      .button {
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.98),
+          rgba(123, 231, 199, 0.92)
+        );
+        color: #07101f;
+        box-shadow: 0 18px 40px rgba(142, 162, 255, 0.28);
+      }
+
+      .button-ghost,
+      .doc-link,
+      .chip {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-strong);
+      }
+
+      .button:hover,
+      .button:focus-visible,
+      .button-ghost:hover,
+      .button-ghost:focus-visible,
+      .doc-link:hover,
+      .doc-link:focus-visible,
+      .tab-button:hover,
+      .tab-button:focus-visible {
+        transform: translateY(-2px);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.9fr);
+        gap: 22px;
+        margin-top: 28px;
+        padding: 36px;
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-xl);
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.07),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(11, 18, 38, 0.68);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+        animation: fade-lift 720ms ease-out both;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        top: -140px;
+        right: -100px;
+        background: radial-gradient(
+          circle,
+          rgba(142, 162, 255, 0.34),
+          transparent 66%
+        );
+        filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .hero-copy,
+      .hero-side {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--muted-strong);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+        box-shadow: 0 0 18px rgba(244, 197, 108, 0.6);
+      }
+
+      .hero-copy h1,
+      .section-head h2,
+      .tab-header h2,
+      .cta-band h2 {
+        margin: 16px 0 14px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      .section-head h2,
+      .tab-header h2,
+      .cta-band h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        line-height: 1;
+      }
+
+      .hero-copy p,
+      .section-head p,
+      .signal-card p,
+      .card p,
+      .panel p,
+      .tab-header p,
+      .tab-panel p,
+      .cta-band p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .hero-copy p {
+        max-width: 60ch;
+        font-size: 1.02rem;
+      }
+
+      .hero-actions,
+      .chip-row,
+      .doc-grid,
+      .grid,
+      .quality-grid,
+      .principles-grid,
+      .prompt-grid,
+      .resources-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 24px 0 24px;
+      }
+
+      .chip-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .chip {
+        padding: 14px 16px;
+        border-radius: 18px;
+        line-height: 1.55;
+      }
+
+      .chip strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--text);
+      }
+
+      .panel,
+      .card,
+      .signal-card,
+      .tab-shell,
+      .cta-band {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-lg);
+        background: rgba(10, 15, 31, 0.76);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+
+      .signal-card,
+      .card,
+      .panel {
+        padding: 22px;
+      }
+
+      .signal-card {
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.03)
+          ),
+          rgba(10, 15, 31, 0.82);
+        animation: float-panel 8s ease-in-out infinite;
+      }
+
+      .signal-card strong,
+      .metric-value {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 2rem;
+        line-height: 1;
+        color: var(--text);
+      }
+
+      .signal-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .signal-list div {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .signal-list h3,
+      .card h3,
+      .tab-panel h3,
+      .resource-card h3,
+      .cta-band h3 {
+        margin: 0 0 10px;
+        font-size: 1.08rem;
+        line-height: 1.3;
+      }
+
+      .section {
+        margin-top: 30px;
+      }
+
+      .section-head {
+        margin-bottom: 18px;
+      }
+
+      .section-head p,
+      .tab-header p {
+        max-width: 64ch;
+      }
+
+      .grid,
+      .quality-grid,
+      .principles-grid,
+      .resources-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+
+      .card,
+      .resource-card {
+        grid-column: span 4;
+        animation: fade-lift 700ms ease-out both;
+      }
+
+      .grid > :nth-child(2),
+      .quality-grid > :nth-child(2),
+      .principles-grid > :nth-child(2),
+      .resources-grid > :nth-child(2) {
+        animation-delay: 90ms;
+      }
+
+      .grid > :nth-child(3),
+      .quality-grid > :nth-child(3),
+      .principles-grid > :nth-child(3),
+      .resources-grid > :nth-child(3) {
+        animation-delay: 180ms;
+      }
+
+      .metric-pill,
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(142, 162, 255, 0.14);
+        color: var(--muted-strong);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .card ul,
+      .tab-panel ul,
+      .tab-panel ol,
+      .resource-card ul {
+        margin: 14px 0 0 18px;
+        padding: 0;
+        color: var(--muted-strong);
+        line-height: 1.7;
+      }
+
+      .card li + li,
+      .tab-panel li + li,
+      .resource-card li + li {
+        margin-top: 8px;
+      }
+
+      .principle-card {
+        grid-column: span 4;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .principle-card::before {
+        content: "";
+        position: absolute;
+        inset: auto -40px -44px auto;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(142, 162, 255, 0.2),
+          transparent 70%
+        );
+      }
+
+      .principle-step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        margin-bottom: 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-strong);
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      .tab-shell {
+        padding: 24px;
+        animation: fade-lift 760ms ease-out both;
+      }
+
+      .tab-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .tab-button {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        min-height: 76px;
+        min-width: 180px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted-strong);
+        text-align: left;
+      }
+
+      .tab-button small {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      .tab-button.is-active {
+        border-color: rgba(142, 162, 255, 0.32);
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.18),
+          rgba(123, 231, 199, 0.12)
+        );
+        color: var(--text);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+      }
+
+      .tab-panel {
+        padding: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 22px;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.06),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(10, 15, 31, 0.84);
+      }
+
+      .tab-panel[hidden] {
+        display: none;
+      }
+
+      .tab-header {
+        padding-bottom: 18px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .snippet,
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .snippet {
+        margin-top: 16px;
+        padding: 18px;
+        overflow-x: auto;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(5, 8, 18, 0.92);
+        color: #f4f6ff;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        white-space: pre-wrap;
+      }
+
+      code {
+        padding: 0.15em 0.4em;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 0.92em;
+      }
+
+      .quality-card-good {
+        border-left: 4px solid var(--accent-2);
+      }
+
+      .quality-card-warn {
+        border-left: 4px solid var(--accent-3);
+      }
+
+      .quality-card-bad {
+        border-left: 4px solid var(--danger);
+      }
+
+      .doc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .doc-link {
+        justify-content: space-between;
+        width: 100%;
+        border-radius: 18px;
+      }
+
+      .doc-link strong,
+      .resource-card strong {
+        color: var(--text);
+      }
+
+      .resource-card {
+        padding: 22px;
+      }
+
+      .cta-band {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: center;
+        padding: 28px;
+        margin-top: 30px;
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.14),
+          rgba(123, 231, 199, 0.1)
+        );
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 1100px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .card,
+        .principle-card,
+        .resource-card {
+          grid-column: span 6;
+        }
+
+        .cta-band {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .shell {
+          width: min(calc(100% - 24px), var(--max));
+        }
+
+        .topbar {
+          position: static;
+          border-radius: 28px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .topbar-actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .hero,
+        .tab-shell,
+        .tab-panel,
+        .cta-band,
+        .signal-card,
+        .card,
+        .resource-card {
+          padding: 22px;
+        }
+
+        .chip-row,
+        .doc-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .tab-button {
+          min-width: 0;
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          width: min(calc(100% - 18px), var(--max));
+          padding-top: 16px;
+        }
+
+        .hero-copy h1,
+        .section-head h2,
+        .tab-header h2,
+        .cta-band h2 {
+          font-size: clamp(2.4rem, 15vw, 4rem);
+        }
+
+        .card,
+        .principle-card,
+        .resource-card {
+          grid-column: span 12;
+        }
+
+        .button,
+        .button-ghost,
+        .doc-link {
+          width: 100%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <strong>Static UI/UX Max Kit</strong>
+            <span>Reusable kit for premium static HTML pages</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <a class="button-ghost" href="#principles">Principles</a>
+          <a class="button-ghost" href="#playbook">Playbook</a>
+          <a class="button" href="#resources">Open docs</a>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Reusable static-first system</span>
+          <h1>Build beautiful pages without fragile runtime tricks.</h1>
+          <p>
+            This page is a standalone guide for creating premium static HTML
+            landing pages and guide pages for any project. It teaches how to use
+            a design-system-first workflow, strong hierarchy, tasteful motion,
+            and deployment-safe implementation that still feels polished.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button" href="#playbook">Open the playbook</a>
+            <a class="button-ghost" href="#resources">Browse the docs</a>
+          </div>
+
+          <div class="chip-row">
+            <div class="chip">
+              <strong>Static-first</strong>
+              Render visible content directly in HTML.
+            </div>
+            <div class="chip">
+              <strong>Design-system-first</strong>
+              Decide typography, color, spacing, motion, and layout before
+              coding components.
+            </div>
+            <div class="chip">
+              <strong>Deploy-safe</strong>
+              Use CSS and local JS only when plain GitHub Pages or similar is
+              the target.
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side">
+          <div class="signal-card">
+            <strong>5 core outcomes</strong>
+            <p>
+              The kit is built to make future pages look intentional, cinematic,
+              and trustworthy without needing a framework build step.
+            </p>
+            <div class="signal-list">
+              <div>
+                <h3>Premium visuals</h3>
+                <p>
+                  Dark editorial styling, glass-like surfaces, and controlled
+                  accents.
+                </p>
+              </div>
+              <div>
+                <h3>Readable hierarchy</h3>
+                <p>
+                  Hero-first composition, layered sections, and scannable dense
+                  content.
+                </p>
+              </div>
+              <div>
+                <h3>Reliable deployment</h3>
+                <p>
+                  No visible content depends on external framework runtime
+                  imports.
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="principles">
+        <div class="section-head">
+          <span class="eyebrow">What this kit teaches</span>
+          <h2>The principles that actually produce better pages.</h2>
+          <p>
+            Beautiful pages do not come from asking an AI to add more effects.
+            They come from stronger constraints, better hierarchy, and more
+            disciplined systems.
+          </p>
+        </div>
+
+        <div class="principles-grid">
+          <article class="card principle-card">
+            <div class="principle-step">01</div>
+            <h3>Design premium static pages</h3>
+            <p>
+              Learn how to make plain HTML files feel high-end using typography,
+              surface treatment, spacing rhythm, and a strong hero structure.
+            </p>
+          </article>
+
+          <article class="card principle-card">
+            <div class="principle-step">02</div>
+            <h3>Start from a design system</h3>
+            <p>
+              Define page type, conversion goal, color palette, typography,
+              radius scale, panel style, and motion rules before writing layout.
+            </p>
+          </article>
+
+          <article class="card principle-card">
+            <div class="principle-step">03</div>
+            <h3>Make dense content readable</h3>
+            <p>
+              Use cards, chapter tabs, callouts, code blocks, and clear section
+              roles so long information still feels premium and navigable.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid quality-grid">
+          <article class="card quality-card-good">
+            <span class="metric-pill">Good pages do this</span>
+            <div class="metric-value">System</div>
+            <p>
+              They use one coherent visual language, consistent surfaces,
+              deliberate spacing, and controlled motion.
+            </p>
+          </article>
+
+          <article class="card quality-card-warn">
+            <span class="metric-pill">What to avoid</span>
+            <div class="metric-value">Noise</div>
+            <p>
+              Too many gradients, too many accent colors, random radii, generic
+              template sections, and animation for decoration only.
+            </p>
+          </article>
+
+          <article class="card quality-card-bad">
+            <span class="metric-pill">Deployment lesson</span>
+            <div class="metric-value">Reliability</div>
+            <p>
+              If the visible page depends on a failed runtime import, the user
+              sees a broken shell. Static-first rendering prevents that.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="playbook">
+        <div class="tab-shell">
+          <div class="section-head">
+            <span class="eyebrow">Reusable playbook</span>
+            <h2>The exact workflow to use on any future project.</h2>
+            <p>
+              The tabs below condense the full markdown docs into a single
+              practical system: design rules, workflow, AI prompts, static page
+              blueprint, and deploy QA.
+            </p>
+          </div>
+
+          <div class="tab-buttons" role="tablist" aria-label="Playbook tabs">
+            <button
+              class="tab-button is-active"
+              type="button"
+              data-tab="design"
+              role="tab"
+              aria-selected="true"
+            >
+              Design System
+              <small>Visual language and anti-patterns</small>
+            </button>
+            <button
+              class="tab-button"
+              type="button"
+              data-tab="workflow"
+              role="tab"
+              aria-selected="false"
+            >
+              Workflow
+              <small>Step-by-step production order</small>
+            </button>
+            <button
+              class="tab-button"
+              type="button"
+              data-tab="prompts"
+              role="tab"
+              aria-selected="false"
+            >
+              AI Prompts
+              <small>Copy-paste instructions for AI tools</small>
+            </button>
+            <button
+              class="tab-button"
+              type="button"
+              data-tab="blueprint"
+              role="tab"
+              aria-selected="false"
+            >
+              HTML Blueprint
+              <small>Static structure and component rules</small>
+            </button>
+            <button
+              class="tab-button"
+              type="button"
+              data-tab="deploy"
+              role="tab"
+              aria-selected="false"
+            >
+              Deploy + QA
+              <small>GitHub Pages-safe validation</small>
+            </button>
+          </div>
+
+          <section class="tab-panel" data-panel="design" role="tabpanel">
+            <div class="tab-header">
+              <span class="eyebrow">Design system first</span>
+              <h2>Make fewer, stronger decisions.</h2>
+              <p>
+                Premium UI comes from consistency, not novelty. Define the
+                system before the layout so every component feels like it
+                belongs to the same page.
+              </p>
+            </div>
+            <div class="grid">
+              <article class="card">
+                <h3>Typography pairing</h3>
+                <ul>
+                  <li>Use one serif for large hero and section headings.</li>
+                  <li>Use one sans font for UI and body text.</li>
+                  <li>
+                    Use typography contrast to establish hierarchy immediately.
+                  </li>
+                </ul>
+              </article>
+              <article class="card">
+                <h3>Color rules</h3>
+                <ul>
+                  <li>Keep the base dark and neutral.</li>
+                  <li>Use only 2 to 3 accent colors.</li>
+                  <li>Use accents as highlights, not dominant fills.</li>
+                </ul>
+              </article>
+              <article class="card">
+                <h3>Surface language</h3>
+                <ul>
+                  <li>Translucent dark surfaces.</li>
+                  <li>Thin bright borders.</li>
+                  <li>Large radii and deep soft shadows.</li>
+                </ul>
+              </article>
+            </div>
+            <pre class="snippet">
+/* Repeat one premium panel recipe instead of improvising component by component */
+background: rgba(10, 15, 31, 0.72);
+border: 1px solid rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(18px);
+box-shadow: 0 28px 120px rgba(0, 0, 0, 0.38);
+border-radius: 24px;</pre
+            >
+          </section>
+
+          <section
+            class="tab-panel"
+            data-panel="workflow"
+            role="tabpanel"
+            hidden
+          >
+            <div class="tab-header">
+              <span class="eyebrow">Production order</span>
+              <h2>Use the workflow, not random iteration.</h2>
+              <p>
+                The fastest way to get better pages is to follow the same order
+                every time instead of jumping between styling, animation, and
+                content without a system.
+              </p>
+            </div>
+            <ol>
+              <li>Identify the page type.</li>
+              <li>Identify the conversion goal.</li>
+              <li>Generate a design system first.</li>
+              <li>Decide deployment constraints early.</li>
+              <li>Create the content hierarchy.</li>
+              <li>Build the hero first.</li>
+              <li>Create reusable visual primitives.</li>
+              <li>Add motion after the layout works.</li>
+              <li>Make dense content easier to read.</li>
+              <li>Build responsive behavior intentionally.</li>
+              <li>Add reduced-motion support.</li>
+              <li>Validate for deployment reality.</li>
+              <li>Format and publish.</li>
+            </ol>
+            <pre class="snippet">
+python3 .opencode/skills/ui-ux-pro-max/scripts/search.py "dark cinematic technical storytelling landing premium" --design-system -p "Project Name" -f markdown
+npx prettier --write "index.html" "path/to/page.html"
+git add .
+git commit -m "Your commit message"
+git push origin main</pre
+            >
+          </section>
+
+          <section
+            class="tab-panel"
+            data-panel="prompts"
+            role="tabpanel"
+            hidden
+          >
+            <div class="tab-header">
+              <span class="eyebrow">Prompt kit</span>
+              <h2>Tell AI tools exactly what quality means.</h2>
+              <p>
+                Better results come from stronger constraints. Give the AI the
+                deployment context, the visual system, and the anti-patterns to
+                avoid before asking for code.
+              </p>
+            </div>
+            <div class="prompt-grid">
+              <article class="card">
+                <h3>Use for landing pages</h3>
+                <p>
+                  Ask for a premium static HTML landing page with inline CSS,
+                  local JavaScript only, strong hero, overview cards, and a CTA
+                  band.
+                </p>
+              </article>
+              <article class="card">
+                <h3>Use for long guide pages</h3>
+                <p>
+                  Ask for a premium static guide page with chapter tabs, dense
+                  content panels, polished tables, callouts, and media embeds.
+                </p>
+              </article>
+              <article class="card">
+                <h3>Always add this constraint</h3>
+                <p>
+                  If the final page will be deployed as a plain HTML file on
+                  GitHub Pages, do not rely on React or Framer Motion for the
+                  visible content.
+                </p>
+              </article>
+            </div>
+            <pre class="snippet">
+Build me a premium static HTML landing page with inline CSS and local JavaScript only.
+
+Requirements:
+- No framework runtime dependency for the visible content
+- It must work reliably on GitHub Pages
+- Use a static-first approach
+- Use a premium dark editorial aesthetic
+- Use one serif heading font and one sans body font
+- Use large rounded glass-like panels
+- Use subtle ambient gradients and restrained motion</pre
+            >
+          </section>
+
+          <section
+            class="tab-panel"
+            data-panel="blueprint"
+            role="tabpanel"
+            hidden
+          >
+            <div class="tab-header">
+              <span class="eyebrow">Static blueprint</span>
+              <h2>Keep the architecture simple and repeatable.</h2>
+              <p>
+                The blueprint focuses on a shell container, reusable panels,
+                hero-first section order, and small local JavaScript for narrow
+                interactions like tabs and accordions.
+              </p>
+            </div>
+            <ul>
+              <li>Use a centered max-width shell container.</li>
+              <li>Use one panel recipe across cards and surfaces.</li>
+              <li>
+                Use a hero, overview layer, content sections, and final CTA.
+              </li>
+              <li>Use local JS only for small interactions.</li>
+              <li>Use CSS for motion and responsiveness.</li>
+            </ul>
+            <pre class="snippet">
+&lt;main class="shell"&gt;
+  &lt;!-- nav --&gt;
+  &lt;!-- hero --&gt;
+  &lt;!-- overview --&gt;
+  &lt;!-- content sections --&gt;
+  &lt;!-- footer / CTA --&gt;
+&lt;/main&gt;
+
+&lt;script&gt;
+  // small local interactions only
+&lt;/script&gt;</pre
+            >
+          </section>
+
+          <section class="tab-panel" data-panel="deploy" role="tabpanel" hidden>
+            <div class="tab-header">
+              <span class="eyebrow">Deployment reality</span>
+              <h2>Pages are only finished when they survive deployment.</h2>
+              <p>
+                The most common failure mode is a page that looks good locally
+                but breaks after push because rendering depended on runtime
+                imports or incorrect paths.
+              </p>
+            </div>
+            <div class="grid">
+              <article class="card">
+                <h3>Deployment rules</h3>
+                <ul>
+                  <li>Prefer static HTML for plain GitHub Pages.</li>
+                  <li>Prefer relative links.</li>
+                  <li>Prefer local JavaScript only.</li>
+                  <li>Avoid runtime dependencies for core rendering.</li>
+                </ul>
+              </article>
+              <article class="card">
+                <h3>QA checks</h3>
+                <ul>
+                  <li>Hero looks strong on desktop and mobile.</li>
+                  <li>Panels are visually consistent.</li>
+                  <li>Hover and focus states exist.</li>
+                  <li>Reduced motion is respected.</li>
+                </ul>
+              </article>
+              <article class="card">
+                <h3>Common fixes</h3>
+                <ul>
+                  <li>Blank page: move visible content into static HTML.</li>
+                  <li>Broken deploy: verify paths and hosting assumptions.</li>
+                  <li>Generic look: define the design system first.</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" id="resources">
+        <div class="section-head">
+          <span class="eyebrow">Documentation map</span>
+          <h2>Everything in the kit, organized by use.</h2>
+          <p>
+            Use these files directly in AI tools or as your own manual when you
+            need to create premium landing pages and guide pages for future
+            projects.
+          </p>
+        </div>
+
+        <div class="doc-grid">
+          <a class="doc-link" href="./README.md">
+            <span
+              ><strong>README.md</strong><br />Start here for the full kit
+              overview.</span
+            >
+            <span class="tag">Overview</span>
+          </a>
+          <a class="doc-link" href="./01-what-was-built.md">
+            <span
+              ><strong>01-what-was-built.md</strong><br />Patterns and page
+              types explained.</span
+            >
+            <span class="tag">Patterns</span>
+          </a>
+          <a class="doc-link" href="./02-design-system-and-rules.md">
+            <span
+              ><strong>02-design-system-and-rules.md</strong><br />Typography,
+              color, motion, hierarchy.</span
+            >
+            <span class="tag">System</span>
+          </a>
+          <a class="doc-link" href="./03-step-by-step-workflow.md">
+            <span
+              ><strong>03-step-by-step-workflow.md</strong><br />The production
+              sequence to follow every time.</span
+            >
+            <span class="tag">Workflow</span>
+          </a>
+          <a class="doc-link" href="./04-ai-prompts.md">
+            <span
+              ><strong>04-ai-prompts.md</strong><br />Copy-paste prompts for
+              Claude, ChatGPT, and more.</span
+            >
+            <span class="tag">Prompts</span>
+          </a>
+          <a class="doc-link" href="./05-static-html-blueprint.md">
+            <span
+              ><strong>05-static-html-blueprint.md</strong><br />Reusable
+              architecture for static-first pages.</span
+            >
+            <span class="tag">Blueprint</span>
+          </a>
+          <a class="doc-link" href="./06-deploy-and-qa.md">
+            <span
+              ><strong>06-deploy-and-qa.md</strong><br />Deployment safety and
+              quality checks.</span
+            >
+            <span class="tag">QA</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="resources-grid">
+          <article class="resource-card">
+            <h3>When to stay static-first</h3>
+            <ul>
+              <li>The project is deployed as plain HTML files.</li>
+              <li>GitHub Pages is the main host.</li>
+              <li>The page only needs local tabs, accordions, or toggles.</li>
+              <li>
+                You want deterministic rendering with minimal failure points.
+              </li>
+            </ul>
+          </article>
+
+          <article class="resource-card">
+            <h3>When to use Framer Motion instead</h3>
+            <ul>
+              <li>The project is a real React/Vite/Next app.</li>
+              <li>A build process already exists.</li>
+              <li>The deployment target supports the built app.</li>
+              <li>Motion meaningfully improves the experience.</li>
+            </ul>
+          </article>
+
+          <article class="resource-card">
+            <h3>The short reusable rule set</h3>
+            <p>
+              Build a premium static-first HTML page. Use a strong design system
+              first. Use dark editorial styling, clear hierarchy, restrained
+              motion, and reliable deployment-safe implementation.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div>
+          <span class="eyebrow">Best way to use this</span>
+          <h2>
+            Open the docs, copy the prompts, then build from the blueprint.
+          </h2>
+          <p>
+            If you follow the workflow in order instead of jumping straight into
+            code generation, you will consistently get stronger-looking pages in
+            any future project.
+          </p>
+        </div>
+        <a class="button" href="./04-ai-prompts.md">Open AI prompts</a>
+      </section>
+
+      <p class="footer-note">
+        Static-first, framework-optional, deploy-safe UI/UX documentation kit
+        for premium landing pages and guide pages.
+      </p>
+    </main>
+
+    <script>
+      (function () {
+        const tabs = document.querySelectorAll("[data-tab]");
+        const panels = document.querySelectorAll("[data-panel]");
+
+        if (!tabs.length || !panels.length) {
+          return;
+        }
+
+        function activateTab(id) {
+          tabs.forEach((tab) => {
+            const active = tab.getAttribute("data-tab") === id;
+            tab.classList.toggle("is-active", active);
+            tab.setAttribute("aria-selected", active ? "true" : "false");
+          });
+
+          panels.forEach((panel) => {
+            panel.hidden = panel.getAttribute("data-panel") !== id;
+          });
+        }
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            activateTab(tab.getAttribute("data-tab"));
+          });
+        });
+
+        activateTab("design");
+      })();
+    </script>
+  </body>
+</html>
