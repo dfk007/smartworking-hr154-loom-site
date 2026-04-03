@@ -1,0 +1,2192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenCode Loom Master Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #060816;
+        --bg-soft: #0d1226;
+        --panel: rgba(11, 18, 38, 0.72);
+        --panel-strong: rgba(15, 23, 46, 0.92);
+        --panel-border: rgba(166, 180, 255, 0.18);
+        --text: #f5f7ff;
+        --muted: #b6c0e5;
+        --muted-strong: #dbe3ff;
+        --accent: #8ea2ff;
+        --accent-2: #7be7c7;
+        --accent-3: #f4c56c;
+        --shadow: 0 28px 120px rgba(0, 0, 0, 0.38);
+        --radius-xl: 32px;
+        --radius-lg: 24px;
+        --radius-md: 18px;
+        --max: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background:
+          radial-gradient(
+            circle at 12% 18%,
+            rgba(142, 162, 255, 0.26),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 82% 16%,
+            rgba(123, 231, 199, 0.2),
+            transparent 24%
+          ),
+          radial-gradient(
+            circle at 62% 82%,
+            rgba(244, 197, 108, 0.16),
+            transparent 20%
+          ),
+          linear-gradient(180deg, #040611 0%, #090e1f 40%, #060816 100%);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::before {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: radial-gradient(
+          circle at center,
+          rgba(0, 0, 0, 0.65),
+          transparent 86%
+        );
+        opacity: 0.3;
+      }
+
+      body::after {
+        background: linear-gradient(
+          180deg,
+          rgba(6, 8, 22, 0) 0%,
+          rgba(6, 8, 22, 0.88) 88%
+        );
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent-3);
+        outline-offset: 3px;
+      }
+
+      .app-shell {
+        position: relative;
+        z-index: 1;
+        width: min(calc(100% - 32px), var(--max));
+        margin: 0 auto;
+        padding: 20px 0 64px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 16px;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        margin-bottom: 28px;
+        border: 1px solid var(--panel-border);
+        border-radius: 999px;
+        background: rgba(8, 12, 26, 0.72);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 14px 48px rgba(0, 0, 0, 0.25);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background:
+          radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.46),
+            transparent 34%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(142, 162, 255, 0.95),
+            rgba(123, 231, 199, 0.82)
+          );
+        box-shadow: 0 12px 32px rgba(123, 231, 199, 0.18);
+      }
+
+      .brand-copy strong,
+      .brand-copy span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .brand-copy strong {
+        font-size: 0.95rem;
+        letter-spacing: 0.03em;
+      }
+
+      .brand-copy span {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .topbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .ghost-link,
+      .primary-link,
+      .tab-button {
+        border-radius: 999px;
+        border: 1px solid transparent;
+        transition:
+          transform 220ms ease,
+          border-color 220ms ease,
+          background 220ms ease,
+          color 220ms ease,
+          box-shadow 220ms ease;
+      }
+
+      .ghost-link,
+      .primary-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 18px;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+
+      .ghost-link {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-strong);
+      }
+
+      .ghost-link:hover,
+      .ghost-link:focus-visible {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .primary-link {
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.98),
+          rgba(123, 231, 199, 0.92)
+        );
+        color: #07101f;
+        box-shadow: 0 18px 40px rgba(142, 162, 255, 0.28);
+      }
+
+      .primary-link:hover,
+      .primary-link:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 48px rgba(142, 162, 255, 0.38);
+      }
+
+      @keyframes fade-lift {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float-panel {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.88fr);
+        gap: 22px;
+        padding: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: var(--radius-xl);
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.07),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(11, 18, 38, 0.68);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+        animation: fade-lift 720ms ease-out both;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        width: 440px;
+        height: 440px;
+        border-radius: 50%;
+        top: -140px;
+        right: -80px;
+        background: radial-gradient(
+          circle,
+          rgba(142, 162, 255, 0.34),
+          transparent 66%
+        );
+        filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--muted-strong);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+        box-shadow: 0 0 18px rgba(244, 197, 108, 0.65);
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-copy h1 {
+        max-width: 11ch;
+        margin: 18px 0 16px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(3rem, 7vw, 5.6rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      .hero-copy p {
+        max-width: 60ch;
+        margin: 0 0 22px;
+        color: var(--muted-strong);
+        font-size: 1.02rem;
+        line-height: 1.75;
+      }
+
+      .chip-row,
+      .pill-row,
+      .asset-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .chip,
+      .pill,
+      .asset-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-strong);
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .chip strong,
+      .pill strong {
+        color: var(--text);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 24px 0 26px;
+      }
+
+      .hero-side {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .glass-card,
+      .signal-card,
+      .story-card,
+      .chapter-panel,
+      .overview-card,
+      .footer-card {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-lg);
+        background: rgba(10, 15, 31, 0.72);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .glass-card {
+        padding: 22px;
+      }
+
+      .signal-card {
+        padding: 20px;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.03)
+          ),
+          rgba(10, 15, 31, 0.8);
+        animation: float-panel 8s ease-in-out infinite;
+      }
+
+      .signal-card h2,
+      .signal-card h3,
+      .overview-card h3,
+      .story-card h3,
+      .panel-card h3,
+      .footer-card h3 {
+        margin: 0 0 10px;
+        font-size: 1.08rem;
+        line-height: 1.3;
+      }
+
+      .signal-card p,
+      .overview-card p,
+      .story-card p,
+      .panel-card p,
+      .footer-card p,
+      .chapter-head p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .signal-card strong,
+      .overview-stat strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 2rem;
+        line-height: 1;
+        color: var(--text);
+      }
+
+      .signal-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .signal-list div {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .section-grid,
+      .overview-grid,
+      .story-grid,
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 22px;
+      }
+
+      .overview-card,
+      .story-card,
+      .footer-card {
+        grid-column: span 4;
+        padding: 22px;
+        animation: fade-lift 700ms ease-out both;
+      }
+
+      .overview-grid > :nth-child(2),
+      .story-grid > :nth-child(2),
+      .footer-grid > :nth-child(2) {
+        animation-delay: 90ms;
+      }
+
+      .overview-grid > :nth-child(3),
+      .story-grid > :nth-child(3) {
+        animation-delay: 180ms;
+      }
+
+      .overview-card.wide,
+      .footer-card.wide {
+        grid-column: span 6;
+      }
+
+      .overview-card.full,
+      .footer-card.full {
+        grid-column: span 12;
+      }
+
+      .overview-stat {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .overview-stat span {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(142, 162, 255, 0.14);
+        color: var(--muted-strong);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .section-title {
+        margin-top: 28px;
+        padding-top: 10px;
+      }
+
+      .section-title h2,
+      .chapter-head h2 {
+        margin: 10px 0 10px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+
+      .section-title p {
+        max-width: 64ch;
+        color: var(--muted-strong);
+        line-height: 1.75;
+      }
+
+      .story-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 240px;
+      }
+
+      .story-card::before {
+        content: "";
+        position: absolute;
+        inset: auto -40px -52px auto;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(142, 162, 255, 0.22),
+          transparent 68%
+        );
+        pointer-events: none;
+      }
+
+      .story-step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        margin-bottom: 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-strong);
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      .chapter-shell {
+        margin-top: 30px;
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-xl);
+        background: rgba(8, 12, 26, 0.55);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+        animation: fade-lift 760ms ease-out both;
+        animation-delay: 180ms;
+      }
+
+      .chapter-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .tab-button {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        min-height: 76px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted-strong);
+        text-align: left;
+        min-width: 170px;
+      }
+
+      .tab-button small {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.4;
+      }
+
+      .tab-button.is-active {
+        border-color: rgba(142, 162, 255, 0.32);
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.18),
+          rgba(123, 231, 199, 0.12)
+        );
+        color: var(--text);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+      }
+
+      .tab-button:hover,
+      .tab-button:focus-visible {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .chapter-panel {
+        overflow: hidden;
+        padding: 28px;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.06),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(10, 15, 31, 0.82);
+      }
+
+      .chapter-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .chapter-head p {
+        max-width: 58ch;
+      }
+
+      .chapter-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(244, 197, 108, 0.14);
+        color: var(--muted-strong);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .panel-body {
+        margin-top: 22px;
+      }
+
+      .panel-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .panel-card {
+        grid-column: span 12;
+        padding: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .panel-card.span-8 {
+        grid-column: span 8;
+      }
+
+      .panel-card.span-6 {
+        grid-column: span 6;
+      }
+
+      .panel-card.span-4 {
+        grid-column: span 4;
+      }
+
+      .panel-card.featured {
+        background: linear-gradient(
+          135deg,
+          rgba(142, 162, 255, 0.12),
+          rgba(123, 231, 199, 0.08)
+        );
+      }
+
+      .panel-card ul,
+      .panel-card ol {
+        margin: 14px 0 0 18px;
+        padding: 0;
+        color: var(--muted-strong);
+        line-height: 1.7;
+      }
+
+      .panel-card li + li {
+        margin-top: 8px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        margin-top: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 620px;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      th,
+      td {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+        vertical-align: top;
+        line-height: 1.65;
+      }
+
+      th {
+        color: var(--muted-strong);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .callout {
+        margin-top: 16px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 4px solid var(--accent);
+        border-radius: 18px;
+        background: rgba(142, 162, 255, 0.1);
+        color: var(--muted-strong);
+        line-height: 1.7;
+      }
+
+      .callout.good {
+        border-left-color: var(--accent-2);
+        background: rgba(123, 231, 199, 0.1);
+      }
+
+      .callout.warn {
+        border-left-color: var(--accent-3);
+        background: rgba(244, 197, 108, 0.1);
+      }
+
+      pre {
+        margin: 16px 0 0;
+        padding: 18px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(5, 8, 18, 0.92);
+        color: #f4f6ff;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+      }
+
+      code {
+        padding: 0.15em 0.4em;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.92em;
+      }
+
+      .asset-row {
+        margin-top: 16px;
+      }
+
+      .asset-link {
+        transition:
+          transform 220ms ease,
+          border-color 220ms ease,
+          background 220ms ease;
+      }
+
+      .asset-link:hover,
+      .asset-link:focus-visible {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .media-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 16px;
+      }
+
+      .media-card {
+        grid-column: span 6;
+        padding: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .media-card.full {
+        grid-column: span 12;
+      }
+
+      .meta {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      audio,
+      video,
+      iframe {
+        width: 100%;
+        margin-top: 16px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #000;
+      }
+
+      iframe {
+        min-height: 880px;
+        background: rgba(8, 12, 26, 0.8);
+      }
+
+      .footer-grid {
+        margin-top: 30px;
+      }
+
+      .footer-card ul {
+        margin: 14px 0 0 18px;
+        padding: 0;
+        color: var(--muted-strong);
+        line-height: 1.7;
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        text-align: center;
+      }
+
+      @media (max-width: 1100px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .overview-card,
+        .story-card,
+        .footer-card,
+        .overview-card.wide,
+        .footer-card.wide,
+        .panel-card.span-8,
+        .panel-card.span-6,
+        .panel-card.span-4,
+        .media-card,
+        .media-card.full {
+          grid-column: span 12;
+        }
+
+        .chapter-head {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .app-shell {
+          width: min(calc(100% - 24px), var(--max));
+        }
+
+        .topbar {
+          position: static;
+          border-radius: 28px;
+        }
+
+        .topbar,
+        .brand,
+        .topbar-actions {
+          align-items: flex-start;
+        }
+
+        .topbar {
+          flex-direction: column;
+        }
+
+        .topbar-actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .hero,
+        .chapter-shell,
+        .chapter-panel {
+          padding: 22px;
+        }
+
+        .hero-copy h1,
+        .section-title h2,
+        .chapter-head h2 {
+          max-width: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .app-shell {
+          width: min(calc(100% - 18px), var(--max));
+          padding-top: 16px;
+        }
+
+        .topbar,
+        .hero,
+        .glass-card,
+        .signal-card,
+        .overview-card,
+        .story-card,
+        .chapter-shell,
+        .chapter-panel,
+        .panel-card,
+        .media-card,
+        .footer-card {
+          border-radius: 22px;
+        }
+
+        .hero-copy h1 {
+          font-size: clamp(2.5rem, 16vw, 4rem);
+        }
+
+        .primary-link,
+        .ghost-link,
+        .asset-link {
+          width: 100%;
+        }
+
+        .tab-button {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <template id="tpl-sample">
+      <div class="panel-grid">
+        <article class="panel-card featured span-12">
+          <h3>What the sample video gets right</h3>
+          <p>
+            It does not waste time on biography. It opens with role-fit, moves
+            immediately into proof, then spends most of the runtime on one
+            credible project story.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>What the candidate says</th>
+                  <th>Why it works</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>0:00 - 1:27</td>
+                  <td>
+                    Introduces himself as a senior DevOps and cloud engineer,
+                    mirrors the job description, and states three strengths
+                    quickly.
+                  </td>
+                  <td>
+                    Creates immediate credibility and makes the rest of the
+                    video easier to believe.
+                  </td>
+                </tr>
+                <tr>
+                  <td>1:27 - 4:32</td>
+                  <td>
+                    Walks through one recent platform project: challenge,
+                    architecture, Terraform, Kubernetes, CI/CD, observability,
+                    and outcomes.
+                  </td>
+                  <td>
+                    Shows ownership and decision-making instead of only listing
+                    tools.
+                  </td>
+                </tr>
+                <tr>
+                  <td>4:32 - 5:41</td>
+                  <td>
+                    Closes with why he fits, how he works remotely, and why the
+                    role matters to him.
+                  </td>
+                  <td>Ends on hireability, not repetition.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>How the sample candidate frames himself</h3>
+          <ul>
+            <li>Senior DevOps and Cloud Engineer.</li>
+            <li>Multi-cloud background across AWS, Azure, and GCP.</li>
+            <li>
+              Strong in Terraform infrastructure, scalable container platforms,
+              and CI/CD automation.
+            </li>
+            <li>Focused on reliable, scalable, production-ready systems.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Talking strategy worth copying</h3>
+          <ul>
+            <li>Use JD vocabulary repeatedly and naturally.</li>
+            <li>Move from identity to proof fast.</li>
+            <li>Center the middle on one flagship project.</li>
+            <li>
+              Explain challenge, design, implementation, and result in order.
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-8">
+          <h3>Technical proof points packed into the middle</h3>
+          <ul>
+            <li>
+              Reusable Terraform modules for networking, compute, IAM, and
+              storage.
+            </li>
+            <li>
+              Multiple environments, including production, staging, and
+              customer-specific deployments.
+            </li>
+            <li>
+              Containerized workloads on Kubernetes with autoscaling and
+              reliability in mind.
+            </li>
+            <li>GitHub Actions and GitOps-style delivery workflows.</li>
+            <li>
+              Prometheus, Grafana, OpenTelemetry, and SRE language around
+              reliability.
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-4">
+          <h3>Important limit</h3>
+          <div class="callout warn">
+            The sample runs 5:41, but Smart Working says your video should stay
+            under 5 minutes. Copy the structure, not the length.
+          </div>
+        </article>
+
+        <article class="panel-card span-12">
+          <h3>Transcript-based summary</h3>
+          <pre>
+Opening: "I am a senior DevOps and cloud engineer... this role fits my background in GCP, Terraform, serverless architecture, Cloud Run and observability."
+
+Strengths: reusable Terraform modules, scalable container systems, and CI/CD automation.
+
+Project section: one platform story covering multi-environment infrastructure, Kubernetes, event-driven design, deployment automation, observability, and production outcomes.
+
+Close: strong fit because of Terraform, scalable cloud infrastructure, ownership mindset, remote readiness, and motivation to work more deeply with GCP services.</pre
+          >
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-improvements">
+      <div class="panel-grid">
+        <article class="panel-card span-6">
+          <h3>What the original draft already did well</h3>
+          <ul>
+            <li>It correctly emphasized GCP and Terraform.</li>
+            <li>It used your strongest recent experience.</li>
+            <li>It included CI/CD and observability.</li>
+            <li>It was already close to a usable 5-minute structure.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>What needed to change</h3>
+          <ul>
+            <li>The opening was more biographical than sharp.</li>
+            <li>
+              It leaned too heavily into AI specifics instead of platform
+              ownership.
+            </li>
+            <li>
+              The middle read like a stack list instead of a
+              challenge-to-outcome story.
+            </li>
+            <li>It did not answer "why should we hire you" directly enough.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card featured span-12">
+          <h3>How the updated version improves positioning</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Original direction</th>
+                  <th>Updated direction</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Opening</td>
+                  <td>Intro plus background.</td>
+                  <td>
+                    Intro plus role-fit plus three strengths inside the first
+                    minute.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Role alignment</td>
+                  <td>Strong on GCP and Terraform, but still AI-heavy.</td>
+                  <td>
+                    More clearly framed as DevOps, platform engineering,
+                    reliability, automation, and cloud operations.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Project walkthrough</td>
+                  <td>Feature list and tool list.</td>
+                  <td>Challenge -> implementation -> ownership -> result.</td>
+                </tr>
+                <tr>
+                  <td>Close</td>
+                  <td>Polite CTA.</td>
+                  <td>
+                    Direct case for why you are hireable and ready to
+                    contribute.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel-card span-12">
+          <div class="callout good">
+            Best positioning decision: present yourself as a platform and
+            infrastructure engineer who also has strong AI-platform experience,
+            not as someone only suitable for LLM-specific work.
+          </div>
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-your-script">
+      <div class="panel-grid">
+        <article class="panel-card featured span-12">
+          <h3>Final script</h3>
+          <pre>
+0:00 - 0:55 | Start Strong
+
+Hi, I am Daud Farzand, an AI Platform Infrastructure Engineer based in Lahore. I currently work remotely with US-based teams, and I have just over four years of production experience across DevOps, cloud infrastructure, platform engineering, and MLOps, with a strong hands-on focus on Google Cloud Platform and Terraform.
+
+I am excited about this role because it combines the kind of work I do best: building reliable cloud infrastructure, automating deployments, and operating production systems with strong observability and cost awareness.
+
+If I had to summarize my strengths in three areas, they would be: first, Terraform-based infrastructure across multiple environments; second, containerized platform operations on GCP using services like Cloud Run, GKE, and Vertex AI; and third, CI/CD and observability for production reliability.
+
+0:55 - 3:20 | Showcase Your Best Work
+
+A strong example of my work is the platform infrastructure I have built across my recent roles at Tech Prysm and Techanzy, where I was responsible for designing and operating production systems end to end.
+
+One project I am especially proud of was building and deploying a production-grade AI platform with multi-environment infrastructure, containerized services, observability, and automated delivery. The challenge was to support reliable deployments across development, staging, production, and customer-specific environments while keeping the platform secure, scalable, and cost efficient.
+
+To solve that, I used Terraform to provision and manage cloud infrastructure in a repeatable way, including IAM, networking, storage, and compute resources. On Google Cloud, I worked with Vertex AI workloads, Cloud Run for serverless API services, GKE for container orchestration, and BigQuery for usage analytics. I also used GitHub Actions for CI/CD so infrastructure and application changes could move through auditable deployment workflows instead of manual changes.
+
+On the platform side, I worked with containerized services built with FastAPI, PostgreSQL, PgBouncer, object storage, and supporting services, with health checks and deployment automation built in. In another production system, I also used Terraform, Docker Compose, Ansible, and WireGuard to provision hybrid infrastructure and reduce deployment time significantly.
+
+Observability was a major part of my ownership. I implemented Prometheus, Grafana, and OpenTelemetry to monitor latency, resource usage, and service health, and used those signals to improve reliability and performance. That work helped us maintain high availability, support production workloads with confidence, and reduce costs through better deployment discipline, prompt caching, and more efficient infrastructure usage.
+
+What is most relevant for this role is that I was not only deploying services, I was owning the environment end to end: architecture, infrastructure as code, deployment workflows, monitoring, reliability, and ongoing optimization.
+
+3:20 - 4:20 | Why I Fit This Role
+
+I believe I am a strong fit for this role because the core requirements match the work I have already been doing in production. I have hands-on experience with GCP, Terraform, Docker, Kubernetes, GitHub Actions, observability stacks, and remote collaboration.
+
+I also think my background is a good match for the platform itself. I have worked in multi-environment and multi-tenant systems, including customer-specific deployments, where reliability, access control, and cost efficiency matter every day. I am comfortable owning infrastructure beyond the initial setup, including debugging, incident response, performance tuning, and documentation.
+
+I have also been working remotely with international teams, so async communication, clear written updates, and operational documentation are already part of how I work.
+
+4:20 - 4:50 | Close
+
+What attracts me to Smart Working is the opportunity to contribute to a high-standard remote engineering environment while going deeper into the exact platform work I enjoy most on GCP and Terraform.
+
+Thank you for your time. I would be glad to discuss any part of my experience in more depth, and I would be excited to contribute to your team.</pre
+          >
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Resume points to lean on</h3>
+          <ul>
+            <li>
+              Production GCP work across Vertex AI, Cloud Run, GKE, and
+              BigQuery.
+            </li>
+            <li>Terraform-driven infrastructure and CI/CD automation.</li>
+            <li>Prometheus, Grafana, and OpenTelemetry for observability.</li>
+            <li>
+              Remote work with US-based teams and customer-facing environments.
+            </li>
+            <li>Cost optimization and deployment-time reduction.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>What to emphasize less</h3>
+          <ul>
+            <li>Too much deep LLM product detail.</li>
+            <li>Too many tool names in a row without explaining impact.</li>
+            <li>Long discussion of UI work.</li>
+            <li>Anything that sounds like resume recitation.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-12">
+          <div class="callout">
+            Your strongest angle is already enough: GCP, Terraform, Cloud Run,
+            GKE, observability, multi-environment delivery, and platform
+            ownership. Stay strongest there and do not overclaim anything you
+            cannot defend in an interview.
+          </div>
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-screen-share">
+      <div class="panel-grid">
+        <article class="panel-card span-6">
+          <h3>Best order if you share screen</h3>
+          <ol>
+            <li>Start on camera for the intro.</li>
+            <li>Switch to a simple architecture diagram.</li>
+            <li>Show a Terraform module or folder structure.</li>
+            <li>Show a GitHub Actions workflow or deployment pipeline.</li>
+            <li>Show a monitoring dashboard screenshot if available.</li>
+            <li>Return to camera for the closing 20 to 30 seconds.</li>
+          </ol>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>What you can safely show</h3>
+          <ul>
+            <li>Sanitized Terraform folders and modules.</li>
+            <li>Redacted architecture diagrams.</li>
+            <li>Pipeline YAML with secrets hidden.</li>
+            <li>Monitoring dashboards with names or URLs blurred.</li>
+            <li>Public-facing or mock environment screens only.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-12">
+          <h3>What not to show</h3>
+          <ul>
+            <li>Resume or LinkedIn profile.</li>
+            <li>Internal client names if they are confidential.</li>
+            <li>
+              Secrets, URLs, tokens, IPs, project IDs, production hostnames, or
+              customer data.
+            </li>
+            <li>Messy desktop tabs and unrelated windows.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card featured span-12">
+          <h3>Suggested visual sequence</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Script section</th>
+                  <th>Visual</th>
+                  <th>Why it helps</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Opening</td>
+                  <td>Face camera only</td>
+                  <td>
+                    Builds trust and lets them assess communication clearly.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Project challenge and architecture</td>
+                  <td>Architecture diagram</td>
+                  <td>
+                    Makes the explanation concrete without exposing code
+                    immediately.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Terraform and CI/CD</td>
+                  <td>Repo structure or workflow file</td>
+                  <td>Proves the infrastructure is real and structured.</td>
+                </tr>
+                <tr>
+                  <td>Observability and results</td>
+                  <td>Dashboard screenshot</td>
+                  <td>
+                    Reinforces production ownership and reliability mindset.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Close</td>
+                  <td>Back to face camera</td>
+                  <td>
+                    Ends with more confidence and stronger human connection.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-delivery">
+      <div class="panel-grid">
+        <article class="panel-card span-4">
+          <h3>How you should sound</h3>
+          <ul>
+            <li>Calm</li>
+            <li>Direct</li>
+            <li>Professional</li>
+            <li>Confident, not salesy</li>
+            <li>Technical, but easy to follow</li>
+          </ul>
+        </article>
+
+        <article class="panel-card featured span-4">
+          <h3>Positioning sentence</h3>
+          <div class="callout good">
+            I build and operate production cloud platforms with Terraform, GCP,
+            container platforms, CI/CD, and observability, and I already work
+            well in remote async environments.
+          </div>
+        </article>
+
+        <article class="panel-card span-4">
+          <h3>Keywords to use naturally</h3>
+          <ul>
+            <li>production</li>
+            <li>reliable</li>
+            <li>multi-environment</li>
+            <li>customer-specific deployments</li>
+            <li>automation</li>
+            <li>observability</li>
+            <li>cost efficiency</li>
+            <li>end-to-end ownership</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Recording checklist</h3>
+          <ul>
+            <li>Keep it under 5 minutes.</li>
+            <li>Quiet room, tested microphone, stable internet.</li>
+            <li>Good lighting and clean background.</li>
+            <li>Open only the windows you plan to show.</li>
+            <li>Do one rehearsal, then record a natural take.</li>
+            <li>Use your script as cues, not as a reading document.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Avoid these mistakes</h3>
+          <ul>
+            <li>Sounding memorized.</li>
+            <li>Listing too many tools without explaining impact.</li>
+            <li>Going too deep into AI terminology for a DevOps role.</li>
+            <li>Talking past 5 minutes.</li>
+            <li>Claiming experience you may not be able to defend later.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-12">
+          <h3>Final strategy</h3>
+          <pre>
+1. Start with confidence and role fit.
+2. State three strengths quickly.
+3. Spend most of the video on one strong project story.
+4. Emphasize ownership, reliability, automation, and observability.
+5. Close by showing you are remote-ready and ready to contribute.</pre
+          >
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-practice">
+      <div class="panel-grid">
+        <article class="panel-card span-12">
+          <h3>Practice assets</h3>
+          <p>
+            These files are linked directly so you can rehearse or open the raw
+            markdown without leaving the project directory.
+          </p>
+          <div class="asset-row">
+            <a
+              class="asset-link"
+              href="./daud-loom-bullet-rehearsal.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open <code>daud-loom-bullet-rehearsal.md</code></a
+            >
+            <a
+              class="asset-link"
+              href="./daud-loom-final-4m30-spoken.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open <code>daud-loom-final-4m30-spoken.md</code></a
+            >
+          </div>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Bullet rehearsal version</h3>
+          <pre>
+# Daud Loom Bullet Rehearsal Version
+
+Use this for practice, not for reading word-for-word.
+
+## Target
+
+- Total length: 4:20 to 4:40
+- Start and end on camera
+- Screen share only if your project material is safe to show
+
+## Opening - 40 to 50 seconds
+
+- Hi, I am Daud Farzand, based in Lahore
+- AI Platform Infrastructure Engineer with just over 4 years of production experience
+- Remote work with US-based teams
+- Strongest overlap with this role: GCP, Terraform, platform operations, CI/CD, observability
+- Why this role excites me: reliable cloud infrastructure, automation, end-to-end ownership
+
+## Three Strengths - 20 to 30 seconds
+
+- Terraform-based infrastructure across multiple environments
+- GCP platform operations with Cloud Run, GKE, Vertex AI, BigQuery
+- CI/CD and observability for production reliability
+
+## Main Project Story - 2 minutes to 2 minutes 20 seconds
+
+- Best example: platform infrastructure work across Tech Prysm and Techanzy
+- Goal: production-grade platform, secure, scalable, cost-aware
+- Challenge: support dev, staging, production, and customer-specific deployments reliably
+- My role: architecture, IaC, deployment workflows, monitoring, optimization
+- Terraform for IAM, networking, storage, compute
+- GCP usage: Cloud Run, GKE, Vertex AI, BigQuery
+- CI/CD with GitHub Actions and auditable deployment workflows
+- Platform stack: FastAPI, PostgreSQL, PgBouncer, object storage, health checks
+- Additional infrastructure experience: Docker Compose, Ansible, WireGuard, hybrid setup
+- Observability: Prometheus, Grafana, OpenTelemetry
+- Outcomes: high availability, faster deployments, better cost discipline, stronger operational confidence
+
+## Why I Fit - 45 to 55 seconds
+
+- Production experience already matches the work in the JD
+- Strong hands-on background with GCP, Terraform, Docker, Kubernetes, GitHub Actions
+- Comfortable with customer-specific and multi-tenant environments
+- Good at ownership beyond setup: debugging, incident response, performance tuning, documentation
+- Already remote and async-ready
+
+## Close - 20 to 25 seconds
+
+- Smart Working fits the kind of remote engineering environment I want
+- I would be excited to contribute on GCP and Terraform from day one
+- Thank you for your time
+
+## Delivery Reminders
+
+- Do not rush the first 20 seconds
+- Keep sentences short
+- Do not sound memorized
+- Explain impact, not just tools
+- Stay under 5 minutes</pre
+          >
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Natural 4:30 spoken version</h3>
+          <pre>
+# Daud Loom Final 4:30 Spoken Version
+
+This version is optimized to sound natural aloud. Read it once or twice, then record from memory using the flow.
+
+Hi, I am Daud Farzand, and I am based in Lahore.
+
+I currently work as an AI Platform Infrastructure Engineer with US-based teams, and I have just over four years of production experience across DevOps, cloud infrastructure, platform engineering, and MLOps, with a strong hands-on focus on Google Cloud Platform and Terraform.
+
+I am excited about this role because it is very closely aligned with the kind of work I already do in production: building reliable cloud infrastructure, automating deployments, improving observability, and taking ownership of systems end to end.
+
+If I had to summarize my strengths in three areas, I would say first, building Terraform-based infrastructure across multiple environments; second, operating containerized platforms on GCP using services like Cloud Run, GKE, and Vertex AI; and third, building CI/CD and observability workflows that make production systems more reliable and easier to operate.
+
+A strong example of my work is the platform infrastructure I have built across my recent roles at Tech Prysm and Techanzy.
+
+One project I am especially proud of was building and deploying a production-grade platform that needed to support secure, scalable, and cost-aware deployments across development, staging, production, and customer-specific environments.
+
+The challenge was not just deploying services once. It was making the whole environment repeatable, observable, and maintainable over time.
+
+To solve that, I used Terraform to provision and manage infrastructure in a consistent way, including IAM, networking, storage, and compute resources. On Google Cloud, I worked with services including Cloud Run for serverless APIs, GKE for container orchestration, Vertex AI workloads, and BigQuery for analytics and usage reporting.
+
+I also built deployment workflows using GitHub Actions so that both infrastructure and application changes could move through auditable pipelines rather than manual changes.
+
+On the platform side, I worked with containerized services built around FastAPI, PostgreSQL, PgBouncer, object storage, and supporting components, with health checks and deployment automation built in from the start. In another production system, I also used Terraform, Docker Compose, Ansible, and WireGuard to provision hybrid infrastructure and reduce deployment time significantly.
+
+Observability was also a major part of my ownership. I implemented Prometheus, Grafana, and OpenTelemetry to monitor latency, resource usage, and service health, and used those signals to improve reliability and performance over time.
+
+What is most relevant for this role is that I was not only deploying workloads. I was owning the environment end to end, including architecture, infrastructure as code, deployment workflows, monitoring, reliability, and ongoing optimization.
+
+I believe I am a strong fit for this role because the core requirements are very close to the work I have already been doing. I have hands-on experience with GCP, Terraform, Docker, Kubernetes, GitHub Actions, observability stacks, and remote collaboration.
+
+I have also worked in multi-environment and multi-tenant systems, including customer-specific deployments, where reliability, access control, and cost efficiency matter every day. I am comfortable owning infrastructure beyond the initial setup, including debugging, incident response, performance tuning, and documentation.
+
+I have been working remotely with international teams as well, so async communication, clear written updates, and documentation are already part of how I work.
+
+What attracts me to Smart Working is the opportunity to contribute in a high-standard remote engineering environment while going deeper into the exact platform work I enjoy most on GCP and Terraform.
+
+Thank you for your time. I would be glad to discuss any part of my experience in more detail, and I would be excited to contribute to your team.</pre
+          >
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-media">
+      <div class="panel-grid">
+        <article class="panel-card span-12">
+          <h3>Media links</h3>
+          <div class="asset-row">
+            <a
+              class="asset-link"
+              href="./daud-loom-final-4m30-spoken.mp3"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open <code>daud-loom-final-4m30-spoken.mp3</code></a
+            >
+            <a
+              class="asset-link"
+              href="./daud-loom-final-4m30-spoken.mp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open <code>daud-loom-final-4m30-spoken.mp4</code></a
+            >
+            <a
+              class="asset-link"
+              href="../loom-sample/compressed-2.mp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open <code>compressed-2.mp4</code></a
+            >
+          </div>
+        </article>
+
+        <div class="media-grid" style="grid-column: span 12; margin-top: 0">
+          <article class="media-card">
+            <h3>Generated practice audio</h3>
+            <p class="meta">
+              Source: <code>./daud-loom-final-4m30-spoken.mp3</code>
+            </p>
+            <audio controls preload="metadata">
+              <source
+                src="./daud-loom-final-4m30-spoken.mp3"
+                type="audio/mpeg"
+              />
+              Your browser does not support the audio element.
+            </audio>
+          </article>
+
+          <article class="media-card">
+            <h3>Generated practice video</h3>
+            <p class="meta">
+              Source: <code>./daud-loom-final-4m30-spoken.mp4</code>
+            </p>
+            <video controls preload="metadata">
+              <source
+                src="./daud-loom-final-4m30-spoken.mp4"
+                type="video/mp4"
+              />
+              Your browser does not support the video element.
+            </video>
+          </article>
+
+          <article class="media-card full">
+            <h3>Original Smart Working sample Loom video</h3>
+            <p class="meta">
+              Source: <code>../loom-sample/compressed-2.mp4</code>
+            </p>
+            <video controls preload="metadata">
+              <source src="../loom-sample/compressed-2.mp4" type="video/mp4" />
+              Your browser does not support the video element.
+            </video>
+            <div class="callout warn">
+              Use this to study structure and delivery. Do not copy the runtime
+              because it exceeds the stated 5-minute limit.
+            </div>
+          </article>
+        </div>
+      </div>
+    </template>
+
+    <template id="tpl-recording">
+      <div class="panel-grid">
+        <article class="panel-card span-6">
+          <h3>Before you record</h3>
+          <ul>
+            <li>Keep the target runtime between 4:20 and 4:50.</li>
+            <li>Use a quiet room and test your mic first.</li>
+            <li>Keep camera at eye level with decent lighting.</li>
+            <li>Close unrelated tabs, notifications, and chat popups.</li>
+            <li>Prepare only the exact screen-share windows you will show.</li>
+            <li>
+              Do not show your resume, LinkedIn, secrets, or customer-sensitive
+              data.
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Mindset before the take</h3>
+          <ul>
+            <li>
+              Speak like you are explaining your work to an engineering manager.
+            </li>
+            <li>Aim for calm confidence, not high energy or sales language.</li>
+            <li>Do not try to sound perfect.</li>
+            <li>Use the bullet rehearsal version as memory anchors.</li>
+            <li>
+              If you stumble slightly, keep going unless the mistake is major.
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel-card featured span-12">
+          <h3>Best one-pass take order</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>What to do</th>
+                  <th>Target time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    Start on face camera. Deliver your intro, role fit, and
+                    three strengths clearly.
+                  </td>
+                  <td>0:00 - 0:55</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>
+                    Switch to your architecture diagram or safe project view and
+                    explain the challenge.
+                  </td>
+                  <td>0:55 - 1:35</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>
+                    Show Terraform or deployment material and explain what you
+                    built and how you operated it.
+                  </td>
+                  <td>1:35 - 2:45</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>
+                    Show observability or workflow evidence and explain
+                    outcomes, reliability, and ownership.
+                  </td>
+                  <td>2:45 - 3:25</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Return to camera and explain why you fit this role.</td>
+                  <td>3:25 - 4:15</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Close confidently, thank them, and stop.</td>
+                  <td>4:15 - 4:40</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>If you need a retake</h3>
+          <ul>
+            <li>Retake if you go over 5 minutes.</li>
+            <li>Retake if your opening is weak or hesitant.</li>
+            <li>Retake if you expose anything sensitive on screen.</li>
+            <li>Retake if your explanation becomes too resume-like.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card span-6">
+          <h3>Final reminder</h3>
+          <div class="callout good">
+            Your strongest angle is not only that you know GCP and Terraform. It
+            is that you have already used them in production with ownership
+            across infrastructure, deployment workflows, observability, and
+            remote collaboration.
+          </div>
+        </article>
+      </div>
+    </template>
+
+    <template id="tpl-claude">
+      <div class="panel-grid">
+        <article class="panel-card span-12">
+          <h3>Claude version</h3>
+          <p>
+            This keeps the original Claude HTML available for side-by-side
+            comparison without leaving the page.
+          </p>
+          <div class="asset-row">
+            <a
+              class="asset-link"
+              href="./claude-loom-script-final.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open <code>claude-loom-script-final.html</code></a
+            >
+          </div>
+        </article>
+
+        <article class="panel-card span-12">
+          <h3>Embedded Claude guide</h3>
+          <iframe
+            src="./claude-loom-script-final.html"
+            title="Claude Loom Script Final"
+          ></iframe>
+        </article>
+      </div>
+    </template>
+
+    <div id="app">
+      <main class="app-shell">
+        <header class="topbar">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div class="brand-copy">
+              <strong>OpenCode Loom</strong>
+              <span>Static-first interview guide for Daud Farzand</span>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a class="ghost-link" href="../index.html">Entry landing</a>
+            <a class="ghost-link" href="#chapters">Chapter deck</a>
+            <a
+              class="primary-link"
+              href="./daud-loom-final-4m30-spoken.mp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Watch practice video</a
+            >
+          </div>
+        </header>
+
+        <section class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow">Static-first guide</span>
+            <h1>Turn the brief into a sharper story.</h1>
+            <p>
+              This guide now renders directly on GitHub Pages with no external
+              JavaScript runtime dependency, while keeping motion, depth, and
+              polish through CSS and local JavaScript only.
+            </p>
+
+            <div class="chip-row">
+              <div class="chip">
+                <strong>Role:</strong> DevOps Engineer - GCP & Terraform
+              </div>
+              <div class="chip">
+                <strong>Main story:</strong> platform ownership on GCP
+              </div>
+              <div class="chip">
+                <strong>Primary theme:</strong> Terraform + reliability + remote
+                readiness
+              </div>
+            </div>
+
+            <div class="hero-actions">
+              <a class="primary-link" href="#chapters">Open chapter deck</a>
+              <a
+                class="ghost-link"
+                href="./daud-loom-final-4m30-spoken.mp4"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open media</a
+              >
+            </div>
+
+            <div class="pill-row">
+              <div class="pill">
+                <strong>4:20-4:50</strong> Target runtime for the final
+                recording.
+              </div>
+              <div class="pill">
+                <strong>3 strengths</strong> State them early, then prove them.
+              </div>
+              <div class="pill">
+                <strong>1 project</strong> Let one flagship story carry the
+                middle.
+              </div>
+              <div class="pill">
+                <strong>0 leaks</strong> No resume, no LinkedIn, no sensitive
+                data on screen.
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-side">
+            <div class="signal-card">
+              <strong>5-minute discipline</strong>
+              <p>
+                The strongest version of this guide opens with role-fit, proves
+                credibility through one project, and closes on why you are ready
+                now.
+              </p>
+              <div class="signal-list">
+                <div>
+                  <h3>Start strong</h3>
+                  <p>
+                    Identity, role-fit, and three strengths inside the first
+                    minute.
+                  </p>
+                </div>
+                <div>
+                  <h3>One flagship project</h3>
+                  <p>
+                    Use challenge, implementation, ownership, and result in a
+                    single connected story.
+                  </p>
+                </div>
+                <div>
+                  <h3>Finish on fit</h3>
+                  <p>
+                    Close on remote readiness, operational maturity, and why the
+                    role makes sense.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section-title">
+          <span class="eyebrow">Fast orientation</span>
+          <h2>Read the page like a performance deck.</h2>
+          <p>
+            This guide is now static-first, so the deployed version remains
+            readable, interactive, and deterministic on GitHub Pages.
+          </p>
+        </section>
+
+        <section class="overview-grid">
+          <article class="overview-card">
+            <div class="overview-stat">
+              <strong>DevOps Engineer - GCP & Terraform [HR154]</strong>
+              <span>Role frame</span>
+            </div>
+            <p>
+              Everything here is tuned to match the job language while staying
+              credible to your actual experience.
+            </p>
+          </article>
+          <article class="overview-card">
+            <div class="overview-stat">
+              <strong>Platform ownership on GCP</strong>
+              <span>Primary angle</span>
+            </div>
+            <p>
+              The strongest framing is infrastructure, reliability, automation,
+              and end-to-end operational ownership.
+            </p>
+          </article>
+          <article class="overview-card">
+            <div class="overview-stat">
+              <strong>Deterministic</strong>
+              <span>Deployment</span>
+            </div>
+            <p>
+              The deployed version no longer relies on React or Framer Motion
+              imports to render the actual content.
+            </p>
+          </article>
+        </section>
+
+        <section class="story-grid">
+          <article class="story-card">
+            <div class="story-step">01</div>
+            <h3>Open with role fit, not biography</h3>
+            <p>
+              Use the first minute to sound like someone already doing the job:
+              GCP, Terraform, multi-environment delivery, observability, and
+              ownership.
+            </p>
+          </article>
+          <article class="story-card">
+            <div class="story-step">02</div>
+            <h3>Prove it with one high-confidence story</h3>
+            <p>
+              Anchor the middle in one credible project so every tool, decision,
+              and result feels connected instead of random.
+            </p>
+          </article>
+          <article class="story-card">
+            <div class="story-step">03</div>
+            <h3>Close on why you are hireable now</h3>
+            <p>
+              End by showing remote readiness, operational maturity, and why
+              this role is the next logical step.
+            </p>
+          </article>
+        </section>
+
+        <section id="chapters" class="chapter-shell">
+          <div class="chapter-tabs" id="fallback-tabs"></div>
+          <article class="chapter-panel">
+            <div class="chapter-head">
+              <div>
+                <span class="eyebrow" id="fallback-kicker">Calibration</span>
+                <h2 id="fallback-title">Sample Breakdown</h2>
+                <p id="fallback-summary">
+                  Study the structure that works before recording your own
+                  version.
+                </p>
+              </div>
+              <span class="chapter-pill">OpenCode master guide</span>
+            </div>
+            <div class="panel-body" id="fallback-panel"></div>
+          </article>
+        </section>
+
+        <section class="footer-grid">
+          <article class="footer-card wide">
+            <h3>Practice assets</h3>
+            <p>
+              Use the markdown and media files directly when you are ready to
+              rehearse.
+            </p>
+            <div class="asset-row">
+              <a
+                class="asset-link"
+                href="./daud-loom-bullet-rehearsal.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open <code>daud-loom-bullet-rehearsal.md</code></a
+              >
+              <a
+                class="asset-link"
+                href="./daud-loom-final-4m30-spoken.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open <code>daud-loom-final-4m30-spoken.md</code></a
+              >
+              <a
+                class="asset-link"
+                href="./daud-loom-final-4m30-spoken.mp4"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open <code>daud-loom-final-4m30-spoken.mp4</code></a
+              >
+            </div>
+          </article>
+          <article class="footer-card wide">
+            <h3>Why this version is safer</h3>
+            <p>
+              The page now uses static HTML, CSS animations, and local
+              JavaScript tabs only, which makes it much more reliable on GitHub
+              Pages.
+            </p>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        const fallbackChapters = [
+          {
+            id: "sample",
+            label: "Sample Breakdown",
+            kicker: "Calibration",
+            summary:
+              "Study the structure that works before recording your own version.",
+            templateId: "tpl-sample",
+          },
+          {
+            id: "improvements",
+            label: "Why This Was Updated",
+            kicker: "Positioning",
+            summary:
+              "See how the stronger version shifts the story toward platform ownership and hireability.",
+            templateId: "tpl-improvements",
+          },
+          {
+            id: "your-script",
+            label: "What You Should Say",
+            kicker: "Recording Copy",
+            summary:
+              "The final spoken flow, plus the resume points that deserve the most weight.",
+            templateId: "tpl-your-script",
+          },
+          {
+            id: "screen-share",
+            label: "Screen Share Plan",
+            kicker: "Visual Proof",
+            summary:
+              "Keep the visuals safe, simple, and aligned with the spoken narrative.",
+            templateId: "tpl-screen-share",
+          },
+          {
+            id: "delivery",
+            label: "Delivery and Positioning",
+            kicker: "Tone",
+            summary:
+              "Use the right language, pace, and emphasis so the technical story feels credible.",
+            templateId: "tpl-delivery",
+          },
+          {
+            id: "practice",
+            label: "Practice Scripts",
+            kicker: "Rehearsal",
+            summary:
+              "Open the raw rehearsal notes and the natural spoken version from one place.",
+            templateId: "tpl-practice",
+          },
+          {
+            id: "media",
+            label: "Media Library",
+            kicker: "Playback",
+            summary:
+              "Audio, generated video, and the original sample are all embedded here.",
+            templateId: "tpl-media",
+          },
+          {
+            id: "recording",
+            label: "Recording Checklist",
+            kicker: "Execution",
+            summary:
+              "Use this pass before you hit record so the take stays controlled and clean.",
+            templateId: "tpl-recording",
+          },
+          {
+            id: "claude",
+            label: "Claude Version",
+            kicker: "Comparison",
+            summary:
+              "Keep the earlier draft nearby while you compare the framing and structure.",
+            templateId: "tpl-claude",
+          },
+        ];
+
+        const tabsRoot = document.getElementById("fallback-tabs");
+        const title = document.getElementById("fallback-title");
+        const kicker = document.getElementById("fallback-kicker");
+        const summary = document.getElementById("fallback-summary");
+        const panel = document.getElementById("fallback-panel");
+
+        if (!tabsRoot || !panel) {
+          return;
+        }
+
+        function renderChapter(chapterId) {
+          const chapter =
+            fallbackChapters.find((item) => item.id === chapterId) ||
+            fallbackChapters[0];
+          const template = document.getElementById(chapter.templateId);
+          if (!template) {
+            return;
+          }
+
+          title.textContent = chapter.label;
+          kicker.textContent = chapter.kicker;
+          summary.textContent = chapter.summary;
+          panel.innerHTML = template.innerHTML;
+
+          tabsRoot.querySelectorAll("[data-fallback-tab]").forEach((button) => {
+            const active =
+              button.getAttribute("data-fallback-tab") === chapter.id;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+        }
+
+        tabsRoot.innerHTML = fallbackChapters
+          .map((chapter) => {
+            return (
+              '<button type="button" class="tab-button' +
+              (chapter.id === "sample" ? " is-active" : "") +
+              '" data-fallback-tab="' +
+              chapter.id +
+              '" aria-pressed="' +
+              (chapter.id === "sample" ? "true" : "false") +
+              '">' +
+              chapter.label +
+              "<small>" +
+              chapter.kicker +
+              "</small></button>"
+            );
+          })
+          .join("");
+
+        tabsRoot.addEventListener("click", function (event) {
+          const button = event.target.closest("[data-fallback-tab]");
+          if (!button) {
+            return;
+          }
+
+          renderChapter(button.getAttribute("data-fallback-tab"));
+        });
+
+        renderChapter("sample");
+      })();
+    </script>
+  </body>
+</html>
