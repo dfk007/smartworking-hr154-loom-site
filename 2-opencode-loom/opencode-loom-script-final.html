@@ -168,11 +168,11 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
   <div class="tbar">
     <div class="ts" style="background:#0a2535;color:#38bdf8;width:17%;">OPEN · 0:45</div>
     <div class="ts" style="background:#0a2535;color:#38bdf8;width:13%;">PILLARS · 0:35</div>
-    <div class="ts" style="background:#0a2218;color:#4ade80;width:42%;">SERVELLM DEMO · 2:05</div>
-    <div class="ts" style="background:#281e06;color:#fbbf24;width:18%;">WHY ME · 0:50</div>
+    <div class="ts" style="background:#0a2218;color:#4ade80;width:40%;">SERVELLM DEMO · 2:00</div>
+    <div class="ts" style="background:#281e06;color:#fbbf24;width:20%;">WHY ME · 0:50</div>
     <div class="ts" style="background:#1a1230;color:#a78bfa;width:10%;">CLOSE · 0:25</div>
   </div>
-  <div class="tl">0:00 ──── 0:45 ──── 1:20 ──── 3:25 ──── 4:15 ──── 4:40</div>
+  <div class="tl">0:00 ──── 0:45 ──── 1:20 ──── 3:20 ──── 4:10 ──── 4:35</div>
 
 
   <!-- SEG 1 -->
@@ -245,88 +245,68 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">1:40 – 2:10</span><span class="sn">Architecture — the stack I designed</span><span class="sd">~30 sec</span></div>
+    <div class="sh"><span class="st">1:40 – 2:05</span><span class="sn">Architecture — the stack</span><span class="sd">~25 sec</span></div>
     <div class="sb">
       <div class="spoken">
-        The platform runs as <b>seven containerized services</b> orchestrated with
-        Docker Compose — and here is the architecture.<br><br>
+        Seven services — you can see them all running here.<br><br>
 
-        <b>FastAPI backend</b> — the core API layer, OpenAI-compatible, running on port 8000
-        with full streaming support.<br>
-        <b>PostgreSQL</b> — primary database, tuned with custom parameters for connection
-        handling at scale.<br>
-        <b>PgBouncer</b> — sitting in front of Postgres in <b>transaction pool mode</b>,
-        handling up to <span class="g">200 max connections</span> with a pool of 20 — this
-        is what lets us support <span class="g">1,000-plus concurrent users</span> without
-        the database choking.<br>
-        <b>MinIO</b> — S3-compatible object storage for model artifacts and user uploads.<br>
-        <b>Ollama</b> — the self-hosted LLM inference engine, serving models on port 11435.<br>
-        And a <b>Next.js 15 frontend</b> — production-optimised, running under PM2 for
-        process management.
+        <b>FastAPI</b> backend, OpenAI-compatible API on 8000.
+        <b>Postgres</b> with <b>PgBouncer</b> in front — transaction pool mode,
+        <span class="g">200 connections</span>, handles <span class="g">1000-plus concurrent users</span>
+        without touching the DB limit.
+        <b>MinIO</b> for S3-compatible object storage.
+        <b>Ollama</b> for self-hosted model inference.
+        <b>Next.js</b> frontend running under PM2.
       </div>
-      <div class="note">⟶ Point at each service on screen as you name it — either in the running dashboard, docker compose ps output, or the architecture diagram. Keep this visual.</div>
+      <div class="note">⟶ Scan down the docker compose ps list as you name each service. One line per service, keep moving.</div>
     </div>
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">2:10 – 2:35</span><span class="sn">Walking through the platform — multi-tenant, RBAC, models</span><span class="sd">~25 sec</span></div>
+    <div class="sh"><span class="st">2:05 – 2:25</span><span class="sn">Multi-tenant platform — RBAC, model access, orgs</span><span class="sd">~20 sec</span></div>
     <div class="sb">
       <div class="spoken">
-        What made this platform genuinely production-grade was the <b>multi-tenant
-        architecture</b>. Every organisation gets its own isolated environment — their
-        own users, their own model access, their own usage analytics.<br><br>
+        Each organisation is fully isolated — their own users, models, and usage data.
+        We have <b>five-tier RBAC</b> — SuperAdmin down to API User — enforced at the
+        middleware layer with JWT and API key auth.<br><br>
 
-        We built a <b>five-tier RBAC system</b> — SuperAdmin, Admin, Chat User, API User,
-        and Billing User — with JWT and API key authentication at the middleware layer.<br><br>
-
-        From this models page, admins can see <b>which Ollama models are available</b>,
-        pull new ones, and control which organisations have access to which models — all
-        from the dashboard without touching any config files.
+        From the models page, admins control which Ollama models each organisation
+        can access — no config file changes, fully managed through the dashboard.
       </div>
-      <div class="note">⟶ Show: Dashboard → Models page → Organisation list. Point at the model list and explain what you are seeing.</div>
+      <div class="note">⟶ Show: dashboard org list → models page. Point and move. Do not linger.</div>
     </div>
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">2:35 – 2:55</span><span class="sn">Infrastructure decisions — Terraform, CI/CD, deployment</span><span class="sd">~20 sec</span></div>
+    <div class="sh"><span class="st">2:25 – 2:45</span><span class="sn">Infrastructure — Terraform, CI/CD, Ansible</span><span class="sd">~20 sec</span></div>
     <div class="sb">
       <div class="spoken">
-        On the infrastructure side — the entire environment was provisioned with
-        <b>Terraform</b> across GCP and AWS. I wrote modular configs for networking,
-        IAM, compute, and storage — so we could spin up a new customer environment
-        in minutes, not days.<br><br>
-
-        Deployments ran through <b>GitHub Actions pipelines</b> — Docker build, migration
-        validation, health checks, then service promotion — every step auditable.
-        And I used <b>Ansible playbooks</b> to provision the servers, so the entire
-        setup went from zero to running with a single command. That is what reduced
-        our deployment time by <span class="g">ninety percent</span>.
+        Infrastructure was fully IaC — <b>Terraform</b> for GCP and AWS, modular configs
+        per environment. CI/CD through <b>GitHub Actions</b> — build, migrate, validate,
+        promote. <b>Ansible</b> for server provisioning. One command from zero to
+        production. That brought deployment time down by <span class="g">90 percent</span>.
       </div>
-      <div class="note">⟶ You can show: a terminal with docker compose ps running, or the GitHub Actions tab on the repo if it is open. Even 5 seconds of a real terminal is convincing.</div>
+      <div class="note">⟶ Flash the terminal or GitHub Actions tab for 5 seconds here — any real output is enough.</div>
     </div>
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">2:55 – 3:15</span><span class="sn">Observability, token tracking, analytics dashboard</span><span class="sd">~20 sec</span></div>
+    <div class="sh"><span class="st">2:45 – 3:05</span><span class="sn">Analytics dashboard — usage visibility</span><span class="sd">~20 sec</span></div>
     <div class="sb">
       <div class="spoken">
-        Observability was built in from day one. I implemented <b>Prometheus and Grafana</b>
-        to monitor inference latency, connection pool saturation, and service health —
-        with alerting for incident escalation.<br><br>
+        This is the analytics dashboard — API requests, token usage per model,
+        per organisation. Every API key's usage is tracked here.<br><br>
 
-        Inside the platform itself, there is a <b>real-time analytics dashboard</b> —
-        this shows API request volumes, token usage per model and per organisation,
-        and latency trends. Every token consumed by every API key is tracked and stored —
-        this is what we used for <b>billing and cost allocation</b> across organisations.
-        We cut API costs by <span class="g">thirty-five percent</span> just through
-        intelligent model routing and better visibility into usage.
+        This visibility is what let us optimise costs — we cut API spend by
+        <span class="g">35 percent</span> just by seeing exactly where the expensive
+        calls were coming from and routing smarter.
       </div>
-      <div class="note">⟶ Show: Analytics page in the dashboard — the charts for token usage and API requests. This is your strongest visual proof point. Point at the numbers on screen as you speak.</div>
+      <div class="note">⟶ Point at the charts — requests chart, token usage chart. Say the numbers. Move on. Do not over-explain what you are showing.</div>
     </div>
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">3:15 – 3:25</span><span class="sn">Results — hard numbers</span><span class="sd">~10 sec</span></div>
+    <div class="sh"><span class="st">3:05 – 3:20</span><span class="sn">Results — hard numbers</span><span class="sd">~15 sec</span></div>
     <div class="sb">
       <div class="spoken">
         The results: <span class="g">deployment time reduced by 90 percent</span>,
@@ -341,9 +321,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
 
 
   <!-- SEG 4 -->
-  <div class="sl">Segment 4 — Why Me · 3:25 – 4:15</div>
+  <div class="sl">Segment 4 — Why Me · 3:20 – 4:10</div>
   <div class="seg">
-    <div class="sh"><span class="st">3:25 – 4:15</span><span class="sn">Fit · End-to-end ownership · Remote</span><span class="sd">~50 sec</span></div>
+    <div class="sh"><span class="st">3:20 – 4:10</span><span class="sn">Fit · End-to-end ownership · Remote</span><span class="sd">~50 sec</span></div>
     <div class="sb">
       <div class="spoken">
         What you have just seen is not a side project or a tutorial — it is a platform
@@ -369,9 +349,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
 
 
   <!-- SEG 5 -->
-  <div class="sl">Segment 5 — Close · 4:15 – 4:40</div>
+  <div class="sl">Segment 5 — Close · 4:10 – 4:35</div>
   <div class="seg">
-    <div class="sh"><span class="st">4:15 – 4:40</span><span class="sn">Thank you · CTA</span><span class="sd">~25 sec</span></div>
+    <div class="sh"><span class="st">4:10 – 4:35</span><span class="sn">Thank you · CTA</span><span class="sd">~25 sec</span></div>
     <div class="sb">
       <div class="spoken">
         Thank you for your time. I would be glad to go deeper on any part of this —
@@ -638,10 +618,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
   <div class="qr"><div class="qrt">⚡ 5-Segment Quick Reference</div>
     <div class="qrow"><span class="qt">0:00</span><div class="qtext"><b>Open:</b> Daud Farzand · GCP + Terraform · 4yr · excited about Cloud Run + Pub/Sub at Smart Working</div></div>
     <div class="qrow"><span class="qt">0:45</span><div class="qtext"><b>3 Pillars:</b> Terraform multi-env · GCP (Cloud Run, GKE, Vertex AI) + Pub/Sub pattern · GitHub Actions + Cloud Build + Prometheus/Grafana</div></div>
-    <div class="qrow"><span class="qt">1:20</span><div class="qtext"><b>ServeLLM:</b> terminal (docker compose ps) → dashboard → models → analytics (35% story) → API keys → infra mention</div></div>
-    <div class="qrow"><span class="qt">3:15</span><div class="qtext"><b>Numbers:</b> 90% · 60% · 35% · 99% — end screen share, pause, then pivot to camera</div></div>
-    <div class="qrow"><span class="qt">3:25</span><div class="qtext"><b>Why Me:</b> "what you just saw is not a side project" · production SLA · end-to-end ownership · remote-native · Cloud Run + Pub/Sub at Smart Working</div></div>
-    <div class="qrow"><span class="qt">4:15</span><div class="qtext"><b>Close:</b> thank you · go deeper on Terraform/CI/CD · excited · look into camera</div></div>
+    <div class="qrow"><span class="qt">1:20</span><div class="qtext"><b>ServeLLM:</b> terminal (docker compose ps) → dashboard → models → analytics (35% story) → infra mention — end screen share ~3:05</div></div>
+    <div class="qrow"><span class="qt">3:05</span><div class="qtext"><b>Numbers:</b> 90% · 60% · 35% · 99% — pause, end screen share, then pivot to camera</div></div>
+    <div class="qrow"><span class="qt">3:20</span><div class="qtext"><b>Why Me:</b> "what you just saw is not a side project" · production SLA · end-to-end ownership · remote-native · Cloud Run + Pub/Sub at Smart Working</div></div>
+    <div class="qrow"><span class="qt">4:10</span><div class="qtext"><b>Close:</b> thank you · go deeper on Terraform/CI/CD · excited · look into camera</div></div>
   </div>
 
   <div class="sl">ServeLLM Setup</div>
