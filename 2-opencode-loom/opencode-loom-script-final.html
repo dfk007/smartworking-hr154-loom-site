@@ -3,258 +3,688 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loom Script — Daud · HR154</title>
+<title>Loom Script — Daud · HR154 · ServeLLM</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{--bg:#080c14;--s1:#0e1320;--s2:#13192a;--line:#1f2a40;--line2:#273347;--c:#38bdf8;--cb:rgba(56,189,248,.1);--g:#4ade80;--gb:rgba(74,222,128,.1);--a:#fbbf24;--ab:rgba(251,191,36,.1);--p:#a78bfa;--t:#c8d6ea;--tb:#e8f0f8;--tm:#7a8ea8;--td:#3d4f66;}
+:root{
+  --bg:#080c14;--s1:#0e1320;--s2:#13192a;--s3:#181f33;
+  --line:#1f2a40;--line2:#273347;
+  --c:#38bdf8;--cb:rgba(56,189,248,.1);--c2:rgba(56,189,248,.2);
+  --g:#4ade80;--gb:rgba(74,222,128,.1);--g2:rgba(74,222,128,.2);
+  --a:#fbbf24;--ab:rgba(251,191,36,.1);--a2:rgba(251,191,36,.2);
+  --p:#a78bfa;--pb:rgba(167,139,250,.1);
+  --r:#f87171;--rb:rgba(248,113,113,.1);
+  --t:#c8d6ea;--tb:#e8f0f8;--tm:#7a8ea8;--td:#3d4f66;
+}
 body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;}
-nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(14px);display:flex;align-items:stretch;padding:0 28px;height:54px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(16px);display:flex;align-items:stretch;padding:0 28px;height:54px;}
 .nl{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--c);display:flex;align-items:center;margin-right:24px;white-space:nowrap;}
 .nt{height:54px;padding:0 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--td);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;display:flex;align-items:center;gap:6px;}
 .nt:hover{color:var(--t);}.nt.on{color:var(--c);border-bottom-color:var(--c);}
-.panel{display:none;max-width:800px;margin:0 auto;padding:36px 24px 80px;}
+
+/* PANELS */
+.panel{display:none;max-width:820px;margin:0 auto;padding:36px 24px 80px;}
 .panel.on{display:block;animation:up .22s ease;}
 @keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-.ph{margin-bottom:26px;}.ph h1{font-family:'Syne',sans-serif;font-size:25px;font-weight:800;color:var(--tb);letter-spacing:-.3px;margin-bottom:4px;}
+
+/* TYPOGRAPHY */
+.ph{margin-bottom:26px;}
+.ph h1{font-family:'Syne',sans-serif;font-size:25px;font-weight:800;color:var(--tb);letter-spacing:-.3px;margin-bottom:4px;}
 .ph p{font-size:13px;color:var(--tm);font-family:'DM Mono',monospace;}
 .sl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--td);margin:26px 0 13px;display:flex;align-items:center;gap:10px;}
 .sl::after{content:'';flex:1;height:1px;background:var(--line);}
+
+/* TIMELINE BAR */
 .tbar{display:flex;height:26px;border-radius:5px;overflow:hidden;gap:2px;margin-bottom:5px;}
 .ts{display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8.5px;overflow:hidden;padding:0 4px;white-space:nowrap;font-weight:500;}
 .tl{font-family:'DM Mono',monospace;font-size:10px;color:var(--td);margin-bottom:26px;}
+
+/* SEGMENT */
 .seg{border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:18px;}
 .sh{background:var(--s2);padding:11px 17px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);}
-.st{font-family:'DM Mono',monospace;font-size:10px;color:var(--c);background:var(--cb);border:1px solid rgba(56,189,248,.2);border-radius:4px;padding:2px 7px;white-space:nowrap;}
+.st{font-family:'DM Mono',monospace;font-size:10px;color:var(--c);background:var(--cb);border:1px solid var(--c2);border-radius:4px;padding:2px 7px;white-space:nowrap;}
 .sn{font-size:13px;font-weight:600;color:var(--tb);}
 .sd{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;color:var(--td);}
 .sb{padding:16px 18px;background:var(--s1);}
+
+/* SPOKEN TEXT */
 .spoken{font-size:15.5px;line-height:2.05;color:var(--tb);font-weight:300;background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:17px 19px;}
-.spoken b{color:var(--c);font-weight:600;}.spoken .g{color:var(--g);font-weight:600;}.spoken .p{color:var(--p);font-weight:500;}
+.spoken b{color:var(--c);font-weight:600;}
+.spoken .g{color:var(--g);font-weight:600;}
+.spoken .p{color:var(--p);font-weight:500;}
+.spoken .a{color:var(--a);font-weight:500;}
+
+/* NOTE */
 .note{margin-top:10px;padding:9px 13px;background:var(--ab);border-left:2px solid var(--a);border-radius:0 5px 5px 0;font-family:'DM Mono',monospace;font-size:11px;color:var(--a);line-height:1.6;}
+.note-g{margin-top:10px;padding:9px 13px;background:var(--gb);border-left:2px solid var(--g);border-radius:0 5px 5px 0;font-family:'DM Mono',monospace;font-size:11px;color:var(--g);line-height:1.6;}
+
+/* ALERTS */
 .alert{border-radius:8px;padding:12px 15px;font-size:13px;margin-bottom:18px;line-height:1.65;}
-.ac{background:var(--cb);border:1px solid rgba(56,189,248,.2);color:#93c5fd;}
-.ag{background:var(--gb);border:1px solid rgba(74,222,128,.2);color:#86efac;}
-.aa{background:var(--ab);border:1px solid rgba(251,191,36,.2);color:#fde68a;}
+.ac{background:var(--cb);border:1px solid var(--c2);color:#93c5fd;}
+.ag{background:var(--gb);border:1px solid var(--g2);color:#86efac;}
+.aa{background:var(--ab);border:1px solid var(--a2);color:#fde68a;}
+.ar{background:var(--rb);border:1px solid rgba(248,113,113,.2);color:#fca5a5;}
+
+/* BULLET BLOCKS */
 .bb{background:var(--s1);border:1px solid var(--line);border-radius:9px;padding:17px 19px;margin-bottom:14px;}
 .bt{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--c);margin-bottom:11px;}
 .bl{list-style:none;}
 .bl li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--t);display:flex;gap:10px;align-items:flex-start;line-height:1.55;}
-.bl li:last-child{border-bottom:none;}.bl li::before{content:'›';color:var(--c);font-size:17px;line-height:1.15;flex-shrink:0;}
-.bl li b{color:var(--tb);}.bl li .g{color:var(--g);font-weight:600;}.bl li .p{color:var(--p);}
+.bl li:last-child{border-bottom:none;}
+.bl li::before{content:'›';color:var(--c);font-size:17px;line-height:1.15;flex-shrink:0;}
+.bl li b{color:var(--tb);}
+.bl li .g{color:var(--g);font-weight:600;}
+.bl li .p{color:var(--p);}
+.bl li .a{color:var(--a);}
+
+/* DEMO STEPS */
+.demo-step{border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px;}
+.demo-head{background:var(--s3);padding:12px 17px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);}
+.demo-num{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;color:var(--bg);background:var(--c);border-radius:4px;padding:2px 8px;flex-shrink:0;}
+.demo-num-g{background:var(--g);color:var(--bg);}
+.demo-num-a{background:var(--a);color:var(--bg);}
+.demo-num-p{background:var(--p);color:var(--bg);}
+.demo-title{font-size:14px;font-weight:600;color:var(--tb);}
+.demo-time{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;color:var(--td);white-space:nowrap;}
+.demo-body{padding:15px 17px;background:var(--s1);}
+.demo-body p{font-size:13.5px;color:var(--t);line-height:1.7;margin-bottom:10px;}
+.demo-body p:last-child{margin-bottom:0;}
+.demo-body b{color:var(--tb);}
+.demo-body .c{color:var(--c);font-weight:600;}
+.demo-body .g{color:var(--g);font-weight:600;}
+.demo-body .a{color:var(--a);}
+.demo-say{background:var(--s2);border:1px solid var(--line);border-left:2px solid var(--c);border-radius:0 6px 6px 0;padding:10px 14px;font-size:13px;color:var(--t);line-height:1.7;margin-top:10px;font-style:italic;}
+.demo-say b{color:var(--c);font-style:normal;font-weight:600;}
+
+/* CHECKLIST */
 .cb2{background:var(--s1);border:1px solid var(--line);border-radius:9px;padding:17px 19px;margin-bottom:14px;}
 .cl{list-style:none;}
 .cl li{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--t);line-height:1.5;cursor:pointer;}
-.cl li:last-child{border-bottom:none;}.cl li.done{color:var(--td);text-decoration:line-through;}
+.cl li:last-child{border-bottom:none;}
+.cl li.done{color:var(--td);text-decoration:line-through;}
 .chk{width:18px;height:18px;border:1.5px solid var(--line2);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;}
 .done .chk{background:var(--g);border-color:var(--g);color:#080c14;font-weight:700;}
+
+/* PILLS */
 .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
 .pill{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:10px;}
-.pc{background:var(--cb);color:var(--c);border:1px solid rgba(56,189,248,.25);}
-.pg{background:var(--gb);color:var(--g);border:1px solid rgba(74,222,128,.25);}
-.div{height:1px;background:var(--line);margin:22px 0;}
-.qr{background:var(--s1);border:1px solid rgba(56,189,248,.2);border-radius:9px;padding:17px 19px;margin-bottom:14px;}
+.pc{background:var(--cb);color:var(--c);border:1px solid var(--c2);}
+.pg{background:var(--gb);color:var(--g);border:1px solid var(--g2);}
+.pa{background:var(--ab);color:var(--a);border:1px solid var(--a2);}
+.pp{background:var(--pb);color:var(--p);border:1px solid rgba(167,139,250,.25);}
+
+/* QUICK REF */
+.qr{background:var(--s1);border:1px solid var(--c2);border-radius:9px;padding:17px 19px;margin-bottom:14px;}
 .qrt{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--c);margin-bottom:13px;}
 .qrow{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.5;}
 .qrow:last-child{border-bottom:none;}
-.qt{font-family:'DM Mono',monospace;font-size:10px;background:var(--cb);color:var(--c);border:1px solid rgba(56,189,248,.2);border-radius:4px;padding:2px 7px;white-space:nowrap;margin-top:2px;flex-shrink:0;}
+.qt{font-family:'DM Mono',monospace;font-size:10px;background:var(--cb);color:var(--c);border:1px solid var(--c2);border-radius:4px;padding:2px 7px;white-space:nowrap;margin-top:2px;flex-shrink:0;}
 .qtext{color:var(--t);}.qtext b{color:var(--tb);}
+
+/* SCREEN PLAN TABLE */
+.screen-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;}
+.screen-table th{background:var(--s2);padding:10px 14px;text-align:left;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tm);border-bottom:1px solid var(--line2);}
+.screen-table td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55;font-size:13px;color:var(--t);}
+.screen-table tr:last-child td{border-bottom:none;}
+.screen-table td:first-child{font-family:'DM Mono',monospace;font-size:11px;color:var(--c);white-space:nowrap;}
+.screen-table td b{color:var(--tb);}
+.screen-table td .g{color:var(--g);}
+.screen-table td .a{color:var(--a);}
+
+/* SERVICE CARD */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+@media(max-width:600px){.svc-grid{grid-template-columns:1fr;}}
+.svc-card{background:var(--s1);border:1px solid var(--line);border-radius:8px;padding:13px 15px;}
+.svc-card .svc-name{font-family:'DM Mono',monospace;font-size:11px;color:var(--c);font-weight:500;margin-bottom:4px;}
+.svc-card .svc-desc{font-size:12.5px;color:var(--tm);line-height:1.5;}
+.svc-card .svc-tag{font-size:10px;font-family:'DM Mono',monospace;color:var(--g);}
+
+.div{height:1px;background:var(--line);margin:22px 0;}
 </style>
 </head>
 <body>
+
 <nav>
   <div class="nl">DAUD · HR154</div>
-  <button class="nt on" onclick="go('script')" id="t-script">📝 Full Script</button>
-  <button class="nt" onclick="go('bullets')" id="t-bullets">⚡ Bullet Cues</button>
-  <button class="nt" onclick="go('checklist')" id="t-checklist">✅ Checklist</button>
+  <button class="nt on"  onclick="go('script')"    id="t-script">   📝 Full Script   </button>
+  <button class="nt"     onclick="go('demo')"      id="t-demo">     🖥 Demo Plan     </button>
+  <button class="nt"     onclick="go('bullets')"   id="t-bullets">  ⚡ Bullet Cues   </button>
+  <button class="nt"     onclick="go('checklist')" id="t-checklist">✅ Checklist     </button>
 </nav>
 
-<!-- ── TAB 1: FULL SCRIPT ── -->
+
+<!-- ══════════════════════ TAB 1: FULL SCRIPT ══════════════════════ -->
 <div class="panel on" id="p-script">
-  <div class="ph"><h1>Full Spoken Script</h1><p>Read once aloud slowly. Switch to Bullet Cues. Rehearse 3x. Then record.</p></div>
-  <div class="alert ac"><strong>How to use:</strong> Read once to absorb the flow. Do not memorize word for word. Speak like you are explaining your own work to an engineering manager — because that is exactly what this is.</div>
+  <div class="ph">
+    <h1>Full Spoken Script</h1>
+    <p>ServeLLM project walkthrough (~70%) + role alignment (~30%). Target: 4:30 – 4:50.</p>
+  </div>
+
+  <div class="alert ac"><strong>How to use:</strong> Read once slowly to absorb the flow. Practice from Bullet Cues tab. Screen share ServeLLM during segment 3 — see Demo Plan tab for exactly what to show and when.</div>
+
   <div class="tbar">
-    <div class="ts" style="background:#0a2535;color:#38bdf8;width:18%;">OPEN · 0:50</div>
-    <div class="ts" style="background:#0a2535;color:#38bdf8;width:16%;">PILLARS · 0:40</div>
-    <div class="ts" style="background:#0a2218;color:#4ade80;width:40%;">PROJECT · 2:00</div>
-    <div class="ts" style="background:#281e06;color:#fbbf24;width:16%;">WHY ME · 0:50</div>
+    <div class="ts" style="background:#0a2535;color:#38bdf8;width:17%;">OPEN · 0:45</div>
+    <div class="ts" style="background:#0a2535;color:#38bdf8;width:13%;">PILLARS · 0:35</div>
+    <div class="ts" style="background:#0a2218;color:#4ade80;width:42%;">SERVELLM DEMO · 2:05</div>
+    <div class="ts" style="background:#281e06;color:#fbbf24;width:18%;">WHY ME · 0:50</div>
     <div class="ts" style="background:#1a1230;color:#a78bfa;width:10%;">CLOSE · 0:25</div>
   </div>
-  <div class="tl">0:00 ──── 0:50 ──── 1:30 ──── 3:30 ──── 4:20 ──── 4:45</div>
+  <div class="tl">0:00 ──── 0:45 ──── 1:20 ──── 3:25 ──── 4:15 ──── 4:40</div>
 
-  <div class="sl">Segment 1 — Open</div>
+
+  <!-- SEG 1 -->
+  <div class="sl">Segment 1 — Open · 0:00 – 0:45</div>
   <div class="seg">
-    <div class="sh"><span class="st">0:00 – 0:50</span><span class="sn">Who I am · Why this role</span><span class="sd">~50 sec</span></div>
+    <div class="sh"><span class="st">0:00 – 0:45</span><span class="sn">Name · Role · Why this role</span><span class="sd">~45 sec</span></div>
     <div class="sb">
-      <div class="spoken">Hi, I am <b>Daud Farzand</b>, based in Lahore. I work as an AI Platform Infrastructure Engineer with US-based teams, and I have just over <b>four years</b> of production experience across DevOps, cloud infrastructure, and platform engineering — with a strong hands-on focus on <b>Google Cloud Platform</b> and <b>Terraform</b>.<br><br>I am excited about this role because it focuses on exactly what I work with every day — <b>GCP, Terraform, and serverless architecture</b>, especially <b>Cloud Run and Pub/Sub</b> — and Smart Working is the kind of remote engineering environment where I want to go deeper into this work.</div>
-      <div class="note">⟶ The sample candidate names "Cloud Run and PubSub" at 0:13. Mirror this. Slow down on your name. Do not rush the first 20 seconds.</div>
+      <div class="spoken">
+        Hi, I am <b>Daud Farzand</b>, based in Lahore. I work as an AI Platform Infrastructure
+        Engineer with US-based teams, and I have just over <b>four years</b> of production
+        experience across DevOps, cloud infrastructure, and platform engineering —
+        with a strong focus on <b>Google Cloud Platform</b> and <b>Terraform</b>.<br><br>
+
+        I am excited about this role because it focuses on exactly what I already build and operate —
+        <b>GCP, Terraform, Cloud Run, and Pub/Sub</b> — and I want to go deeper into this kind
+        of work in a high-standard remote environment like Smart Working.
+      </div>
+      <div class="note">⟶ Name "Cloud Run and Pub/Sub" in the first 45 seconds — mirrors the sample candidate at 0:13. Slow, confident delivery.</div>
     </div>
   </div>
 
-  <div class="sl">Segment 2 — Three Pillars</div>
+
+  <!-- SEG 2 -->
+  <div class="sl">Segment 2 — Three Pillars · 0:45 – 1:20</div>
   <div class="seg">
-    <div class="sh"><span class="st">0:50 – 1:30</span><span class="sn">Terraform · GCP · CI/CD + Observability</span><span class="sd">~40 sec</span></div>
+    <div class="sh"><span class="st">0:45 – 1:20</span><span class="sn">Terraform · GCP · CI/CD + Observability</span><span class="sd">~35 sec</span></div>
     <div class="sb">
-      <div class="spoken">If I had to summarize my strengths in three areas:<br><br><b>First — Terraform.</b> I write reusable modules and manage infrastructure across dev, staging, production, and customer-specific environments on both <b>GCP and AWS</b>. All infrastructure changes go through CI/CD pipelines — no manual console changes in production.<br><br><b>Second — GCP platform operations.</b> I work with <b>Cloud Run</b> for serverless APIs, <b>GKE</b> for container orchestration, <b>Vertex AI</b> for ML inference, and <b>BigQuery</b> for analytics. I have also designed systems using <b>event-driven architecture</b> — decoupled services communicating asynchronously, with retry logic and failure handling — which maps directly to <b>Pub/Sub</b> concepts like acknowledgement and dead-letter handling.<br><br><b>Third — CI/CD and observability.</b> I build deployment pipelines with <b>GitHub Actions</b> and have used <b>Cloud Build</b> for GCP-native delivery. For observability I run <b>Prometheus, Grafana, and OpenTelemetry</b> — tracking latency, error rates, and service health from day one on every system I own.</div>
-      <div class="note">⟶ The Pub/Sub framing mirrors exactly how the sample candidate handles it at 3:16 — honest, accurate, and what they want to hear. "Cloud Build" is a direct job requirement — say it clearly in pillar 3.</div>
+      <div class="spoken">
+        My strengths for this role are in three areas.<br><br>
+
+        <b>First — Terraform.</b> I write reusable modules and manage infrastructure across
+        dev, staging, production, and customer-specific environments on both
+        <b>GCP and AWS</b>. Every change goes through CI/CD — no manual console operations
+        in production.<br><br>
+
+        <b>Second — GCP platform operations.</b> I work with <b>Cloud Run</b> for serverless APIs,
+        <b>GKE</b> for container orchestration, <b>Vertex AI</b> for ML inference, and
+        <b>BigQuery</b> for analytics. I have also designed <b>event-driven systems</b> —
+        services communicating asynchronously with retry logic and dead-letter handling —
+        which maps directly to <b>Pub/Sub</b> patterns in GCP.<br><br>
+
+        <b>Third — CI/CD and observability.</b> I build pipelines with
+        <b>GitHub Actions</b> and <b>Cloud Build</b>, and I instrument every system I own
+        with <b>Prometheus, Grafana, and OpenTelemetry</b> from day one.
+      </div>
+      <div class="note">⟶ Numbered structure is most memorable part of the sample video — copy it exactly. "Cloud Build" is a direct job requirement. The Pub/Sub line is honest and accurate.</div>
     </div>
   </div>
 
-  <div class="sl">Segment 3 — Project Story</div>
+
+  <!-- SEG 3 — SERVELLM WALKTHROUGH (the main section) -->
+  <div class="sl">Segment 3 — ServeLLM Project Walkthrough · 1:20 – 3:25</div>
+
+  <div class="alert ag"><strong>Screen share starts here.</strong> Open ServeLLM running locally. Walk through the pages as you speak — see the Demo Plan tab for the exact sequence. Keep camera visible in corner if possible.</div>
+
   <div class="seg">
-    <div class="sh"><span class="st">1:30 – 1:50</span><span class="sn">Situation</span><span class="sd">~20 sec</span></div>
+    <div class="sh"><span class="st">1:20 – 1:40</span><span class="sn">Project Context — what is ServeLLM and why did it exist?</span><span class="sd">~20 sec</span></div>
     <div class="sb">
-      <div class="spoken">Let me walk you through a production system I built. Across my work at <b>Techanzy and TechPrysm</b>, I designed and operated a production-grade cloud platform that needed to support <b>multiple clients, multiple environments, and real uptime commitments</b> simultaneously.<br><br>The challenge was not just deploying services once — it was making the whole environment <b>repeatable, auditable, and maintainable</b> under production load.</div>
+      <div class="spoken">
+        Let me show you something I built. This is <b>ServeLLM</b> — a production-grade,
+        multi-tenant LLM serving platform I architected and deployed at <b>Techanzy</b>.
+        The business need was simple: enterprise clients wanted to run their own private
+        LLM infrastructure — with their own models, their own user management, their own
+        billing — without depending on OpenAI or any external vendor.<br><br>
+
+        My responsibility was the <b>full infrastructure and backend</b> — from the first
+        line of Terraform to production deployment.
+      </div>
     </div>
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">1:50 – 2:45</span><span class="sn">Architecture — what I built</span><span class="sd">~55 sec</span></div>
+    <div class="sh"><span class="st">1:40 – 2:10</span><span class="sn">Architecture — the stack I designed</span><span class="sd">~30 sec</span></div>
     <div class="sb">
-      <div class="spoken">I used <b>Terraform</b> to provision and manage all infrastructure — IAM, networking, storage, and compute — across <b>GCP and AWS</b>, with modular configurations so changes could be promoted safely from dev through staging to production.<br><br>On <b>Google Cloud</b>, I deployed <b>Cloud Run</b> for serverless API serving, <b>GKE</b> for orchestrating containerized workloads, and <b>Vertex AI</b> inference endpoints — all with <b>blue-green deployment strategies</b> to eliminate downtime during updates.<br><br>I also designed services using <b>event-driven architecture principles</b> — decoupled services communicating asynchronously. We handled retries, failure scenarios, and message processing patterns that map closely to <b>Pub/Sub concepts</b> like acknowledgement and dead-letter handling.<br><br>The platform ran <b>FastAPI, PostgreSQL with PgBouncer connection pooling, and object storage</b> — with health checks and automated recovery built in across all services.</div>
-      <div class="note">⟶ If screen sharing, show a Terraform file or architecture diagram here for 20-30 seconds. The sample candidate had no screen share — any visual makes you stand out immediately.</div>
+      <div class="spoken">
+        The platform runs as <b>seven containerized services</b> orchestrated with
+        Docker Compose — and here is the architecture.<br><br>
+
+        <b>FastAPI backend</b> — the core API layer, OpenAI-compatible, running on port 8000
+        with full streaming support.<br>
+        <b>PostgreSQL</b> — primary database, tuned with custom parameters for connection
+        handling at scale.<br>
+        <b>PgBouncer</b> — sitting in front of Postgres in <b>transaction pool mode</b>,
+        handling up to <span class="g">200 max connections</span> with a pool of 20 — this
+        is what lets us support <span class="g">1,000-plus concurrent users</span> without
+        the database choking.<br>
+        <b>MinIO</b> — S3-compatible object storage for model artifacts and user uploads.<br>
+        <b>Ollama</b> — the self-hosted LLM inference engine, serving models on port 11435.<br>
+        And a <b>Next.js 15 frontend</b> — production-optimised, running under PM2 for
+        process management.
+      </div>
+      <div class="note">⟶ Point at each service on screen as you name it — either in the running dashboard, docker compose ps output, or the architecture diagram. Keep this visual.</div>
     </div>
   </div>
 
   <div class="seg">
-    <div class="sh"><span class="st">2:45 – 3:20</span><span class="sn">CI/CD · Observability · Results</span><span class="sd">~35 sec</span></div>
+    <div class="sh"><span class="st">2:10 – 2:35</span><span class="sn">Walking through the platform — multi-tenant, RBAC, models</span><span class="sd">~25 sec</span></div>
     <div class="sb">
-      <div class="spoken">For delivery, I built <b>GitHub Actions pipelines</b> — Docker builds, Terraform plan and apply, database migration validation, and deployment promotion — so every change moved through an auditable workflow, not a manual SSH session.<br><br>Observability was first-class from the start — <b>Prometheus and Grafana</b> tracking latency under <span class="g">100 milliseconds at p99</span>, resource usage, and service availability, with alerting for incident escalation.<br><br>The results: <span class="g">deployment time reduced by 90 percent</span> — connection overhead down <span class="g">60 percent</span> through pooling — API costs reduced <span class="g">35 percent</span> through intelligent routing — and <span class="g">99 percent uptime</span> maintained across the full platform.</div>
-      <div class="note">⟶ Pause before each number. Let 90%, 60%, 35%, 99% land with a brief silence. The sample says "reduced significantly" — you say 90%. That gap is your biggest edge.</div>
+      <div class="spoken">
+        What made this platform genuinely production-grade was the <b>multi-tenant
+        architecture</b>. Every organisation gets its own isolated environment — their
+        own users, their own model access, their own usage analytics.<br><br>
+
+        We built a <b>five-tier RBAC system</b> — SuperAdmin, Admin, Chat User, API User,
+        and Billing User — with JWT and API key authentication at the middleware layer.<br><br>
+
+        From this models page, admins can see <b>which Ollama models are available</b>,
+        pull new ones, and control which organisations have access to which models — all
+        from the dashboard without touching any config files.
+      </div>
+      <div class="note">⟶ Show: Dashboard → Models page → Organisation list. Point at the model list and explain what you are seeing.</div>
     </div>
   </div>
 
-  <div class="sl">Segment 4 — Why Me</div>
   <div class="seg">
-    <div class="sh"><span class="st">3:20 – 4:20</span><span class="sn">Fit · Ownership · Remote · Enthusiasm</span><span class="sd">~60 sec</span></div>
+    <div class="sh"><span class="st">2:35 – 2:55</span><span class="sn">Infrastructure decisions — Terraform, CI/CD, deployment</span><span class="sd">~20 sec</span></div>
     <div class="sb">
-      <div class="spoken">I believe I am a strong fit because the core requirements of this role — <b>GCP, Terraform, Cloud Run, CI/CD, and observability</b> — are not things I am learning. They are systems I am currently running in production, with real SLA commitments and cost accountability behind them.<br><br>I have worked in <b>multi-tenant and customer-specific environments</b> where access control, reliability, and cost efficiency are daily concerns. I take ownership <b>end to end</b> — architecture, deployment, monitoring, debugging, and documentation — not just the initial setup.<br><br>I have been <b>working remotely with international teams</b> throughout my career, so async communication, clear written updates, and operational documentation are already how I work.<br><br>Most importantly, what excites me about this opportunity is working more deeply with <b>Google Cloud Platform</b>, especially <b>Cloud Run and Pub/Sub</b>, and contributing to a high-scale platform like yours.</div>
-      <div class="note">⟶ The sample candidate's exact close at 5:14: "most importantly, I'm excited to work more deeply with Google Cloud Platforms, especially Cloud Run, PubSub." Mirror this move — deliberate keyword signalling that clearly works.</div>
+      <div class="spoken">
+        On the infrastructure side — the entire environment was provisioned with
+        <b>Terraform</b> across GCP and AWS. I wrote modular configs for networking,
+        IAM, compute, and storage — so we could spin up a new customer environment
+        in minutes, not days.<br><br>
+
+        Deployments ran through <b>GitHub Actions pipelines</b> — Docker build, migration
+        validation, health checks, then service promotion — every step auditable.
+        And I used <b>Ansible playbooks</b> to provision the servers, so the entire
+        setup went from zero to running with a single command. That is what reduced
+        our deployment time by <span class="g">ninety percent</span>.
+      </div>
+      <div class="note">⟶ You can show: a terminal with docker compose ps running, or the GitHub Actions tab on the repo if it is open. Even 5 seconds of a real terminal is convincing.</div>
     </div>
   </div>
 
-  <div class="sl">Segment 5 — Close</div>
   <div class="seg">
-    <div class="sh"><span class="st">4:20 – 4:45</span><span class="sn">Thank you · CTA</span><span class="sd">~25 sec</span></div>
+    <div class="sh"><span class="st">2:55 – 3:15</span><span class="sn">Observability, token tracking, analytics dashboard</span><span class="sd">~20 sec</span></div>
     <div class="sb">
-      <div class="spoken">Thank you for your time. I would be glad to go deeper on any part of my experience — whether that is Terraform module design, GKE architecture, or CI/CD pipeline structure. I am excited about this opportunity and I look forward to the next step.</div>
-      <div class="note">⟶ Look directly into the camera. Smile. End with energy. Do NOT say "this was it for my introduction" — that is the sample's weak close. Yours ends on a forward-looking offer.</div>
+      <div class="spoken">
+        Observability was built in from day one. I implemented <b>Prometheus and Grafana</b>
+        to monitor inference latency, connection pool saturation, and service health —
+        with alerting for incident escalation.<br><br>
+
+        Inside the platform itself, there is a <b>real-time analytics dashboard</b> —
+        this shows API request volumes, token usage per model and per organisation,
+        and latency trends. Every token consumed by every API key is tracked and stored —
+        this is what we used for <b>billing and cost allocation</b> across organisations.
+        We cut API costs by <span class="g">thirty-five percent</span> just through
+        intelligent model routing and better visibility into usage.
+      </div>
+      <div class="note">⟶ Show: Analytics page in the dashboard — the charts for token usage and API requests. This is your strongest visual proof point. Point at the numbers on screen as you speak.</div>
+    </div>
+  </div>
+
+  <div class="seg">
+    <div class="sh"><span class="st">3:15 – 3:25</span><span class="sn">Results — hard numbers</span><span class="sd">~10 sec</span></div>
+    <div class="sb">
+      <div class="spoken">
+        The results: <span class="g">deployment time reduced by 90 percent</span>,
+        database connection overhead down <span class="g">60 percent</span> through
+        PgBouncer pooling, API costs down <span class="g">35 percent</span>,
+        and <span class="g">99 percent uptime</span> maintained across all seven services
+        in production.
+      </div>
+      <div class="note">⟶ Pause after each number. These land harder after the visual demo — the viewer now understands what they represent.</div>
+    </div>
+  </div>
+
+
+  <!-- SEG 4 -->
+  <div class="sl">Segment 4 — Why Me · 3:25 – 4:15</div>
+  <div class="seg">
+    <div class="sh"><span class="st">3:25 – 4:15</span><span class="sn">Fit · End-to-end ownership · Remote</span><span class="sd">~50 sec</span></div>
+    <div class="sb">
+      <div class="spoken">
+        What you have just seen is not a side project or a tutorial — it is a platform
+        I designed, provisioned, deployed, and operated under real SLA commitments for
+        real enterprise clients.<br><br>
+
+        The core requirements of this role — <b>GCP, Terraform, Cloud Run, CI/CD,
+        and observability</b> — are exactly the stack I have been running in production.
+        I take ownership <b>end to end</b> — from the Terraform module to the Grafana
+        dashboard to the incident response playbook.<br><br>
+
+        I have been working <b>remotely with international teams</b> throughout my career,
+        so async communication, documentation, and clear written decisions are already
+        how I operate.<br><br>
+
+        Most importantly — what excites me about this opportunity is working more deeply
+        with <b>Google Cloud Platform, especially Cloud Run and Pub/Sub</b>, and contributing
+        to a scalable platform at Smart Working.
+      </div>
+      <div class="note">⟶ End screen share here and return to camera-only. The "what you have just seen" opening line is powerful — it ties the demo directly into your fit statement.</div>
+    </div>
+  </div>
+
+
+  <!-- SEG 5 -->
+  <div class="sl">Segment 5 — Close · 4:15 – 4:40</div>
+  <div class="seg">
+    <div class="sh"><span class="st">4:15 – 4:40</span><span class="sn">Thank you · CTA</span><span class="sd">~25 sec</span></div>
+    <div class="sb">
+      <div class="spoken">
+        Thank you for your time. I would be glad to go deeper on any part of this —
+        the infrastructure design, the Terraform module structure, the CI/CD pipeline,
+        or the database architecture. I am excited about this opportunity and I look
+        forward to the next step.
+      </div>
+      <div class="note">⟶ Camera only. Look directly into the lens. Smile. End on energy — not "that's it for my introduction."</div>
     </div>
   </div>
 </div>
 
-<!-- ── TAB 2: BULLET CUES ── -->
-<div class="panel" id="p-bullets">
-  <div class="ph"><h1>Bullet Cue Card</h1><p>Rehearse from here — not the script. 3 times aloud. Third time: close the tab and record.</p></div>
-  <div class="alert ac"><strong>How to use:</strong> Each bullet is one spoken idea. Say it in your own words. Memorize the flow and key terms — not sentences.</div>
 
-  <div class="bb"><div class="bt">01 · Open · 0:50</div>
+<!-- ══════════════════════ TAB 2: DEMO PLAN ══════════════════════ -->
+<div class="panel" id="p-demo">
+  <div class="ph">
+    <h1>ServeLLM Screen Share Plan</h1>
+    <p>Exactly what to show, in what order, and what to say at each screen. 70% ServeLLM story, 30% role alignment.</p>
+  </div>
+
+  <div class="alert ag"><strong>Core principle:</strong> Show the running platform — not code. SmartWorking said "share a project you're proud of." ServeLLM running locally IS that project. Every screen you show should have something moving or real on it.</div>
+
+  <div class="sl">Pre-Recording Setup — do this before you hit record</div>
+  <div class="bb">
+    <ul class="bl">
+      <li>Run <b>docker compose up -d</b> and confirm all 7 services are healthy: <b>docker compose ps</b></li>
+      <li>Open browser tabs in order: <b>Dashboard home → Models → Analytics → Users → API Keys</b></li>
+      <li>Log in as a SuperAdmin user so you have access to all sections</li>
+      <li>Have a <b>second terminal tab open</b> showing docker compose ps or logs — for the architecture moment</li>
+      <li>Have the <b>Swagger UI open</b> at localhost:8000/docs as a backup visual</li>
+      <li>Disable all browser notifications and close other tabs</li>
+    </ul>
+  </div>
+
+  <div class="sl">Screen Share Sequence — 7 steps in ~2:05</div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num">01</div>
+      <div class="demo-title">Terminal — docker compose ps (architecture proof)</div>
+      <div class="demo-time">1:40 – 1:55 · ~15 sec</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to show:</b> A terminal running <span class="c">docker compose ps</span> with all 7 services showing healthy status. This is the first thing they see — it proves the platform actually runs.</p>
+      <p><b>What to point at:</b> Each service name — db, pgbouncer, backend, minio, ollama, frontend, streamlit — and say the port number as you scan down the list.</p>
+      <div class="demo-say">"These are the seven services running right now — FastAPI backend on 8000, PgBouncer on 6432 pooling connections to Postgres on 5432, MinIO on 9000, Ollama on 11435, and the Next.js frontend on 3000."</div>
+    </div>
+  </div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num demo-num-g">02</div>
+      <div class="demo-title">Dashboard Home — the main overview</div>
+      <div class="demo-time">1:55 – 2:10 · ~15 sec</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to show:</b> The main dashboard landing page. Point at the summary cards — total users, organisations, API requests, token usage.</p>
+      <p><b>What to highlight:</b> "This is a live multi-tenant environment — each organisation has its own isolated data." Gesture at the org selector or user count.</p>
+      <div class="demo-say">"This is the operator dashboard — showing the full picture across all organisations on this deployment. Every metric here — requests, tokens, latency — is tracked per API key and per organisation."</div>
+    </div>
+  </div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num demo-num-g">03</div>
+      <div class="demo-title">Models Page — Ollama model management</div>
+      <div class="demo-time">2:10 – 2:22 · ~12 sec</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to show:</b> The models management page. List of available Ollama models. Ideally one model is already pulled (e.g. llama3.2, gemma3, mistral).</p>
+      <p><b>What to explain:</b> Model access is controlled per organisation — not every tenant sees every model. This is the access control layer on top of Ollama.</p>
+      <div class="demo-say">"Admins can see which models are available from Ollama, pull new ones, and control exactly which organisations can access which models — without touching any config files."</div>
+    </div>
+  </div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num demo-num-a">04</div>
+      <div class="demo-title">Analytics Page — token usage + API request charts</div>
+      <div class="demo-time">2:22 – 2:45 · ~23 sec — YOUR STRONGEST VISUAL</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to show:</b> The analytics page with charts — API requests over time, token usage per model, latency trends. This is built with Recharts and shows real data.</p>
+      <p><b>What to point at:</b> Token usage chart — "every token consumed is tracked per API key." Request volume chart — "this is what we used for billing and cost optimisation." Latency chart if visible.</p>
+      <div class="demo-say">"This is what I mean by observability as a first-class concern — every API call, every token, every model inference is tracked here. This dashboard is how we reduced API costs by 35 percent — we could see exactly where the expensive calls were coming from."</div>
+      <div class="note" style="margin-top:10px;">⟶ This is the 35% cost savings story made visual. Spend the most time here — it is the strongest proof of production ownership.</div>
+    </div>
+  </div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num demo-num-a">05</div>
+      <div class="demo-title">API Keys Page — multi-tenant access control</div>
+      <div class="demo-time">2:45 – 2:55 · ~10 sec</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to show:</b> The API keys management page. Show that API keys are scoped per organisation, with usage limits and tracking.</p>
+      <div class="demo-say">"Each organisation gets scoped API keys — with rate limits, usage tracking, and org-level isolation built in. This is what makes it a proper SaaS platform, not just a hosted model."</div>
+    </div>
+  </div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num demo-num-p">06</div>
+      <div class="demo-title">Infrastructure — Swagger UI or docker compose logs</div>
+      <div class="demo-time">2:55 – 3:10 · ~15 sec</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to show:</b> Either the FastAPI Swagger UI at localhost:8000/docs (shows the full OpenAI-compatible API surface), OR a quick terminal showing docker compose logs backend — real log output is convincing.</p>
+      <p><b>What to say:</b> Mention Terraform, GitHub Actions, Ansible briefly — you do not need to show code, just reference the toolchain that provisioned this.</p>
+      <div class="demo-say">"The entire infrastructure behind this was provisioned with Terraform — modular configs for GCP and AWS — and deployed through GitHub Actions pipelines with automated migration validation. Ansible handled server provisioning. One command to go from zero to this."</div>
+    </div>
+  </div>
+
+  <div class="demo-step">
+    <div class="demo-head">
+      <div class="demo-num demo-num-p">07</div>
+      <div class="demo-title">End screen share — return to camera only</div>
+      <div class="demo-time">3:10 – 3:25 · transition into Why Me</div>
+    </div>
+    <div class="demo-body">
+      <p><b>What to do:</b> Stop screen share. Return to face camera. Take a brief pause — 1 to 2 seconds — then begin "What you have just seen is not a side project..."</p>
+      <p>That pause after the demo is intentional. It gives the viewer a moment to process what they saw before you pivot to why it matters for this role.</p>
+    </div>
+  </div>
+
+  <div class="sl">ServeLLM Architecture — what each service proves</div>
+
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-name">PostgreSQL + PgBouncer</div>
+      <div class="svc-desc">Transaction-mode pooling, 200 max connections, 60% overhead reduction. Proves database connection management at scale.</div>
+      <div class="svc-tag">→ GCP Cloud SQL pattern</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">FastAPI Backend</div>
+      <div class="svc-desc">OpenAI-compatible API, SSE streaming, JWT + API key auth, 5-tier RBAC, token tracking with tiktoken.</div>
+      <div class="svc-tag">→ Cloud Run deployment pattern</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">MinIO Object Storage</div>
+      <div class="svc-desc">S3-compatible, bucket policies, model artifact storage. Direct analogue to GCS.</div>
+      <div class="svc-tag">→ GCS / S3 pattern</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Ollama LLM Engine</div>
+      <div class="svc-desc">Self-hosted inference on port 11435, model pull management, health checks, graceful degradation.</div>
+      <div class="svc-tag">→ Vertex AI analogue</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Next.js Frontend + PM2</div>
+      <div class="svc-desc">Production build baked into image, PM2 process management, 1.5GB memory limit, resource reservations.</div>
+      <div class="svc-tag">→ Cloud Run frontend pattern</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Terraform + GitHub Actions</div>
+      <div class="svc-desc">Modular IaC for GCP + AWS, multi-env promotion, automated migration validation, 90% deployment time reduction.</div>
+      <div class="svc-tag">→ Direct job requirement match</div>
+    </div>
+  </div>
+
+  <div class="sl">What NOT to show or say</div>
+  <div class="bb">
+    <ul class="bl">
+      <li><b>Do not show your resume or LinkedIn</b> — SmartWorking stated this explicitly</li>
+      <li><b>Do not show raw code</b> — show the running platform. Code without context is noise.</li>
+      <li><b>Do not show any hardcoded credentials</b> — the docker-compose.yml has plaintext passwords. Keep terminal away from that file.</li>
+      <li><b>Do not show client names or internal data</b> if any real client data is in the database</li>
+      <li><b>Do not try to demo all seven services</b> — 4 to 5 screens maximum. Quality over quantity.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ TAB 3: BULLET CUES ══════════════════════ -->
+<div class="panel" id="p-bullets">
+  <div class="ph">
+    <h1>Bullet Cue Card</h1>
+    <p>Rehearse from here — not the script. 3 times aloud. Then close the tab and record.</p>
+  </div>
+
+  <div class="alert ac"><strong>How to use:</strong> Each bullet = one spoken idea. Expand in your own words. Memorize the flow and the key terms — not sentences.</div>
+
+  <div class="bb"><div class="bt">01 · Open · 0:45</div>
     <ul class="bl">
       <li><b>Daud Farzand</b>, Lahore — AI Platform Infrastructure Engineer</li>
       <li><b>4+ years production</b> — DevOps, cloud infra, platform engineering</li>
-      <li>Focus: <b>GCP + Terraform</b> — work with US-based remote teams daily</li>
-      <li>Excited because: <b>GCP, Cloud Run, Pub/Sub</b> — already my daily stack, want to go deeper here</li>
+      <li>Focus: <b>GCP + Terraform</b> — US-based remote teams daily</li>
+      <li>Excited: <b>GCP, Cloud Run, Pub/Sub</b> — already my stack, want to go deeper at Smart Working</li>
     </ul>
   </div>
 
-  <div class="bb"><div class="bt">02 · Three Pillars · 0:40</div>
+  <div class="bb"><div class="bt">02 · Three Pillars · 0:35</div>
     <ul class="bl">
-      <li><b>1. Terraform</b> — reusable modules · multi-env (dev / staging / prod / customer-specific) · all through CI/CD, no manual console changes</li>
-      <li><b>2. GCP</b> — <b>Cloud Run</b> (serverless APIs) · <b>GKE</b> (containers) · <b>Vertex AI</b> (ML) · BigQuery · event-driven patterns → <span class="p">Pub/Sub: async comms, retry, dead-letter handling</span></li>
-      <li><b>3. CI/CD + Observability</b> — <b>GitHub Actions + Cloud Build</b> · Prometheus · Grafana · OpenTelemetry · latency, errors, health — day one on every system</li>
+      <li><b>1. Terraform</b> — reusable modules · multi-env · all through CI/CD, no manual console changes</li>
+      <li><b>2. GCP</b> — Cloud Run · GKE · Vertex AI · BigQuery · event-driven patterns → <span class="p">Pub/Sub: async, retry, dead-letter</span></li>
+      <li><b>3. CI/CD + Observability</b> — <b>GitHub Actions + Cloud Build</b> · Prometheus · Grafana · OTel — day one</li>
     </ul>
   </div>
 
-  <div class="bb"><div class="bt">03 · Project Story · 2:00</div>
+  <div class="bb"><div class="bt">03 · ServeLLM Demo · 2:05</div>
     <ul class="bl">
-      <li><b>Where:</b> Techanzy + TechPrysm — production platform, multiple clients, real SLA</li>
-      <li><b>Challenge:</b> not just deploy — make it <b>repeatable, auditable, maintainable</b> under load</li>
-      <li><b>Terraform:</b> modular IAM · networking · storage · compute — GCP + AWS per environment</li>
-      <li><b>GCP:</b> Cloud Run (APIs) · GKE (workloads) · Vertex AI (ML) · <b>blue-green deploys</b></li>
-      <li><b>Event-driven:</b> decoupled services · async comms · retry + failure handling → Pub/Sub patterns</li>
-      <li><b>CI/CD:</b> GitHub Actions — Docker → Terraform plan/apply → DB migration → deploy (auditable, no manual SSH)</li>
-      <li><b>Stack:</b> FastAPI · PostgreSQL + PgBouncer · object storage · health checks across all services</li>
-      <li><b>Observability:</b> Prometheus + Grafana · &lt;100ms p99 · alerting for incident escalation</li>
-      <li class="g"><b>Results: 90% faster deploys · 60% less DB overhead · 35% API cost savings · 99% uptime</b></li>
+      <li><b>What it is:</b> production multi-tenant LLM platform — private, enterprise-grade, zero vendor lock-in</li>
+      <li><b>Show terminal:</b> docker compose ps — 7 services healthy (db · pgbouncer · backend · minio · ollama · frontend · streamlit)</li>
+      <li><b>Architecture:</b> FastAPI backend · PostgreSQL + <b>PgBouncer transaction pooling</b> (200 connections, 1000+ users) · MinIO · Ollama · Next.js + PM2</li>
+      <li><b>Show dashboard:</b> multi-tenant orgs · isolated data · user management</li>
+      <li><b>Show models page:</b> Ollama model access control per organisation</li>
+      <li><b>Show analytics page:</b> token usage per model · API requests · latency → this is the 35% cost savings story made visible</li>
+      <li><b>Infra:</b> Terraform modular (GCP + AWS) · GitHub Actions CI/CD · Ansible provisioning · one command deploy</li>
+      <li class="g"><b>Numbers: 90% faster deploys · 60% less DB overhead · 35% API cost savings · 99% uptime</b></li>
     </ul>
   </div>
 
   <div class="bb"><div class="bt">04 · Why Me · 0:50</div>
     <ul class="bl">
-      <li>GCP, Terraform, Cloud Run, CI/CD, observability — <b>in production now</b>, not in a course, with real SLAs</li>
-      <li>Multi-tenant, customer-specific environments — reliability + access control + cost every day</li>
-      <li><b>End-to-end ownership:</b> architecture → deploy → monitor → debug → document</li>
-      <li>Remote-native — async, written comms, documentation — already how I work, not something to adapt to</li>
-      <li>Most importantly: excited to go deeper into <b>GCP, Cloud Run, Pub/Sub</b> with Smart Working</li>
+      <li>"What you just saw is not a side project — real SLA commitments, real enterprise clients"</li>
+      <li>GCP, Terraform, Cloud Run, CI/CD, observability — <b>in production now</b>, with cost accountability</li>
+      <li><b>End-to-end ownership:</b> Terraform → deploy → Grafana → incident response → documentation</li>
+      <li>Remote-native — async, documentation, written comms — already how I work</li>
+      <li>Excited to go deeper: <b>GCP, Cloud Run, Pub/Sub</b> at Smart Working</li>
     </ul>
   </div>
 
   <div class="bb"><div class="bt">05 · Close · 0:25</div>
     <ul class="bl">
       <li>Thank you for your time</li>
-      <li>Happy to go deeper — Terraform, GKE, CI/CD pipeline design</li>
+      <li>Happy to go deeper — Terraform structure, CI/CD design, DB architecture</li>
       <li>Excited — looking forward to the next step — <b>look into camera, smile</b></li>
     </ul>
   </div>
 
   <div class="div"></div>
 
-  <div class="alert aa"><strong>Pub/Sub — exact line to say:</strong><br><br>"I have designed systems using event-driven architecture — decoupled services communicating asynchronously, with retry logic and failure handling — which maps directly to Pub/Sub concepts like acknowledgement and dead-letter handling."<br><br>This mirrors exactly how the sample candidate handles it at 3:16. Honest, accurate, and exactly what they want to hear.</div>
+  <div class="alert aa">
+    <strong>Pub/Sub line — say this exactly:</strong><br><br>
+    "I have designed event-driven systems — services communicating asynchronously, with retry logic and dead-letter handling — which maps directly to Pub/Sub patterns in GCP."<br><br>
+    Honest, accurate, and mirrors how the sample candidate handled it at 3:16.
+  </div>
 
-  <div class="alert ag"><strong>Your numbers — say each one, then pause:</strong>
+  <div class="alert ag">
+    <strong>Numbers — pause after each:</strong>
     <div class="pills">
       <span class="pill pg">90% faster deploys</span>
       <span class="pill pg">60% less DB overhead</span>
       <span class="pill pg">35% API cost savings</span>
       <span class="pill pg">99% uptime</span>
-      <span class="pill pc">&lt;100ms p99 latency</span>
+      <span class="pill pc">7 services in production</span>
       <span class="pill pc">1000+ concurrent users</span>
+      <span class="pill pc">200 max DB connections</span>
     </div>
   </div>
 </div>
 
-<!-- ── TAB 3: CHECKLIST ── -->
+
+<!-- ══════════════════════ TAB 4: CHECKLIST ══════════════════════ -->
 <div class="panel" id="p-checklist">
-  <div class="ph"><h1>Recording Checklist</h1><p>Tap each item to mark done. Submit: forms.gle/8q7kPgpwnhnnhqUy8</p></div>
-  <div class="alert ag">Smart Working's email says <strong>submit this week</strong>. The Loom does not need to be perfect — it needs to be done and under 5 minutes.</div>
+  <div class="ph">
+    <h1>Recording Checklist</h1>
+    <p>Tap to mark done. Submit: forms.gle/8q7kPgpwnhnnhqUy8</p>
+  </div>
+
+  <div class="alert ag">Smart Working said submit <strong>this week</strong>. Done and under 5 minutes beats perfect and late.</div>
 
   <div class="qr"><div class="qrt">⚡ 5-Segment Quick Reference</div>
-    <div class="qrow"><span class="qt">0:00</span><div class="qtext"><b>Open:</b> Daud Farzand · GCP + Terraform · 4yr production · excited about Cloud Run + Pub/Sub</div></div>
-    <div class="qrow"><span class="qt">0:50</span><div class="qtext"><b>3 Pillars:</b> Terraform multi-env · GCP (Cloud Run, GKE, Vertex AI) + Pub/Sub pattern · GitHub Actions + Cloud Build + Prometheus/Grafana/OTel</div></div>
-    <div class="qrow"><span class="qt">1:30</span><div class="qtext"><b>Project:</b> Techanzy/TechPrysm · Terraform modular · Cloud Run + GKE blue-green · event-driven/Pub/Sub · GitHub Actions auditable CI/CD</div></div>
-    <div class="qrow"><span class="qt">2:45</span><div class="qtext"><b>Numbers:</b> 90% · 60% · 35% · 99% — pause after each one</div></div>
-    <div class="qrow"><span class="qt">3:20</span><div class="qtext"><b>Why Me:</b> in production now · end-to-end ownership · remote-native · excited for Cloud Run + Pub/Sub at Smart Working</div></div>
-    <div class="qrow"><span class="qt">4:20</span><div class="qtext"><b>Close:</b> thank you · offer technical convo · look into camera · forward-looking energy</div></div>
+    <div class="qrow"><span class="qt">0:00</span><div class="qtext"><b>Open:</b> Daud Farzand · GCP + Terraform · 4yr · excited about Cloud Run + Pub/Sub at Smart Working</div></div>
+    <div class="qrow"><span class="qt">0:45</span><div class="qtext"><b>3 Pillars:</b> Terraform multi-env · GCP (Cloud Run, GKE, Vertex AI) + Pub/Sub pattern · GitHub Actions + Cloud Build + Prometheus/Grafana</div></div>
+    <div class="qrow"><span class="qt">1:20</span><div class="qtext"><b>ServeLLM:</b> terminal (docker compose ps) → dashboard → models → analytics (35% story) → API keys → infra mention</div></div>
+    <div class="qrow"><span class="qt">3:15</span><div class="qtext"><b>Numbers:</b> 90% · 60% · 35% · 99% — end screen share, pause, then pivot to camera</div></div>
+    <div class="qrow"><span class="qt">3:25</span><div class="qtext"><b>Why Me:</b> "what you just saw is not a side project" · production SLA · end-to-end ownership · remote-native · Cloud Run + Pub/Sub at Smart Working</div></div>
+    <div class="qrow"><span class="qt">4:15</span><div class="qtext"><b>Close:</b> thank you · go deeper on Terraform/CI/CD · excited · look into camera</div></div>
   </div>
+
+  <div class="sl">ServeLLM Setup</div>
+  <div class="cb2"><ul class="cl">
+    <li onclick="tick(this)"><div class="chk">✓</div>docker compose up -d — all 7 services running</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>docker compose ps — all show healthy status</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Logged in to dashboard as SuperAdmin</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Browser tabs open in order: Dashboard → Models → Analytics → API Keys</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Terminal tab open with docker compose ps ready to show</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Swagger UI open at localhost:8000/docs as backup</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Analytics page has some visible data — send a few test API calls if empty</li>
+  </ul></div>
 
   <div class="sl">Before Recording</div>
   <div class="cb2"><ul class="cl">
     <li onclick="tick(this)"><div class="chk">✓</div>Practiced bullet cues out loud at least 3 times</li>
     <li onclick="tick(this)"><div class="chk">✓</div>Camera at eye level — prop laptop on books if needed</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Light source in front of you, not behind you</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Clean background — plain wall is fine</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Mic tested — earphones or external mic, not laptop mic</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Light source in front of you, not behind</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Mic tested — earphones or external mic</li>
     <li onclick="tick(this)"><div class="chk">✓</div>All notifications silenced — phone and desktop</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Loom signed in and tested at loom.com</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Decided: camera only OR camera + one safe artifact (Terraform file or architecture diagram — NOT resume or LinkedIn)</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Loom signed in and screen share permission granted</li>
     <li onclick="tick(this)"><div class="chk">✓</div>Submission form open in another tab: forms.gle/8q7kPgpwnhnnhqUy8</li>
   </ul></div>
 
   <div class="sl">During Recording</div>
   <div class="cb2"><ul class="cl">
-    <li onclick="tick(this)"><div class="chk">✓</div>Start strong — Daud Farzand, no hesitation</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Say "Cloud Run and Pub/Sub" in opening AND in why-me close</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Start on camera — Daud Farzand, confident, no hesitation</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Say "Cloud Run and Pub/Sub" in opening (first 45 sec)</li>
     <li onclick="tick(this)"><div class="chk">✓</div>Say "GitHub Actions" and "Cloud Build" in pillar 3</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Start screen share at 1:20 — show terminal first (docker compose ps)</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Spend most time on Analytics page — that is your strongest visual</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>End screen share at ~3:15, pause 1-2 seconds, then pivot to camera</li>
     <li onclick="tick(this)"><div class="chk">✓</div>Pause after each number — 90%, 60%, 35%, 99%</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Look into the camera, not at the screen</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Stay under 5 minutes — aim for 4:30 to 4:45</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Do NOT show resume or LinkedIn on screen</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Say "Cloud Run and Pub/Sub" again in Why Me close</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Under 5 minutes — aim for 4:30 to 4:45</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Do NOT show resume or LinkedIn — SmartWorking said this explicitly</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Do NOT show docker-compose.yml — it has plaintext credentials</li>
   </ul></div>
 
   <div class="sl">After Recording</div>
   <div class="cb2"><ul class="cl">
-    <li onclick="tick(this)"><div class="chk">✓</div>Watch back once — check pacing and total time</li>
-    <li onclick="tick(this)"><div class="chk">✓</div>Re-record only if under 3:30 or over 5:00 — otherwise submit</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Watch back once — check time (must be under 5:00)</li>
+    <li onclick="tick(this)"><div class="chk">✓</div>Re-record only if under 3:30 or over 5:00</li>
     <li onclick="tick(this)"><div class="chk">✓</div>Copy Loom share link</li>
     <li onclick="tick(this)"><div class="chk">✓</div>Submit: <a href="https://forms.gle/8q7kPgpwnhnnhqUy8" target="_blank" style="color:var(--c);">forms.gle/8q7kPgpwnhnnhqUy8</a></li>
     <li onclick="tick(this)"><div class="chk">✓</div>Save Loom link for your records</li>
@@ -263,17 +693,22 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
   <div class="sl">What Smart Working Is Evaluating</div>
   <div class="cb2" style="border-color:rgba(56,189,248,.2);"><ul class="cl" style="cursor:default;">
     <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>Under 5 minutes — stated twice in their guide, hard rule</li>
-    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>A real project story — ServeLLM / TechPrysm is your project</li>
+    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>A real project you are proud of — ServeLLM is your project</li>
     <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>English language proficiency — speak clearly, not fast</li>
-    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>Attention to detail — following their 1 min open / 3 min project / 1 min close structure</li>
-    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>Personality and genuine connection — be natural, not robotic</li>
-    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>No resume or LinkedIn on screen — they stated this explicitly</li>
+    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>Structure: 1 min open · 3 min project · 1 min close</li>
+    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>Personality and genuine connection — be natural</li>
+    <li style="cursor:default;"><div class="chk" style="border-color:var(--line);"></div>No resume or LinkedIn on screen</li>
   </ul></div>
 </div>
 
 <script>
-function go(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));document.getElementById('p-'+id).classList.add('on');document.getElementById('t-'+id).classList.add('on');}
-function tick(li){li.classList.toggle('done');}
+function go(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  document.getElementById('t-'+id).classList.add('on');
+}
+function tick(li){ li.classList.toggle('done'); }
 </script>
 </body>
 </html>
