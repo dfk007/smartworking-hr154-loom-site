@@ -143,6 +143,41 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
 .svc-card .svc-tag{font-size:10px;font-family:'DM Mono',monospace;color:var(--g);}
 
 .div{height:1px;background:var(--line);margin:22px 0;}
+
+/* CONCEPT CARDS */
+.concept{border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:16px;}
+.concept-head{background:var(--s2);padding:12px 17px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;}
+.concept-head:hover{background:var(--s3);}
+.concept-icon{font-size:16px;flex-shrink:0;}
+.concept-title{font-size:14px;font-weight:600;color:var(--tb);}
+.concept-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;}
+.badge-r{background:var(--rb);color:var(--r);border:1px solid rgba(248,113,113,.2);}
+.badge-a{background:var(--ab);color:var(--a);border:1px solid var(--a2);}
+.badge-g{background:var(--gb);color:var(--g);border:1px solid var(--g2);}
+.concept-body{padding:16px 18px;background:var(--s1);display:none;}
+.concept-body.open{display:block;}
+.concept-body p{font-size:13.5px;color:var(--t);line-height:1.75;margin-bottom:10px;}
+.concept-body p:last-child{margin-bottom:0;}
+.concept-body b{color:var(--tb);}
+.concept-body .c{color:var(--c);font-weight:600;}
+.concept-body .g{color:var(--g);font-weight:600;}
+.concept-body .a{color:var(--a);}
+.concept-body .p{color:var(--p);}
+.concept-body code{font-family:'DM Mono',monospace;font-size:12px;background:var(--s2);border:1px solid var(--line);border-radius:4px;padding:2px 6px;color:var(--c);}
+.concept-body pre{font-family:'DM Mono',monospace;font-size:12px;background:var(--s2);border:1px solid var(--line);border-radius:6px;padding:13px 15px;color:var(--t);line-height:1.7;overflow-x:auto;margin:10px 0;}
+
+/* RESOURCE LINKS */
+.res{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.res a{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--s2);border:1px solid var(--line);border-radius:7px;font-size:13px;color:var(--c);text-decoration:none;transition:border-color .15s;}
+.res a:hover{border-color:var(--c2);}
+.res a .rlabel{color:var(--tm);font-family:'DM Mono',monospace;font-size:10px;margin-left:auto;white-space:nowrap;}
+
+/* PRACTICE BOX */
+.practice{background:var(--s2);border:1px solid var(--g2);border-left:2px solid var(--g);border-radius:0 7px 7px 0;padding:11px 14px;margin-top:10px;font-size:13px;color:var(--t);line-height:1.7;}
+.practice strong{color:var(--g);}
+.interview-q{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:12px 15px;margin:8px 0;font-size:13.5px;color:var(--t);line-height:1.6;}
+.interview-q .q{color:var(--a);font-weight:600;margin-bottom:6px;font-size:13px;}
+.interview-q .ans{color:var(--tm);font-size:13px;}
 </style>
 </head>
 <body>
@@ -153,6 +188,8 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
   <button class="nt"     onclick="go('demo')"      id="t-demo">     🖥 Demo Plan     </button>
   <button class="nt"     onclick="go('bullets')"   id="t-bullets">  ⚡ Bullet Cues   </button>
   <button class="nt"     onclick="go('checklist')" id="t-checklist">✅ Checklist     </button>
+  <button class="nt"     onclick="go('mongo')"     id="t-mongo">    🍃 MongoDB Prep  </button>
+  <button class="nt"     onclick="go('concepts')"  id="t-concepts"> 🧠 All Concepts  </button>
 </nav>
 
 
@@ -681,6 +718,385 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,.97);border-bottom
   </ul></div>
 </div>
 
+
+<!-- ══════════════════════ TAB 5: MONGODB PREP ══════════════════════ -->
+<div class="panel" id="p-mongo">
+  <div class="ph">
+    <h1>MongoDB Atlas — Interview Prep</h1>
+    <p>The JD says "mandatory." Five topic areas. Everything you need to know and how to practice each one.</p>
+  </div>
+
+  <div class="alert ar"><strong>Honest gap:</strong> Your production DB experience is PostgreSQL. Your angle is: strong on the IaC/infrastructure layer (Terraform Atlas provider), and transferable distributed systems knowledge. Don't overclaim — do know the concepts cold.</div>
+
+  <div class="sl">Your Positioning Statement for MongoDB</div>
+  <div class="bb">
+    <ul class="bl">
+      <li>"My production database work has been PostgreSQL — but the operational concepts are directly transferable: replication, connection pooling, performance monitoring, backup strategies. On MongoDB Atlas specifically, my entry point is the infrastructure layer — provisioning and managing Atlas clusters via the <b>Terraform mongodbatlas provider</b>, which covers cluster config, backup schedules, user management, and network access as code."</li>
+      <li>Use this framing if asked directly. Then pivot to what you DO know cold.</li>
+    </ul>
+  </div>
+
+  <div class="sl">Topic 1 — Cluster Configuration and Scaling</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">⚙️</span>
+      <span class="concept-title">Cluster tiers, auto-scaling, multi-region, Terraform</span>
+      <span class="concept-badge badge-r">MANDATORY</span>
+    </div>
+    <div class="concept-body">
+      <p><b>What you need to know:</b> Atlas clusters come in tiers — M0 (free), M10/M20 (dev), M30+ (production). For production you need at minimum M30 for replica set elections. You configure cluster tier, region, cloud provider (GCP/AWS/Azure), and MongoDB version at provision time.</p>
+      <p><b>Auto-scaling:</b> Atlas can auto-scale both compute (cluster tier) and storage independently. You set a min/max tier range and Atlas scales within it based on CPU and memory utilization. Key setting: <code>autoScaling.compute.enabled = true</code>.</p>
+      <p><b>Multi-region clusters:</b> You define electable nodes (can become primary) and read-only nodes across regions. A 3-region setup with priority gives you geo-redundancy — primary election stays in the highest-priority region.</p>
+      <p><b>Terraform:</b> The <code>mongodbatlas_advanced_cluster</code> resource is the current way. Key fields: <code>cluster_type</code> (REPLICASET/SHARDED), <code>replication_specs</code> with <code>region_configs</code> per region, <code>electable_specs</code> and <code>read_only_specs</code> per region.</p>
+      <pre>resource "mongodbatlas_advanced_cluster" "prod" {
+  project_id   = var.atlas_project_id
+  name         = "prod-cluster"
+  cluster_type = "REPLICASET"
+  replication_specs {
+    region_configs {
+      provider_name = "GCP"
+      region_name   = "EUROPE_WEST_1"
+      priority      = 7
+      electable_specs { instance_size = "M30" node_count = 3 }
+    }
+  }
+}</pre>
+      <div class="practice"><strong>Practice:</strong> Sign up for a free Atlas account (M0). Provision a cluster via UI, then write Terraform to match it. Run <code>terraform plan</code> and verify the diff is zero.</div>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=bBA9rUdqmgY" target="_blank">▶ MongoDB Atlas Cluster Setup — MongoDB Official <span class="rlabel">YouTube · 12min</span></a>
+        <a href="https://www.youtube.com/watch?v=Md5FGwJ65oY" target="_blank">▶ MongoDB Atlas with Terraform — HashiCorp <span class="rlabel">YouTube · 28min</span></a>
+        <a href="https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/advanced_cluster" target="_blank">📄 Terraform mongodbatlas_advanced_cluster docs <span class="rlabel">Docs</span></a>
+      </div>
+      <div class="interview-q">
+        <div class="q">Q: How would you scale an Atlas cluster during a traffic spike without downtime?</div>
+        <div class="ans">A: Enable auto-scaling with a compute range (e.g. M30–M60). Atlas detects sustained high CPU/memory and scales up with zero downtime via rolling restarts. For predictable spikes, manually scale via API or Terraform before the event. Storage auto-scales independently and never causes downtime.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Topic 2 — Replication and Failover</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">🔄</span>
+      <span class="concept-title">Replica sets, elections, priority, failover testing</span>
+      <span class="concept-badge badge-r">MANDATORY</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Replica sets:</b> Atlas always runs replica sets — minimum 3 nodes (1 primary, 2 secondaries). The primary receives all writes. Secondaries replicate asynchronously via the oplog. If primary fails, secondaries hold an election — the node with highest priority and most up-to-date oplog wins.</p>
+      <p><b>Elections:</b> Require a majority of voting members. In a 3-node set, 2 nodes must agree. If you lose 2 nodes you lose write availability. This is why 3-node minimum matters — losing 1 still leaves a quorum of 2.</p>
+      <p><b>Hidden and delayed members:</b> Non-electable nodes used for analytics reads (hidden=true, priority=0) or point-in-time recovery (delayed member with N-hour lag). Atlas analytics nodes are this pattern.</p>
+      <p><b>Read preferences:</b> <code>primary</code> (default, always reads from primary), <code>primaryPreferred</code>, <code>secondary</code> (read scaling but may see stale data), <code>nearest</code> (lowest latency). Application sets this in connection string: <code>readPreference=secondaryPreferred</code>.</p>
+      <p><b>Testing failover:</b> Atlas UI has a "Test Failover" button — it steps down the primary and times the election. Typically under 30 seconds. You can also run <code>db.adminCommand({replSetStepDown: 60})</code> in mongosh.</p>
+      <div class="practice"><strong>Practice:</strong> On your free Atlas M0, open mongosh, run <code>rs.status()</code> and read every field. Understand <code>stateStr</code>, <code>optimeDate</code>, <code>lastHeartbeat</code>. Then trigger a test failover via the UI and watch the election in rs.status() output.</div>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=INoagFqbLDQ" target="_blank">▶ MongoDB Replication Explained — Traversy Media style <span class="rlabel">YouTube · 18min</span></a>
+        <a href="https://www.youtube.com/watch?v=R-p7fVhNKLQ" target="_blank">▶ MongoDB Atlas High Availability — MongoDB Official <span class="rlabel">YouTube · 20min</span></a>
+      </div>
+      <div class="interview-q">
+        <div class="q">Q: What happens to writes during a primary election in MongoDB?</div>
+        <div class="ans">A: Writes are rejected with a NotWritablePrimary error during the election window (typically 10–30 seconds). Applications should implement retry logic — the MongoDB drivers handle this automatically with <code>retryWrites=true</code> in the connection string, which is the default on Atlas.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Topic 3 — Backup and Disaster Recovery</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">💾</span>
+      <span class="concept-title">Cloud Backup, PITR, snapshot schedules, restore testing</span>
+      <span class="concept-badge badge-r">MANDATORY</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Cloud Backup (current):</b> Atlas takes snapshots of your cluster's storage volumes. You configure a schedule: hourly, daily, weekly, monthly. Each has a retention period. Snapshots are stored in Atlas-managed cloud storage in your cluster's region.</p>
+      <p><b>Point-in-Time Recovery (PITR):</b> Atlas streams the oplog continuously alongside snapshots. This lets you restore to any second within the PITR window (up to 7 days). You pick a snapshot as the base, then replay the oplog to your chosen timestamp.</p>
+      <p><b>Backup schedule via Terraform:</b></p>
+      <pre>resource "mongodbatlas_cloud_backup_schedule" "prod" {
+  project_id   = var.project_id
+  cluster_name = mongodbatlas_advanced_cluster.prod.name
+  reference_hour_of_day    = 3
+  reference_minute_of_hour = 0
+  restore_window_days      = 7
+  policy_item_hourly {
+    frequency_interval = 6
+    retention_unit     = "days"
+    retention_value    = 7
+  }
+  policy_item_daily {
+    frequency_interval = 1
+    retention_unit     = "days"
+    retention_value    = 30
+  }
+}</pre>
+      <p><b>RTO and RPO:</b> Know these terms cold. RPO (Recovery Point Objective) = how much data you can afford to lose. RTO (Recovery Time Objective) = how long recovery takes. With PITR enabled, RPO is seconds. RTO depends on database size — Atlas restores to a new cluster, not in-place.</p>
+      <p><b>mongodump / mongorestore:</b> For self-hosted or offline exports. <code>mongodump --uri="mongodb+srv://..."</code> creates BSON dumps. <code>mongorestore</code> loads them back. Not the primary Atlas backup mechanism but good to know as a fallback.</p>
+      <div class="practice"><strong>Practice:</strong> On Atlas M0, enable Cloud Backup. Take a manual snapshot via UI. Then go through the restore flow (you don't have to complete it — just understand every option presented). Write the Terraform for a backup schedule.</div>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=jQ5mQfPj2yY" target="_blank">▶ MongoDB Atlas Backup and Restore — MongoDB Official <span class="rlabel">YouTube · 15min</span></a>
+        <a href="https://www.youtube.com/watch?v=ukbBPxMMVnc" target="_blank">▶ MongoDB Disaster Recovery Strategies <span class="rlabel">YouTube · 22min</span></a>
+      </div>
+      <div class="interview-q">
+        <div class="q">Q: How would you design a backup strategy for a production MongoDB Atlas cluster with an RPO of 1 hour?</div>
+        <div class="ans">A: Enable Cloud Backup with hourly snapshots retained for 7 days, daily snapshots for 30 days. Enable PITR with a 7-day window — this actually gives sub-second RPO. Test restores quarterly to a separate cluster to validate RTO. Document the runbook including who approves a restore and what validation steps confirm data integrity post-restore.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Topic 4 — Performance Tuning and Indexing</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">⚡</span>
+      <span class="concept-title">Performance Advisor, explain(), indexes, slow queries</span>
+      <span class="concept-badge badge-a">IMPORTANT</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Atlas Performance Advisor:</b> Automatically surfaces slow queries (over 100ms by default) and suggests missing indexes. It shows the query shape, how many times it ran, average execution time, and the suggested index. This is your first stop for performance issues — check it before anything else.</p>
+      <p><b>explain():</b> Run <code>db.collection.find({field: value}).explain("executionStats")</code>. Key fields to read: <code>stage</code> — COLLSCAN means no index (bad), IXSCAN means index used (good). <code>nReturned</code> vs <code>totalDocsExamined</code> — if examined >> returned, the index is inefficient or missing.</p>
+      <p><b>Index types:</b> Single field <code>{field: 1}</code>, compound <code>{a: 1, b: -1}</code> (order matters — follows ESR rule: Equality first, Sort second, Range third), text indexes for full-text search, TTL indexes for auto-expiry of documents, partial indexes to index only a subset of documents.</p>
+      <p><b>Creating indexes without blocking production:</b> In older MongoDB you'd use <code>{background: true}</code>. In MongoDB 4.2+ all index builds are non-blocking by default on secondaries, then rolled to primary. On Atlas this is handled automatically.</p>
+      <p><b>Connection pool sizing:</b> Key for DevOps. Too many connections overwhelm the DB. Atlas shows connection count in metrics. Configure your application's connection pool max — for a 3-node M30 cluster, total connections limit is ~3000. Size pools per service accordingly.</p>
+      <div class="practice"><strong>Practice:</strong> On your M0 cluster, insert 10,000 documents with a script, run a query without an index, run explain() and see COLLSCAN. Then create an index and re-run explain() — see IXSCAN. This takes 20 minutes and makes the concept permanent.</div>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=KDWKKqe2N_o" target="_blank">▶ MongoDB Indexing Explained — MongoDB Official <span class="rlabel">YouTube · 25min</span></a>
+        <a href="https://www.youtube.com/watch?v=wjg3S5e1oJI" target="_blank">▶ MongoDB Performance Tuning with Atlas — MongoDB World <span class="rlabel">YouTube · 35min</span></a>
+        <a href="https://www.youtube.com/watch?v=KiNnMTse8mQ" target="_blank">▶ How to Read MongoDB explain() Output <span class="rlabel">YouTube · 18min</span></a>
+      </div>
+      <div class="interview-q">
+        <div class="q">Q: A query that was running in 50ms is now taking 3 seconds after a data growth. How do you investigate?</div>
+        <div class="ans">A: First check Atlas Performance Advisor — it will likely show the query shape as a slow query. Run explain("executionStats") on the query. If stage is COLLSCAN, a required index is missing or not being used. Check if the collection scan count grew with data — a COLLSCAN that was fast at 10K docs is slow at 10M. Create the suggested compound index (non-blocking on Atlas), verify with explain() that stage becomes IXSCAN, confirm query time drops.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Topic 5 — Security and Access Management</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">🔒</span>
+      <span class="concept-title">Network access, RBAC, auth, encryption, VPC peering</span>
+      <span class="concept-badge badge-r">MANDATORY</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Network access:</b> Atlas blocks all connections by default. You allowlist IP ranges or configure VPC Peering / Private Link. For production, never use 0.0.0.0/0. Use VPC Peering to your GCP VPC so only internal cluster traffic reaches Atlas — no public internet exposure.</p>
+      <p><b>VPC Peering via Terraform:</b></p>
+      <pre>resource "mongodbatlas_network_peering" "gcp" {
+  project_id    = var.project_id
+  container_id  = mongodbatlas_network_container.primary.id
+  provider_name = "GCP"
+  gcp_project_id = var.gcp_project
+  network_name   = var.gcp_network
+}</pre>
+      <p><b>Database users and RBAC:</b> Atlas has built-in roles: <code>readWrite</code>, <code>dbAdmin</code>, <code>clusterMonitor</code>, <code>atlasAdmin</code>. Create scoped users per service — your API service gets <code>readWrite</code> on its DB only, your monitoring agent gets <code>clusterMonitor</code>. Never use the admin user in application code.</p>
+      <p><b>Authentication methods:</b> SCRAM (username/password, default), x.509 client certificates, AWS IAM, LDAP. For production at scale, x.509 or IAM is preferred over passwords — no secrets to rotate.</p>
+      <p><b>Encryption:</b> At-rest encryption is on by default on Atlas paid tiers using cloud provider KMS (GCP CMEK, AWS KMS). In-transit is TLS 1.2+ enforced — connection strings use <code>mongodb+srv://</code> which enables TLS automatically. You can bring your own KMS key via <code>mongodbatlas_encryption_at_rest</code> Terraform resource.</p>
+      <p><b>Audit logging:</b> Atlas can log all auth attempts, CRUD operations, and admin actions. Route to your SIEM. Configure via <code>mongodbatlas_auditing</code> resource.</p>
+      <div class="practice"><strong>Practice:</strong> On Atlas M0: create a new DB user with readWrite only on one specific database. Test that it cannot access other databases. Then try to connect without allowlisting your IP — confirm connection refused. Write the Terraform for both resources.</div>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=kFKJEf8mEAU" target="_blank">▶ MongoDB Atlas Security Best Practices — MongoDB Official <span class="rlabel">YouTube · 20min</span></a>
+        <a href="https://www.youtube.com/watch?v=b4DqKSIEFvk" target="_blank">▶ MongoDB Atlas Network Peering Setup <span class="rlabel">YouTube · 14min</span></a>
+      </div>
+      <div class="interview-q">
+        <div class="q">Q: How would you secure a MongoDB Atlas cluster for a production SaaS platform?</div>
+        <div class="ans">A: VPC Peering so Atlas is never exposed to public internet. Scoped DB users per service with least-privilege roles — no shared admin credentials. x.509 auth or IAM-based auth to eliminate password rotation risk. At-rest encryption with customer-managed KMS keys. Audit logging enabled and routed to SIEM. All of this provisioned via Terraform so it's version-controlled and auditable — not point-and-click in the UI.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">30-Day Practice Plan</div>
+  <div class="bb"><div class="bt">Week 1 — Setup and Basics</div>
+    <ul class="bl">
+      <li>Create free Atlas account. Provision M0 cluster. Connect via mongosh and Atlas Data Explorer.</li>
+      <li>Run <code>rs.status()</code>, <code>db.serverStatus()</code>, <code>db.adminCommand({connectionStatus:1})</code> — read every output field.</li>
+      <li>Insert 10K documents via a simple Python/Node script. Run queries with and without indexes. Compare explain() output.</li>
+      <li>Watch: MongoDB Atlas Cluster Setup (YouTube above) + Replication Explained.</li>
+    </ul>
+  </div>
+  <div class="bb"><div class="bt">Week 2 — Terraform + Security</div>
+    <ul class="bl">
+      <li>Write Terraform to provision your M0 cluster (use <code>mongodbatlas</code> provider). Add a DB user, IP allowlist, backup schedule.</li>
+      <li>Create scoped users. Test access boundaries. Try connecting with wrong credentials — understand error messages.</li>
+      <li>Watch: MongoDB Atlas with Terraform + Security Best Practices (YouTube above).</li>
+    </ul>
+  </div>
+  <div class="bb"><div class="bt">Week 3 — Operations</div>
+    <ul class="bl">
+      <li>Trigger a test failover via Atlas UI. Watch rs.status() during election. Note the timing.</li>
+      <li>Take a manual snapshot. Go through the restore UI flow completely — understand every option.</li>
+      <li>Check Performance Advisor on your test cluster. Add data until slow queries appear.</li>
+    </ul>
+  </div>
+  <div class="bb"><div class="bt">Week 4 — Interview Prep</div>
+    <ul class="bl">
+      <li>Answer every interview question in this tab out loud, without looking at notes.</li>
+      <li>Be able to draw the replica set architecture on a whiteboard: 3 nodes, oplog, election flow.</li>
+      <li>Know your positioning statement cold: PostgreSQL production background + Atlas Terraform layer + transferable distributed DB concepts.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ TAB 6: ALL CONCEPTS ══════════════════════ -->
+<div class="panel" id="p-concepts">
+  <div class="ph">
+    <h1>All Other Concepts — Interview Prep</h1>
+    <p>Senior DevOps Engineer role requirements beyond MongoDB. Everything in the JD, with what to know and how to answer.</p>
+  </div>
+
+  <div class="alert ac">These are all the non-MongoDB requirements from the JD. Your existing experience covers most of these well — focus on gaps: Datadog/APM, GitOps specifics, and event-driven architecture articulation.</div>
+
+  <div class="sl">Cloud Infrastructure + Terraform</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">☁️</span>
+      <span class="concept-title">Terraform — modularisation, remote state, multi-environment</span>
+      <span class="concept-badge badge-r">MANDATORY · YOUR STRENGTH</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Modularisation:</b> Break infrastructure into reusable modules — networking, compute, IAM, database. Each module has <code>variables.tf</code>, <code>outputs.tf</code>, <code>main.tf</code>. Caller passes variables. Modules live in a shared registry or local <code>modules/</code> directory. This is what allows you to stamp out identical environments with different var files.</p>
+      <p><b>Remote state:</b> Store <code>terraform.tfstate</code> in GCS or S3, never locally. Add state locking via DynamoDB (AWS) or GCS native locking. Backend config:</p>
+      <pre>terraform {
+  backend "gcs" {
+    bucket = "my-tfstate-prod"
+    prefix = "services/api"
+  }
+}</pre>
+      <p><b>Multi-environment setups:</b> Two patterns — workspace-based (<code>terraform workspace new staging</code>) or directory-based (<code>envs/prod/</code>, <code>envs/staging/</code>). Directory-based is safer for production because workspaces share a backend bucket and accidental cross-env applies are possible.</p>
+      <div class="interview-q">
+        <div class="q">Q: How do you manage Terraform state across multiple teams safely?</div>
+        <div class="ans">A: Remote state in GCS/S3 with state locking enabled. Split state files per service/team — one tfstate per bounded domain, not one monolithic state. Use Terraform Cloud or Atlantis for plan/apply in CI with PR-based review workflow. This prevents concurrent applies and gives full audit trail.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">🏗️</span>
+      <span class="concept-title">GCP — Cloud Run, GKE, networking, IAM, cost optimisation</span>
+      <span class="concept-badge badge-g">YOUR STRENGTH</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Cloud Run:</b> Fully managed serverless container platform. Scales to zero, scales on request concurrency. Key config: <code>--concurrency</code> (requests per container instance), <code>--min-instances</code> (avoid cold starts), <code>--max-instances</code> (cost cap). Deploy via: <code>gcloud run deploy --image gcr.io/project/image --region us-central1</code>. Use with VPC Connector for private network access.</p>
+      <p><b>IAM principle of least privilege:</b> Workload Identity for GKE workloads — bind a K8s service account to a GCP service account so pods get GCP permissions without key files. This is the production pattern — no JSON keys in containers.</p>
+      <p><b>Cost optimisation:</b> Committed Use Discounts (CUDs) for predictable workloads, Preemptible/Spot instances for batch, right-sizing recommendations from GCP Recommender, Cloud Run min-instances=0 for low-traffic services.</p>
+      <div class="interview-q">
+        <div class="q">Q: How would you architect a cost-optimised GCP infrastructure for a high-scale SaaS platform?</div>
+        <div class="ans">A: Cloud Run for stateless API services (scales to zero, no idle cost), GKE Autopilot for workloads needing more control (node management abstracted, pay per pod), Cloud SQL or Atlas for DB (managed, no VM overhead), GCS for storage. CUDs on predictable baseline compute. Budget alerts at 80% and 100% of monthly target. Cost allocation labels on every resource so you can attribute spend per team/service.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Event-Driven Architecture</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">📨</span>
+      <span class="concept-title">Pub/Sub, SQS/SNS, EventBridge — patterns and ownership</span>
+      <span class="concept-badge badge-a">GAP TO ADDRESS</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Core pattern:</b> Producer publishes an event to a topic. One or more consumers subscribe and process independently. Producers and consumers are decoupled — neither knows the other exists. This is how you scale services without tight coupling.</p>
+      <p><b>GCP Pub/Sub specifics:</b> Topics hold messages. Subscriptions pull or push messages to consumers. Messages have a 7-day retention max. At-least-once delivery — consumers must be idempotent (processing the same message twice should have no side effects). Acknowledgement deadline — if consumer doesn't ack within the deadline, message is redelivered. Dead-letter topic — messages that fail N times go here for inspection.</p>
+      <p><b>DevOps ownership of event-driven systems:</b> Provision topics and subscriptions via Terraform (<code>google_pubsub_topic</code>, <code>google_pubsub_subscription</code>). Monitor: undelivered message count (if rising, consumers are falling behind), oldest unacked message age (if high, consumer is stuck). Set alerts on both. DLQ (dead letter queue) alert is critical — any message in DLQ means a consumer failed permanently.</p>
+      <p><b>Your ServeLLM angle:</b> "I designed the internal service communication with async patterns — decoupled services, retry logic, failure handling — which is the same operational model as Pub/Sub. The infrastructure ownership pattern is identical: provision the messaging layer as code, monitor queue depth and DLQ, set alerts for consumer lag."</p>
+      <div class="interview-q">
+        <div class="q">Q: How do you ensure message ordering and exactly-once processing in Pub/Sub?</div>
+        <div class="ans">A: GCP Pub/Sub supports message ordering via ordering keys — messages with the same key are delivered in order to a subscription. For exactly-once processing, you use Pub/Sub's exactly-once delivery feature (available on pull subscriptions) combined with idempotent consumer logic. In practice, design consumers to be idempotent first — then ordering and delivery guarantees become less critical to correctness.</div>
+      </div>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=cvu53CnZmGI" target="_blank">▶ GCP Pub/Sub Explained — Google Cloud Tech <span class="rlabel">YouTube · 12min</span></a>
+        <a href="https://www.youtube.com/watch?v=fFTskUDVOLo" target="_blank">▶ Event-Driven Architecture Patterns <span class="rlabel">YouTube · 30min</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">CI/CD Pipelines</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">🚀</span>
+      <span class="concept-title">GitHub Actions, Cloud Build, GitOps with ArgoCD</span>
+      <span class="concept-badge badge-g">YOUR STRENGTH</span>
+    </div>
+    <div class="concept-body">
+      <p><b>GitHub Actions pattern for infra:</b> PR triggers <code>terraform plan</code> — output posted as PR comment. Merge to main triggers <code>terraform apply</code>. Separate workflows per environment. Secrets via GitHub Environments with environment-scoped protection rules.</p>
+      <p><b>Cloud Build (GCP-native):</b> Defined in <code>cloudbuild.yaml</code>. Triggered by push to Cloud Source Repositories or GitHub via Cloud Build triggers. Steps run in containers — each step is a Docker image. Artifacts stored in GCS or Artifact Registry. Key advantage over GitHub Actions for GCP: runs inside your GCP project, no external secret exposure, native IAM auth.</p>
+      <p><b>GitOps with ArgoCD:</b> Git is the source of truth for Kubernetes state. ArgoCD watches a Git repo and syncs cluster state to match. Deviation detection — if someone does <code>kubectl apply</code> manually, ArgoCD detects drift and alerts or auto-reverts. Application defined as an <code>Application</code> CR pointing at a Helm chart or Kustomize directory.</p>
+      <div class="interview-q">
+        <div class="q">Q: How do you prevent a bad Terraform apply from taking down production?</div>
+        <div class="ans">A: Plan in CI on PR — never apply without a reviewed plan. Separate state per environment — staging and prod are isolated, staging apply can't affect prod. Use Sentinel or OPA policies to block dangerous patterns (e.g. destroying a database, removing security groups). Maintain a rollback runbook — Terraform doesn't auto-rollback, so know your manual recovery path. Enable drift detection so you catch out-of-band changes before the next apply.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Monitoring, Logging, Observability</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">📊</span>
+      <span class="concept-title">Prometheus/Grafana, Datadog, APM, distributed tracing</span>
+      <span class="concept-badge badge-a">PARTIAL GAP — Datadog</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Your strength:</b> Prometheus + Grafana + OpenTelemetry — you've done this in production. Be ready to explain SLI/SLO definition: SLI is the metric (e.g. p99 latency), SLO is the target (e.g. p99 &lt; 200ms 99.9% of the time), error budget is the allowed violation window.</p>
+      <p><b>Datadog (gap to address):</b> Agent-based — Datadog Agent runs as a DaemonSet on K8s nodes, scrapes container metrics, logs, and traces. Key features: APM (auto-instrumented traces from your app), Log Management (structured log ingestion with tag-based search), Infrastructure Maps (visual service dependency), Monitors and Alerts (more powerful than raw Alertmanager). For interviews, know that Datadog replaces Prometheus+Grafana+Jaeger with a single managed platform — the trade-off is cost vs operational overhead.</p>
+      <p><b>Distributed tracing:</b> OpenTelemetry is the standard. Each service generates a trace with spans. Trace context propagates via HTTP headers (<code>traceparent</code>). All spans with the same trace ID form a waterfall showing exactly where latency occurs across services. For DevOps, you provision the collector and backend (Jaeger, Tempo, or Datadog APM) — the app team instruments the code.</p>
+      <p><b>The SRE framing the JD wants:</b> Define SLOs for each service. Calculate error budget. When budget is nearly exhausted, freeze feature work and focus on reliability. This is a cultural/process concept as much as a technical one.</p>
+      <div class="res">
+        <a href="https://www.youtube.com/watch?v=h4Sl21AKiDg" target="_blank">▶ Datadog for Beginners — TechWorld with Nana <span class="rlabel">YouTube · 32min</span></a>
+        <a href="https://www.youtube.com/watch?v=A0jtzNqIjqY" target="_blank">▶ SLOs, SLIs, Error Budgets Explained <span class="rlabel">YouTube · 18min</span></a>
+        <a href="https://www.youtube.com/watch?v=r8UvWSX3179" target="_blank">▶ OpenTelemetry Explained in 10 Minutes <span class="rlabel">YouTube · 10min</span></a>
+      </div>
+      <div class="interview-q">
+        <div class="q">Q: How do you set up observability for a new microservice from scratch?</div>
+        <div class="ans">A: Four signals — metrics, logs, traces, alerts. Metrics: expose a /metrics endpoint, scrape with Prometheus (or Datadog Agent), build a Grafana/Datadog dashboard for the four golden signals (latency, traffic, errors, saturation). Logs: structured JSON logs with correlation IDs, shipped to log aggregation. Traces: OpenTelemetry SDK in the app, traces to Jaeger or Datadog APM. Alerts: SLO-based — alert on error budget burn rate, not raw thresholds. Day one, before the first production request.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Incident Response and Architecture Ownership</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">🚨</span>
+      <span class="concept-title">Incident response, RCA, runbooks, architecture decisions</span>
+      <span class="concept-badge badge-g">YOUR STRENGTH — frame it right</span>
+    </div>
+    <div class="concept-body">
+      <p><b>This JD is explicit:</b> "Own infrastructure decisions end-to-end" and "lead incident response and root cause analysis." This is not a ticket-executor role. You need to demonstrate architect-level thinking.</p>
+      <p><b>Incident response process:</b> Detect (alert fires) → Acknowledge (someone owns it) → Mitigate (stop the bleeding — rollback, redirect traffic, increase replicas) → Investigate (root cause) → Fix (permanent solution) → Post-mortem (blameless, document, prevent recurrence).</p>
+      <p><b>Runbooks:</b> Pre-written procedures for known failure modes. "If PgBouncer connection pool is exhausted: 1. Check pool stats via SHOW POOLS. 2. Identify top connection consumers. 3. Temporarily increase pool size. 4. Investigate and fix the connection leak." Write these before incidents, not during.</p>
+      <p><b>Your ServeLLM angle for architecture ownership:</b> "At Techanzy I owned the full infrastructure stack — I made the decision to use PgBouncer in transaction mode rather than session mode, I chose the connection pool sizing, I designed the health check strategy. When we had a connection pool exhaustion incident I was the one who diagnosed and resolved it — and then wrote the runbook so it never became a firefight again."</p>
+      <div class="interview-q">
+        <div class="q">Q: Tell me about a production incident you owned and resolved.</div>
+        <div class="ans">A: Use the ServeLLM PgBouncer connection pool exhaustion story if asked. Structure: what failed (connections rejected, backend unhealthy), how you detected it (health check alert + Grafana spike in connection wait time), how you mitigated (temporarily bumped pool size via config reload, no restart needed), root cause (a background job was not releasing connections on exception — connection leak), permanent fix (added finally block + connection validation in the job), prevention (added pool saturation alert at 80% threshold so next time it fires with 20% headroom).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Containerisation and Kubernetes</div>
+  <div class="concept">
+    <div class="concept-head" onclick="tog(this)">
+      <span class="concept-icon">🐳</span>
+      <span class="concept-title">Docker, GKE, Kubernetes workloads, Helm, security</span>
+      <span class="concept-badge badge-g">YOUR STRENGTH</span>
+    </div>
+    <div class="concept-body">
+      <p><b>Kubernetes production essentials:</b> Resource requests and limits on every pod (without limits one noisy neighbour can starve others). PodDisruptionBudgets to ensure rolling updates don't take down too many replicas. HorizontalPodAutoscaler on CPU/memory or custom metrics. Network Policies to restrict pod-to-pod traffic (zero-trust within the cluster).</p>
+      <p><b>GKE Autopilot vs Standard:</b> Autopilot abstracts node management — you pay per pod resource request, GKE manages nodes. Standard gives you full node control — you manage node pools, OS, autoscaling. For this role, knowing the trade-offs matters more than which is "better."</p>
+      <p><b>Kubernetes RBAC:</b> ServiceAccounts for workload identity, Roles/ClusterRoles for permission sets, RoleBindings to attach them. Principle: every pod runs as a non-root ServiceAccount with only the permissions it needs. Audit RBAC drift regularly — <code>kubectl auth can-i --list --as=system:serviceaccount:namespace:sa-name</code>.</p>
+      <div class="interview-q">
+        <div class="q">Q: How do you harden a GKE cluster for a production SaaS workload?</div>
+        <div class="ans">A: Workload Identity instead of service account keys. Network Policies (deny-all default, allow only required paths). PodSecurityStandards enforcement (restricted profile — no root, no privileged containers). Private cluster (nodes have no public IPs, control plane access via authorized networks). Binary Authorization — only signed images from Artifact Registry can deploy. RBAC with least-privilege ServiceAccounts. Node auto-upgrade enabled for security patches. This is all Terraform — no manual kubectl.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sl">Gap Areas — What to Study This Week</div>
+  <div class="bb"><div class="bt">Priority Gaps from the JD</div>
+    <ul class="bl">
+      <li class="a"><b>MongoDB Atlas</b> — see the MongoDB tab. This is the #1 gap and the JD calls it mandatory. 30-day plan is there.</li>
+      <li class="a"><b>Datadog / APM</b> — watch the TechWorld with Nana Datadog video. Know it conceptually. Your Prometheus/Grafana experience is the bridge: "I've done this with open source tooling — Datadog is the managed equivalent with better APM and log correlation."</li>
+      <li><b>GitOps / ArgoCD</b> — you've used it. Be ready to explain the reconciliation loop and how drift detection works in a 2-minute answer.</li>
+      <li><b>Pub/Sub operational ownership</b> — read the GCP Pub/Sub docs for monitoring (undelivered messages, oldest unacked age). Know the DLQ pattern cold.</li>
+      <li><b>SLO/Error Budget framing</b> — be able to define and give an example SLO for a service you've run. "API error rate below 0.1% measured over a 30-day rolling window. Error budget is 43 minutes of downtime per month."</li>
+    </ul>
+  </div>
+</div>
+
 <script>
 function go(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
@@ -689,6 +1105,10 @@ function go(id){
   document.getElementById('t-'+id).classList.add('on');
 }
 function tick(li){ li.classList.toggle('done'); }
+function tog(head){
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
 </script>
 </body>
 </html>
