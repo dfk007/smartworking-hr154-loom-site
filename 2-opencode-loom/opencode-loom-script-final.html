@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mongo Open — HR154</title>
+<title>HR154 Prep — Mongo + Concepts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -61,6 +61,65 @@
     width: min(calc(100% - 28px), var(--max));
     margin: 0 auto;
     padding: 28px 0 56px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(8, 12, 20, 0.94);
+    backdrop-filter: blur(16px);
+  }
+
+  .brand {
+    font-family: 'Syne', sans-serif;
+    color: var(--text-strong);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .tabbar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    border: 1px solid var(--line);
+    background: var(--s1);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab-btn.on {
+    color: var(--cyan);
+    border-color: rgba(56, 189, 248, 0.28);
+    background: var(--cyan-bg);
+  }
+
+  .panel {
+    display: none;
+  }
+
+  .panel.on {
+    display: block;
   }
 
   .hero {
@@ -318,6 +377,11 @@
   }
 
   @media (max-width: 760px) {
+    .topbar {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
     .banner {
       grid-template-columns: 1fr;
     }
@@ -334,220 +398,513 @@
 </style>
 </head>
 <body>
+  <nav class="topbar">
+    <div class="brand">DAUD · HR154</div>
+    <div class="tabbar">
+      <button class="tab-btn on" id="t-mongo" onclick="go('mongo')">🍃 Mongo Focus</button>
+      <button class="tab-btn" id="t-concepts" onclick="go('concepts')">🧠 All Concepts</button>
+    </div>
+  </nav>
+
   <main class="shell">
-    <section class="hero">
-      <div class="eyebrow">HR154 · Updated JD Delta</div>
-      <h1>Mongo Open</h1>
-      <p>The updated JD moved MongoDB Atlas from a supporting requirement to the main gap you need to close. Learn the five Mongo topics below in this order and be ready to explain them at owner level, not tool-user level.</p>
+    <section class="panel on" id="p-mongo">
+      <section class="hero">
+        <div class="eyebrow">HR154 · Updated JD Delta</div>
+        <h1>Mongo Open</h1>
+        <p>The updated JD moved MongoDB Atlas from a supporting requirement to the main gap you need to close. Learn the five Mongo topics below in this order and be ready to explain them at owner level, not tool-user level.</p>
 
-      <div class="banner">
-        <div class="banner-card">
-          <div class="k">Original JD</div>
-          <p>MongoDB Atlas was present, but as one item inside a broader GCP, Cloud Run, Pub/Sub, Terraform role.</p>
+        <div class="banner">
+          <div class="banner-card">
+            <div class="k">Original JD</div>
+            <p>MongoDB Atlas was present, but as one item inside a broader GCP, Cloud Run, Pub/Sub, Terraform role.</p>
+          </div>
+          <div class="banner-card">
+            <div class="k">Updated JD</div>
+            <p><strong>Mandatory deep MongoDB Atlas experience</strong> is now central: cluster scaling, replication/failover, backup/recovery, performance/indexing, and security/access.</p>
+          </div>
         </div>
-        <div class="banner-card">
-          <div class="k">Updated JD</div>
-          <p><strong>Mandatory deep MongoDB Atlas experience</strong> is now central: cluster scaling, replication/failover, backup/recovery, performance/indexing, and security/access.</p>
+      </section>
+
+      <div class="alert alert-red"><strong>Main takeaway:</strong> Pub/Sub and Cloud Run are no longer the differentiator. MongoDB Atlas ownership is.</div>
+      <div class="alert alert-green"><strong>Your angle:</strong> be honest that your production DB depth is stronger in PostgreSQL, then show Atlas IaC knowledge, distributed DB fundamentals, and hands-on practice proof.</div>
+
+      <section class="section">
+        <div class="section-label">Exact Learning Order</div>
+        <div class="grid">
+          <article class="step">
+            <div class="step-head">
+              <div class="num">1</div>
+              <div class="step-title">Atlas cluster setup and scaling</div>
+              <div class="tag">Most important start</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Learn</div>
+                <ul>
+                  <li>Cluster tiers: <code>M0</code> for practice, <code>M30+</code> for real production conversations.</li>
+                  <li><code>REPLICASET</code> vs sharded clusters.</li>
+                  <li>Region, cloud provider, MongoDB version, auto-scaling.</li>
+                  <li><code>mongodbatlas_advanced_cluster</code> in Terraform.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Do</div>
+                <ul>
+                  <li>Create one Atlas account and one free cluster.</li>
+                  <li>Write Terraform to match the cluster config.</li>
+                  <li>Be able to explain how you would scale from <code>M30</code> to higher tiers without downtime.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">2</div>
+              <div class="step-title">Replication, elections, and failover</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Learn</div>
+                <ul>
+                  <li>Primary, secondary, oplog, quorum, elections.</li>
+                  <li>What happens to writes during primary failover.</li>
+                  <li>Read preferences and stale reads.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Do</div>
+                <ul>
+                  <li>Connect with <code>mongosh</code>.</li>
+                  <li>Run <code>rs.status()</code> and understand <code>stateStr</code>, <code>optimeDate</code>, and heartbeat fields.</li>
+                  <li>Trigger Atlas test failover and note election timing.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">3</div>
+              <div class="step-title">Backups, PITR, and disaster recovery</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Learn</div>
+                <ul>
+                  <li>Snapshots vs Point-in-Time Recovery.</li>
+                  <li><code>RPO</code> and <code>RTO</code>.</li>
+                  <li>Restore flow and the fact Atlas restores to a new cluster.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Do</div>
+                <ul>
+                  <li>Take a manual snapshot.</li>
+                  <li>Go through restore options in Atlas UI.</li>
+                  <li>Write a Terraform backup schedule resource and explain hourly plus daily retention.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">4</div>
+              <div class="step-title">Performance tuning and indexing</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Learn</div>
+                <ul>
+                  <li>Atlas Performance Advisor.</li>
+                  <li><code>explain("executionStats")</code>.</li>
+                  <li><code>COLLSCAN</code> vs <code>IXSCAN</code>.</li>
+                  <li>Single-field, compound, TTL, and partial indexes.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Do</div>
+                <ul>
+                  <li>Insert test data.</li>
+                  <li>Run one query without an index, then with an index.</li>
+                  <li>Be able to explain why data growth makes unindexed queries suddenly slow.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">5</div>
+              <div class="step-title">Security, network, and access control</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Learn</div>
+                <ul>
+                  <li>IP allowlist vs VPC peering / PrivateLink.</li>
+                  <li>Least-privilege database users and Atlas roles.</li>
+                  <li>TLS, encryption at rest, KMS, audit logs.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Do</div>
+                <ul>
+                  <li>Create one scoped DB user for one database only.</li>
+                  <li>Test failed access outside that scope.</li>
+                  <li>Be ready to say why <code>0.0.0.0/0</code> is bad for production and why peering is better.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">6</div>
+              <div class="step-title">Package your interview story</div>
+              <div class="tag">Do last</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Say this clearly</div>
+                <div class="quote">"My strongest production database background is PostgreSQL, but for MongoDB Atlas I focused on the infrastructure and operations layer: cluster setup, Terraform automation, failover, backup strategy, indexing basics, and secure connectivity. The core reliability concepts transfer directly, and I have been practicing Atlas hands-on against those exact areas from the JD."</div>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be able to answer</div>
+                <ul>
+                  <li>How do you scale an Atlas cluster?</li>
+                  <li>What happens during primary election?</li>
+                  <li>How would you design backup plus restore testing?</li>
+                  <li>How do you investigate a slow query?</li>
+                  <li>How do you secure Atlas for production SaaS?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
         </div>
-      </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">7-Day Sprint</div>
+        <div class="step">
+          <div class="step-body">
+            <ul class="checklist">
+              <li><span class="dot"></span><span><strong>Day 1:</strong> Create Atlas cluster, connect with <code>mongosh</code>, browse Atlas UI.</span></li>
+              <li><span class="dot"></span><span><strong>Day 2:</strong> Write Terraform for cluster, DB user, and IP access list.</span></li>
+              <li><span class="dot"></span><span><strong>Day 3:</strong> Learn replica set flow, run <code>rs.status()</code>, trigger test failover.</span></li>
+              <li><span class="dot"></span><span><strong>Day 4:</strong> Configure backup concepts, snapshot flow, PITR, restore path.</span></li>
+              <li><span class="dot"></span><span><strong>Day 5:</strong> Insert sample data, test <code>explain()</code>, create indexes, compare results.</span></li>
+              <li><span class="dot"></span><span><strong>Day 6:</strong> Create scoped users, review network security, encryption, audit logging.</span></li>
+              <li><span class="dot"></span><span><strong>Day 7:</strong> Rehearse the five mandatory answers out loud until they sound natural.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Do Not Overfocus</div>
+        <div class="step">
+          <div class="step-body">
+            <ul>
+              <li>Do not spend most of your time on app-side Mongo schema design.</li>
+              <li>Do not spend most of your time on Pub/Sub now.</li>
+              <li>Do not claim deep production Atlas ownership unless you can defend it with hands-on practice.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
     </section>
 
-    <div class="alert alert-red"><strong>Main takeaway:</strong> Pub/Sub and Cloud Run are no longer the differentiator. MongoDB Atlas ownership is.</div>
-    <div class="alert alert-green"><strong>Your angle:</strong> be honest that your production DB depth is stronger in PostgreSQL, then show Atlas IaC knowledge, distributed DB fundamentals, and hands-on practice proof.</div>
+    <section class="panel" id="p-concepts">
+      <section class="hero">
+        <div class="eyebrow">Updated JD · Full Learning Scope</div>
+        <h1>All Concepts</h1>
+        <p>This tab is the full map of what to learn from <code>updated-jd-with-mongo.md</code>. MongoDB Atlas is still the highest-priority gap, but the JD also expects strong Terraform, cloud ownership, containers, event-driven systems, CI/CD, observability, incident response, and async engineering maturity.</p>
 
-    <section class="section">
-      <div class="section-label">Exact Learning Order</div>
-      <div class="grid">
-
-        <article class="step">
-          <div class="step-head">
-            <div class="num">1</div>
-            <div class="step-title">Atlas cluster setup and scaling</div>
-            <div class="tag">Most important start</div>
+        <div class="banner">
+          <div class="banner-card">
+            <div class="k">Top Priority</div>
+            <p><strong>MongoDB Atlas</strong> plus the ability to speak at architect-owner level.</p>
           </div>
-          <div class="step-body mini">
-            <div class="mini-block">
-              <div class="label">Learn</div>
-              <ul>
-                <li>Cluster tiers: <code>M0</code> for practice, <code>M30+</code> for real production conversations.</li>
-                <li><code>REPLICASET</code> vs sharded clusters.</li>
-                <li>Region, cloud provider, MongoDB version, auto-scaling.</li>
-                <li><code>mongodbatlas_advanced_cluster</code> in Terraform.</li>
-              </ul>
-            </div>
-            <div class="mini-block">
-              <div class="label">Do</div>
-              <ul>
-                <li>Create one Atlas account and one free cluster.</li>
-                <li>Write Terraform to match the cluster config.</li>
-                <li>Be able to explain how you would scale from <code>M30</code> to higher tiers without downtime.</li>
-              </ul>
-            </div>
+          <div class="banner-card">
+            <div class="k">Second Priority</div>
+            <p><strong>Terraform + cloud systems design</strong>, then containers, event-driven systems, CI/CD, and observability.</p>
           </div>
-        </article>
-
-        <article class="step">
-          <div class="step-head">
-            <div class="num">2</div>
-            <div class="step-title">Replication, elections, and failover</div>
-            <div class="tag">Mandatory</div>
-          </div>
-          <div class="step-body mini">
-            <div class="mini-block">
-              <div class="label">Learn</div>
-              <ul>
-                <li>Primary, secondary, oplog, quorum, elections.</li>
-                <li>What happens to writes during primary failover.</li>
-                <li>Read preferences and stale reads.</li>
-              </ul>
-            </div>
-            <div class="mini-block">
-              <div class="label">Do</div>
-              <ul>
-                <li>Connect with <code>mongosh</code>.</li>
-                <li>Run <code>rs.status()</code> and understand <code>stateStr</code>, <code>optimeDate</code>, and heartbeat fields.</li>
-                <li>Trigger Atlas test failover and note election timing.</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <article class="step">
-          <div class="step-head">
-            <div class="num">3</div>
-            <div class="step-title">Backups, PITR, and disaster recovery</div>
-            <div class="tag">Mandatory</div>
-          </div>
-          <div class="step-body mini">
-            <div class="mini-block">
-              <div class="label">Learn</div>
-              <ul>
-                <li>Snapshots vs Point-in-Time Recovery.</li>
-                <li><code>RPO</code> and <code>RTO</code>.</li>
-                <li>Restore flow and the fact Atlas restores to a new cluster.</li>
-              </ul>
-            </div>
-            <div class="mini-block">
-              <div class="label">Do</div>
-              <ul>
-                <li>Take a manual snapshot.</li>
-                <li>Go through restore options in Atlas UI.</li>
-                <li>Write a Terraform backup schedule resource and explain hourly plus daily retention.</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <article class="step">
-          <div class="step-head">
-            <div class="num">4</div>
-            <div class="step-title">Performance tuning and indexing</div>
-            <div class="tag">Mandatory</div>
-          </div>
-          <div class="step-body mini">
-            <div class="mini-block">
-              <div class="label">Learn</div>
-              <ul>
-                <li>Atlas Performance Advisor.</li>
-                <li><code>explain("executionStats")</code>.</li>
-                <li><code>COLLSCAN</code> vs <code>IXSCAN</code>.</li>
-                <li>Single-field, compound, TTL, and partial indexes.</li>
-              </ul>
-            </div>
-            <div class="mini-block">
-              <div class="label">Do</div>
-              <ul>
-                <li>Insert test data.</li>
-                <li>Run one query without an index, then with an index.</li>
-                <li>Be able to explain why data growth makes unindexed queries suddenly slow.</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <article class="step">
-          <div class="step-head">
-            <div class="num">5</div>
-            <div class="step-title">Security, network, and access control</div>
-            <div class="tag">Mandatory</div>
-          </div>
-          <div class="step-body mini">
-            <div class="mini-block">
-              <div class="label">Learn</div>
-              <ul>
-                <li>IP allowlist vs VPC peering / PrivateLink.</li>
-                <li>Least-privilege database users and Atlas roles.</li>
-                <li>TLS, encryption at rest, KMS, audit logs.</li>
-              </ul>
-            </div>
-            <div class="mini-block">
-              <div class="label">Do</div>
-              <ul>
-                <li>Create one scoped DB user for one database only.</li>
-                <li>Test failed access outside that scope.</li>
-                <li>Be ready to say why <code>0.0.0.0/0</code> is bad for production and why peering is better.</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <article class="step">
-          <div class="step-head">
-            <div class="num">6</div>
-            <div class="step-title">Package your interview story</div>
-            <div class="tag">Do last</div>
-          </div>
-          <div class="step-body mini">
-            <div class="mini-block">
-              <div class="label">Say this clearly</div>
-              <div class="quote">"My strongest production database background is PostgreSQL, but for MongoDB Atlas I focused on the infrastructure and operations layer: cluster setup, Terraform automation, failover, backup strategy, indexing basics, and secure connectivity. The core reliability concepts transfer directly, and I have been practicing Atlas hands-on against those exact areas from the JD."</div>
-            </div>
-            <div class="mini-block">
-              <div class="label">Be able to answer</div>
-              <ul>
-                <li>How do you scale an Atlas cluster?</li>
-                <li>What happens during primary election?</li>
-                <li>How would you design backup plus restore testing?</li>
-                <li>How do you investigate a slow query?</li>
-                <li>How do you secure Atlas for production SaaS?</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-label">7-Day Sprint</div>
-      <div class="step">
-        <div class="step-body">
-          <ul class="checklist">
-            <li><span class="dot"></span><span><strong>Day 1:</strong> Create Atlas cluster, connect with <code>mongosh</code>, browse Atlas UI.</span></li>
-            <li><span class="dot"></span><span><strong>Day 2:</strong> Write Terraform for cluster, DB user, and IP access list.</span></li>
-            <li><span class="dot"></span><span><strong>Day 3:</strong> Learn replica set flow, run <code>rs.status()</code>, trigger test failover.</span></li>
-            <li><span class="dot"></span><span><strong>Day 4:</strong> Configure backup concepts, snapshot flow, PITR, restore path.</span></li>
-            <li><span class="dot"></span><span><strong>Day 5:</strong> Insert sample data, test <code>explain()</code>, create indexes, compare results.</span></li>
-            <li><span class="dot"></span><span><strong>Day 6:</strong> Create scoped users, review network security, encryption, audit logging.</span></li>
-            <li><span class="dot"></span><span><strong>Day 7:</strong> Rehearse the five mandatory answers out loud until they sound natural.</span></li>
-          </ul>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="section-label">Do Not Overfocus</div>
-      <div class="step">
-        <div class="step-body">
-          <ul>
-            <li>Do not spend most of your time on app-side Mongo schema design.</li>
-            <li>Do not spend most of your time on Pub/Sub now.</li>
-            <li>Do not claim deep production Atlas ownership unless you can defend it with hands-on practice.</li>
-          </ul>
+      <div class="alert alert-red"><strong>Important:</strong> the updated JD is not asking for only tool knowledge. It wants ownership, architecture judgment, performance thinking, and operational maturity.</div>
+      <div class="alert alert-green"><strong>Use this tab like a checklist:</strong> if you cannot explain a card below clearly out loud, that concept is still a gap.</div>
+
+      <section class="section">
+        <div class="section-label">Priority Order</div>
+        <div class="step">
+          <div class="step-body">
+            <ul class="checklist">
+              <li><span class="dot"></span><span><strong>1. MongoDB Atlas:</strong> cluster scaling, replication, failover, backups, indexing, security.</span></li>
+              <li><span class="dot"></span><span><strong>2. Terraform + cloud ownership:</strong> modularisation, remote state, environment separation, design tradeoffs.</span></li>
+              <li><span class="dot"></span><span><strong>3. Containers + serverless:</strong> Docker, Kubernetes, Cloud Run or equivalents, when to choose which.</span></li>
+              <li><span class="dot"></span><span><strong>4. Event-driven systems:</strong> queues, retries, DLQs, idempotency, ordering, fanout.</span></li>
+              <li><span class="dot"></span><span><strong>5. CI/CD + observability + incident response:</strong> how you operate production, not just deploy it.</span></li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <p class="foot">Created from the JD comparison and the existing Loom prep materials in <code>2-opencode-loom/</code>.</p>
+      <section class="section">
+        <div class="section-label">Core Concepts To Learn</div>
+        <div class="grid">
+          <article class="step">
+            <div class="step-head">
+              <div class="num">1</div>
+              <div class="step-title">Cloud provider + Terraform depth</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>One major cloud in production terms: networking, IAM, compute, storage, reliability, and cost.</li>
+                  <li>Terraform modules, remote state, per-environment isolation, variables, and plan/apply workflow.</li>
+                  <li>How to explain design decisions, not just resource names.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you structure Terraform for staging and production safely?</li>
+                  <li>How do you prevent drift and dangerous applies?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">2</div>
+              <div class="step-title">Containers and serverless workloads</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Docker fundamentals, image lifecycle, health checks, and resource limits.</li>
+                  <li>Cloud Run vs Kubernetes vs ECS style tradeoffs.</li>
+                  <li>When serverless is enough and when orchestration control is needed.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>Why would you choose Cloud Run for one service and Kubernetes for another?</li>
+                  <li>What scaling or operational constraints push you away from serverless?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">3</div>
+              <div class="step-title">Event-driven architecture</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Topics, publishers, subscribers, queues, fanout, retries, backoff, and dead-letter queues.</li>
+                  <li>At-least-once delivery, duplicate messages, idempotency, and ordering tradeoffs.</li>
+                  <li>Pub/Sub, SQS/SNS, or EventBridge equivalents at concept level.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you design consumers so retries do not create duplicate side effects?</li>
+                  <li>When do you add a DLQ and what do you monitor on it?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">4</div>
+              <div class="step-title">CI/CD and release safety</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Build, test, plan, deploy, rollback, and environment promotion flow.</li>
+                  <li>Secret handling, approvals, artifact immutability, and deployment traceability.</li>
+                  <li>Reliability and speed tradeoffs in pipelines.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you make infrastructure deploys safe in CI/CD?</li>
+                  <li>What should happen before production promotion?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">5</div>
+              <div class="step-title">Observability and distributed systems</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Metrics, logs, traces, dashboards, alerting thresholds, and latency analysis.</li>
+                  <li>Golden signals: latency, traffic, errors, saturation.</li>
+                  <li>Advanced tools named by the JD: Datadog, APM, tracing.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you investigate an intermittent latency spike across services?</li>
+                  <li>What would you alert on for a critical production API?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">6</div>
+              <div class="step-title">Architecture, scalability, and cost ownership</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Capacity planning, bottleneck identification, scaling patterns, and cost-performance tradeoffs.</li>
+                  <li>What "owner level" means: you choose, justify, monitor, and improve systems.</li>
+                  <li>How to explain why one architecture is better for a workload than another.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you balance performance and cost for a high-scale SaaS platform?</li>
+                  <li>What data would you gather before changing architecture?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">7</div>
+              <div class="step-title">Incident response and root cause analysis</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Triage, mitigation, communication, timelines, impact assessment, and follow-up actions.</li>
+                  <li>The difference between symptoms, trigger, root cause, and contributing factors.</li>
+                  <li>How runbooks reduce recovery time.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you handle a live production outage while keeping stakeholders updated?</li>
+                  <li>What should a good RCA contain after the incident is resolved?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">8</div>
+              <div class="step-title">Documentation, async communication, and mentoring</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Runbooks, architecture docs, decision records, and operational best practices.</li>
+                  <li>What strong remote async communication looks like: clear status, written decisions, crisp handoffs.</li>
+                  <li>How senior engineers mentor through reviews, standards, and system thinking.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be ready to answer</div>
+                <ul>
+                  <li>How do you document a system so another engineer can operate it safely?</li>
+                  <li>How do you raise team quality without becoming a bottleneck?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Nice To Have Concepts</div>
+        <div class="step">
+          <div class="step-body">
+            <ul>
+              <li><strong>Multi-cloud:</strong> be able to compare GCP, AWS, and Azure patterns at a high level.</li>
+              <li><strong>GitOps:</strong> understand pull-based deploys, desired state, and drift visibility.</li>
+              <li><strong>Advanced observability:</strong> Datadog, APM, distributed tracing.</li>
+              <li><strong>High-scale SaaS:</strong> noisy neighbors, tenant isolation, shared vs dedicated infrastructure.</li>
+              <li><strong>Platform engineering:</strong> internal tooling that makes developer workflows safer and faster.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">How To Use This Tab</div>
+        <div class="step">
+          <div class="step-body">
+            <ul>
+              <li>If a card is already your strength, rehearse how to explain it cleanly.</li>
+              <li>If a card is weak, learn the core vocabulary, one real example, and one failure mode.</li>
+              <li>For MongoDB, go back to the first tab because that is the main delta in the updated JD.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <p class="foot">Built directly from <code>updated-jd-with-mongo.md</code> and folded into this prep file as a second tab.</p>
+    </section>
   </main>
+
+  <script>
+    function go(id) {
+      document.querySelectorAll('.panel').forEach(function(panel) {
+        panel.classList.remove('on');
+      });
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.remove('on');
+      });
+      document.getElementById('p-' + id).classList.add('on');
+      document.getElementById('t-' + id).classList.add('on');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
