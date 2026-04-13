@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mongo Open — HR154</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #080c14;
+    --s1: #0f1422;
+    --s2: #151c2d;
+    --line: #24314a;
+    --line2: #31415f;
+    --text: #d9e3f0;
+    --text-strong: #f3f7fb;
+    --muted: #8ca0bc;
+    --cyan: #38bdf8;
+    --cyan-bg: rgba(56, 189, 248, 0.12);
+    --green: #4ade80;
+    --green-bg: rgba(74, 222, 128, 0.12);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251, 191, 36, 0.12);
+    --red: #f87171;
+    --red-bg: rgba(248, 113, 113, 0.12);
+    --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    --max: 980px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(56, 189, 248, 0.16), transparent 24%),
+      radial-gradient(circle at 84% 14%, rgba(74, 222, 128, 0.12), transparent 18%),
+      linear-gradient(180deg, #060912 0%, #080c14 100%);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,0.72), transparent 88%);
+  }
+
+  .shell {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - 28px), var(--max));
+    margin: 0 auto;
+    padding: 28px 0 56px;
+  }
+
+  .hero {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)), var(--s1);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    background: var(--cyan-bg);
+    color: var(--cyan);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    color: var(--text-strong);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 0.95;
+    margin-bottom: 12px;
+  }
+
+  .hero p {
+    max-width: 70ch;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .banner-card {
+    background: var(--s2);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .banner-card .k {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .banner-card strong {
+    color: var(--text-strong);
+  }
+
+  .alert {
+    border-radius: 16px;
+    padding: 15px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    border: 1px solid;
+  }
+
+  .alert-red {
+    background: var(--red-bg);
+    border-color: rgba(248, 113, 113, 0.2);
+    color: #fecaca;
+  }
+
+  .alert-green {
+    background: var(--green-bg);
+    border-color: rgba(74, 222, 128, 0.2);
+    color: #bbf7d0;
+  }
+
+  .section {
+    margin-top: 28px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .step {
+    background: var(--s1);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--s2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .num {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cyan);
+    color: #08101b;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+
+  .tag {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(251, 191, 36, 0.22);
+    background: var(--amber-bg);
+    color: var(--amber);
+    white-space: nowrap;
+  }
+
+  .step-body {
+    padding: 16px;
+  }
+
+  .mini {
+    display: grid;
+    gap: 10px;
+  }
+
+  .mini-block {
+    background: var(--s2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 13px;
+  }
+
+  .mini-block .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+  }
+
+  ul {
+    padding-left: 18px;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: rgba(56, 189, 248, 0.08);
+    color: var(--cyan);
+    border: 1px solid rgba(56, 189, 248, 0.14);
+    border-radius: 6px;
+    padding: 2px 6px;
+  }
+
+  .quote {
+    background: var(--s2);
+    border: 1px solid var(--line2);
+    border-left: 3px solid var(--green);
+    border-radius: 0 12px 12px 0;
+    padding: 14px 16px;
+    color: var(--text-strong);
+    font-size: 14px;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .checklist li:last-child {
+    border-bottom: none;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .foot {
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+  }
+
+  @media (max-width: 760px) {
+    .banner {
+      grid-template-columns: 1fr;
+    }
+
+    .step-head {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      margin-left: 42px;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">HR154 · Updated JD Delta</div>
+      <h1>Mongo Open</h1>
+      <p>The updated JD moved MongoDB Atlas from a supporting requirement to the main gap you need to close. Learn the five Mongo topics below in this order and be ready to explain them at owner level, not tool-user level.</p>
+
+      <div class="banner">
+        <div class="banner-card">
+          <div class="k">Original JD</div>
+          <p>MongoDB Atlas was present, but as one item inside a broader GCP, Cloud Run, Pub/Sub, Terraform role.</p>
+        </div>
+        <div class="banner-card">
+          <div class="k">Updated JD</div>
+          <p><strong>Mandatory deep MongoDB Atlas experience</strong> is now central: cluster scaling, replication/failover, backup/recovery, performance/indexing, and security/access.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="alert alert-red"><strong>Main takeaway:</strong> Pub/Sub and Cloud Run are no longer the differentiator. MongoDB Atlas ownership is.</div>
+    <div class="alert alert-green"><strong>Your angle:</strong> be honest that your production DB depth is stronger in PostgreSQL, then show Atlas IaC knowledge, distributed DB fundamentals, and hands-on practice proof.</div>
+
+    <section class="section">
+      <div class="section-label">Exact Learning Order</div>
+      <div class="grid">
+
+        <article class="step">
+          <div class="step-head">
+            <div class="num">1</div>
+            <div class="step-title">Atlas cluster setup and scaling</div>
+            <div class="tag">Most important start</div>
+          </div>
+          <div class="step-body mini">
+            <div class="mini-block">
+              <div class="label">Learn</div>
+              <ul>
+                <li>Cluster tiers: <code>M0</code> for practice, <code>M30+</code> for real production conversations.</li>
+                <li><code>REPLICASET</code> vs sharded clusters.</li>
+                <li>Region, cloud provider, MongoDB version, auto-scaling.</li>
+                <li><code>mongodbatlas_advanced_cluster</code> in Terraform.</li>
+              </ul>
+            </div>
+            <div class="mini-block">
+              <div class="label">Do</div>
+              <ul>
+                <li>Create one Atlas account and one free cluster.</li>
+                <li>Write Terraform to match the cluster config.</li>
+                <li>Be able to explain how you would scale from <code>M30</code> to higher tiers without downtime.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <div class="num">2</div>
+            <div class="step-title">Replication, elections, and failover</div>
+            <div class="tag">Mandatory</div>
+          </div>
+          <div class="step-body mini">
+            <div class="mini-block">
+              <div class="label">Learn</div>
+              <ul>
+                <li>Primary, secondary, oplog, quorum, elections.</li>
+                <li>What happens to writes during primary failover.</li>
+                <li>Read preferences and stale reads.</li>
+              </ul>
+            </div>
+            <div class="mini-block">
+              <div class="label">Do</div>
+              <ul>
+                <li>Connect with <code>mongosh</code>.</li>
+                <li>Run <code>rs.status()</code> and understand <code>stateStr</code>, <code>optimeDate</code>, and heartbeat fields.</li>
+                <li>Trigger Atlas test failover and note election timing.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <div class="num">3</div>
+            <div class="step-title">Backups, PITR, and disaster recovery</div>
+            <div class="tag">Mandatory</div>
+          </div>
+          <div class="step-body mini">
+            <div class="mini-block">
+              <div class="label">Learn</div>
+              <ul>
+                <li>Snapshots vs Point-in-Time Recovery.</li>
+                <li><code>RPO</code> and <code>RTO</code>.</li>
+                <li>Restore flow and the fact Atlas restores to a new cluster.</li>
+              </ul>
+            </div>
+            <div class="mini-block">
+              <div class="label">Do</div>
+              <ul>
+                <li>Take a manual snapshot.</li>
+                <li>Go through restore options in Atlas UI.</li>
+                <li>Write a Terraform backup schedule resource and explain hourly plus daily retention.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <div class="num">4</div>
+            <div class="step-title">Performance tuning and indexing</div>
+            <div class="tag">Mandatory</div>
+          </div>
+          <div class="step-body mini">
+            <div class="mini-block">
+              <div class="label">Learn</div>
+              <ul>
+                <li>Atlas Performance Advisor.</li>
+                <li><code>explain("executionStats")</code>.</li>
+                <li><code>COLLSCAN</code> vs <code>IXSCAN</code>.</li>
+                <li>Single-field, compound, TTL, and partial indexes.</li>
+              </ul>
+            </div>
+            <div class="mini-block">
+              <div class="label">Do</div>
+              <ul>
+                <li>Insert test data.</li>
+                <li>Run one query without an index, then with an index.</li>
+                <li>Be able to explain why data growth makes unindexed queries suddenly slow.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <div class="num">5</div>
+            <div class="step-title">Security, network, and access control</div>
+            <div class="tag">Mandatory</div>
+          </div>
+          <div class="step-body mini">
+            <div class="mini-block">
+              <div class="label">Learn</div>
+              <ul>
+                <li>IP allowlist vs VPC peering / PrivateLink.</li>
+                <li>Least-privilege database users and Atlas roles.</li>
+                <li>TLS, encryption at rest, KMS, audit logs.</li>
+              </ul>
+            </div>
+            <div class="mini-block">
+              <div class="label">Do</div>
+              <ul>
+                <li>Create one scoped DB user for one database only.</li>
+                <li>Test failed access outside that scope.</li>
+                <li>Be ready to say why <code>0.0.0.0/0</code> is bad for production and why peering is better.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <div class="num">6</div>
+            <div class="step-title">Package your interview story</div>
+            <div class="tag">Do last</div>
+          </div>
+          <div class="step-body mini">
+            <div class="mini-block">
+              <div class="label">Say this clearly</div>
+              <div class="quote">"My strongest production database background is PostgreSQL, but for MongoDB Atlas I focused on the infrastructure and operations layer: cluster setup, Terraform automation, failover, backup strategy, indexing basics, and secure connectivity. The core reliability concepts transfer directly, and I have been practicing Atlas hands-on against those exact areas from the JD."</div>
+            </div>
+            <div class="mini-block">
+              <div class="label">Be able to answer</div>
+              <ul>
+                <li>How do you scale an Atlas cluster?</li>
+                <li>What happens during primary election?</li>
+                <li>How would you design backup plus restore testing?</li>
+                <li>How do you investigate a slow query?</li>
+                <li>How do you secure Atlas for production SaaS?</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">7-Day Sprint</div>
+      <div class="step">
+        <div class="step-body">
+          <ul class="checklist">
+            <li><span class="dot"></span><span><strong>Day 1:</strong> Create Atlas cluster, connect with <code>mongosh</code>, browse Atlas UI.</span></li>
+            <li><span class="dot"></span><span><strong>Day 2:</strong> Write Terraform for cluster, DB user, and IP access list.</span></li>
+            <li><span class="dot"></span><span><strong>Day 3:</strong> Learn replica set flow, run <code>rs.status()</code>, trigger test failover.</span></li>
+            <li><span class="dot"></span><span><strong>Day 4:</strong> Configure backup concepts, snapshot flow, PITR, restore path.</span></li>
+            <li><span class="dot"></span><span><strong>Day 5:</strong> Insert sample data, test <code>explain()</code>, create indexes, compare results.</span></li>
+            <li><span class="dot"></span><span><strong>Day 6:</strong> Create scoped users, review network security, encryption, audit logging.</span></li>
+            <li><span class="dot"></span><span><strong>Day 7:</strong> Rehearse the five mandatory answers out loud until they sound natural.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Do Not Overfocus</div>
+      <div class="step">
+        <div class="step-body">
+          <ul>
+            <li>Do not spend most of your time on app-side Mongo schema design.</li>
+            <li>Do not spend most of your time on Pub/Sub now.</li>
+            <li>Do not claim deep production Atlas ownership unless you can defend it with hands-on practice.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <p class="foot">Created from the JD comparison and the existing Loom prep materials in <code>2-opencode-loom/</code>.</p>
+  </main>
+</body>
+</html>
