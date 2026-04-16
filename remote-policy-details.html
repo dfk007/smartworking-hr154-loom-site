@@ -1,0 +1,1252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Working Remote Policy Details</title>
+    <meta
+      name="description"
+      content="Smart Working Remote Policy details and recruitment follow-up presented in a clear, trust-focused interface."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f4ec;
+        --bg-soft: #fdfbf6;
+        --surface: rgba(255, 255, 255, 0.88);
+        --surface-strong: #ffffff;
+        --surface-border: rgba(23, 23, 23, 0.1);
+        --text: #171717;
+        --muted: #525252;
+        --muted-soft: #737373;
+        --accent: #d4af37;
+        --accent-deep: #8b6a14;
+        --accent-soft: rgba(212, 175, 55, 0.16);
+        --success-soft: rgba(21, 128, 61, 0.1);
+        --warning-soft: rgba(161, 98, 7, 0.1);
+        --danger-soft: rgba(185, 28, 28, 0.09);
+        --shadow: 0 24px 70px rgba(23, 23, 23, 0.08);
+        --shadow-soft: 0 10px 34px rgba(23, 23, 23, 0.06);
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+        --max: 1180px;
+      }
+
+      body[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #090909;
+        --bg-soft: #111111;
+        --surface: rgba(24, 24, 24, 0.9);
+        --surface-strong: #111111;
+        --surface-border: rgba(255, 255, 255, 0.1);
+        --text: #f5f5f5;
+        --muted: #d4d4d4;
+        --muted-soft: #a3a3a3;
+        --accent: #d4af37;
+        --accent-deep: #f0d677;
+        --accent-soft: rgba(212, 175, 55, 0.14);
+        --success-soft: rgba(74, 222, 128, 0.12);
+        --warning-soft: rgba(251, 191, 36, 0.12);
+        --danger-soft: rgba(248, 113, 113, 0.12);
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+        --shadow-soft: 0 10px 34px rgba(0, 0, 0, 0.24);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 28%),
+          radial-gradient(circle at 88% 12%, rgba(23, 23, 23, 0.06), transparent 24%),
+          linear-gradient(180deg, #fcfaf4 0%, #f7f4ec 44%, #f2ede1 100%);
+      }
+
+      body[data-theme="dark"] {
+        background:
+          radial-gradient(circle at top left, rgba(212, 175, 55, 0.12), transparent 26%),
+          radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.06), transparent 20%),
+          linear-gradient(180deg, #060606 0%, #0b0b0b 44%, #101010 100%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      :focus-visible {
+        outline: 3px solid rgba(212, 175, 55, 0.58);
+        outline-offset: 3px;
+      }
+
+      .page {
+        width: min(calc(100% - 32px), var(--max));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        border: 1px solid var(--surface-border);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow-soft);
+        position: sticky;
+        top: 16px;
+        z-index: 10;
+      }
+
+      body[data-theme="dark"] .topbar {
+        background: rgba(17, 17, 17, 0.82);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        border: 1px solid rgba(23, 23, 23, 0.1);
+        background: linear-gradient(135deg, #171717 0%, #3a3a3a 100%);
+        color: #ffffff;
+        box-shadow: 0 14px 28px rgba(23, 23, 23, 0.16);
+      }
+
+      body[data-theme="dark"] .brand-mark {
+        background: linear-gradient(135deg, #f5f5f5 0%, #bdbdbd 100%);
+        color: #111111;
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+      }
+
+      .brand-mark svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .brand-copy {
+        min-width: 0;
+      }
+
+      .eyebrow {
+        margin: 0 0 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-deep);
+      }
+
+      .brand-copy strong,
+      .brand-copy span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .brand-copy strong {
+        font-size: 0.96rem;
+      }
+
+      .brand-copy span {
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+
+      .topbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .button,
+      .button-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-weight: 700;
+        transition:
+          background-color 220ms ease,
+          color 220ms ease,
+          border-color 220ms ease,
+          box-shadow 220ms ease,
+          transform 220ms ease;
+        cursor: pointer;
+      }
+
+      .button {
+        background: linear-gradient(135deg, #171717 0%, #363636 100%);
+        color: #ffffff;
+        box-shadow: 0 16px 36px rgba(23, 23, 23, 0.18);
+      }
+
+      .button-secondary {
+        background: rgba(255, 255, 255, 0.74);
+        border-color: rgba(23, 23, 23, 0.12);
+        color: var(--text);
+      }
+
+      body[data-theme="dark"] .button {
+        background: linear-gradient(135deg, #f5f5f5 0%, #d6d6d6 100%);
+        color: #111111;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.26);
+      }
+
+      body[data-theme="dark"] .button-secondary {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .button:hover,
+      .button:focus-visible,
+      .button-secondary:hover,
+      .button-secondary:focus-visible {
+        transform: translateY(-2px);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr);
+        gap: 22px;
+        margin-top: 28px;
+      }
+
+      .panel {
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-xl);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), #ffffff);
+        box-shadow: var(--shadow);
+      }
+
+      body[data-theme="dark"] .panel {
+        background: linear-gradient(180deg, rgba(24, 24, 24, 0.96), #111111);
+      }
+
+      .hero-main {
+        padding: 34px;
+      }
+
+      .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border: 1px solid rgba(23, 23, 23, 0.09);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      body[data-theme="dark"] .chip {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .chip::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 0 5px rgba(212, 175, 55, 0.16);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 4vw, 4.4rem);
+        line-height: 0.96;
+        letter-spacing: -0.05em;
+        max-width: 10ch;
+      }
+
+      .hero-lead {
+        margin-top: 18px;
+        max-width: 64ch;
+        font-size: 1.06rem;
+        line-height: 1.75;
+        color: var(--muted);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .hero-note {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-left: 4px solid var(--accent);
+        border-radius: var(--radius-sm);
+        background: linear-gradient(135deg, var(--accent-soft), rgba(255, 255, 255, 0.84));
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      body[data-theme="dark"] .hero-note {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(255, 255, 255, 0.03));
+      }
+
+      .hero-side {
+        padding: 24px;
+        display: grid;
+        gap: 16px;
+        align-content: start;
+      }
+
+      .metric-card {
+        padding: 20px;
+        border: 1px solid rgba(23, 23, 23, 0.08);
+        border-radius: var(--radius-lg);
+        background: linear-gradient(180deg, rgba(247, 244, 236, 0.72), #ffffff);
+      }
+
+      body[data-theme="dark"] .metric-card {
+        border-color: rgba(255, 255, 255, 0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      }
+
+      .metric-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted-soft);
+      }
+
+      .metric-value {
+        margin-top: 10px;
+        font-size: 1.85rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .metric-copy {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 12px;
+      }
+
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+      }
+
+      .timeline-step {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: #171717;
+        color: #ffffff;
+        font-size: 0.92rem;
+        font-weight: 800;
+      }
+
+      body[data-theme="dark"] .timeline-step {
+        background: #f5f5f5;
+        color: #111111;
+      }
+
+      .timeline-copy strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.98rem;
+      }
+
+      .timeline-copy span {
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 22px;
+        margin-top: 24px;
+      }
+
+      .content-stack {
+        display: grid;
+        gap: 22px;
+      }
+
+      .section-card {
+        padding: 28px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 1.45rem;
+        line-height: 1.12;
+        letter-spacing: -0.04em;
+      }
+
+      .section-subtitle {
+        margin-top: 8px;
+        max-width: 62ch;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .tag {
+        padding: 9px 12px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .tag-neutral {
+        background: rgba(23, 23, 23, 0.06);
+        color: var(--muted);
+      }
+
+      .tag-success {
+        background: var(--success-soft);
+        color: #166534;
+      }
+
+      .tag-warning {
+        background: var(--warning-soft);
+        color: #92400e;
+      }
+
+      .tag-danger {
+        background: var(--danger-soft);
+        color: #b91c1c;
+      }
+
+      .stats-grid,
+      .benefits-grid,
+      .rule-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .benefits-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .rule-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat,
+      .benefit,
+      .rule,
+      .summary,
+      .sidebar-card,
+      .acknowledgment {
+        border: 1px solid rgba(23, 23, 23, 0.08);
+        border-radius: var(--radius-lg);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 248, 242, 0.92));
+      }
+
+      body[data-theme="dark"] .stat,
+      body[data-theme="dark"] .benefit,
+      body[data-theme="dark"] .rule,
+      body[data-theme="dark"] .summary,
+      body[data-theme="dark"] .sidebar-card,
+      body[data-theme="dark"] .acknowledgment {
+        border-color: rgba(255, 255, 255, 0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+      }
+
+      .stat,
+      .benefit,
+      .rule,
+      .summary,
+      .sidebar-card {
+        padding: 18px;
+      }
+
+      .stat strong,
+      .benefit strong,
+      .rule strong,
+      .summary strong,
+      .sidebar-card strong {
+        display: block;
+        font-size: 1rem;
+        letter-spacing: -0.02em;
+      }
+
+      .stat span,
+      .benefit span,
+      .rule span,
+      .summary span,
+      .sidebar-card span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .summary-list,
+      .policy-list,
+      .mail-list,
+      .sidebar-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .summary-list,
+      .mail-list,
+      .sidebar-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .policy-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .summary-list li,
+      .policy-list li,
+      .mail-list li,
+      .sidebar-list li {
+        position: relative;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.72;
+      }
+
+      .summary-list li::before,
+      .policy-list li::before,
+      .mail-list li::before,
+      .sidebar-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.78em;
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--accent);
+      }
+
+      .warning-box,
+      .muted-box {
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: var(--radius-md);
+        line-height: 1.72;
+      }
+
+      .policy-reader {
+        display: grid;
+        gap: 16px;
+      }
+
+      .policy-text {
+        display: grid;
+        gap: 14px;
+        color: var(--muted);
+        line-height: 1.82;
+      }
+
+      .policy-text p {
+        margin: 0;
+      }
+
+      .policy-text .policy-title {
+        font-size: 1.04rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .policy-text .signature-block {
+        margin-top: 8px;
+        display: grid;
+        gap: 8px;
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .warning-box {
+        background: linear-gradient(135deg, rgba(161, 98, 7, 0.08), rgba(255, 255, 255, 0.95));
+        border: 1px solid rgba(161, 98, 7, 0.18);
+      }
+
+      body[data-theme="dark"] .warning-box {
+        background: linear-gradient(135deg, rgba(161, 98, 7, 0.14), rgba(255, 255, 255, 0.03));
+        border-color: rgba(251, 191, 36, 0.22);
+      }
+
+      .muted-box {
+        background: linear-gradient(135deg, rgba(23, 23, 23, 0.04), rgba(255, 255, 255, 0.95));
+        border: 1px solid rgba(23, 23, 23, 0.08);
+        color: var(--muted);
+      }
+
+      body[data-theme="dark"] .muted-box {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .sidebar {
+        display: grid;
+        gap: 20px;
+        align-content: start;
+      }
+
+      .sidebar-card {
+        box-shadow: var(--shadow-soft);
+      }
+
+      .sidebar-card strong {
+        margin-bottom: 10px;
+      }
+
+      .document-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: rgba(23, 23, 23, 0.05);
+        border: 1px solid rgba(23, 23, 23, 0.08);
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          background-color 220ms ease,
+          border-color 220ms ease,
+        transform 220ms ease;
+      }
+
+      body[data-theme="dark"] .document-link {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .document-link:hover,
+      .document-link:focus-visible {
+        background: rgba(212, 175, 55, 0.12);
+        border-color: rgba(212, 175, 55, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .acknowledgment {
+        padding: 28px;
+      }
+
+      .ack-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .field {
+        padding: 16px 14px;
+        border: 1px dashed rgba(23, 23, 23, 0.26);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.65);
+        min-height: 76px;
+      }
+
+      body[data-theme="dark"] .field {
+        border-color: rgba(255, 255, 255, 0.24);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .field-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted-soft);
+      }
+
+      .field-line {
+        margin-top: 18px;
+        border-bottom: 1px solid rgba(23, 23, 23, 0.34);
+      }
+
+      body[data-theme="dark"] .field-line {
+        border-bottom-color: rgba(255, 255, 255, 0.34);
+      }
+
+      footer {
+        margin-top: 24px;
+        padding: 18px 4px 0;
+        color: var(--muted);
+        line-height: 1.7;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 1120px) {
+        .hero,
+        .section-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 900px) {
+        .stats-grid,
+        .benefits-grid,
+        .rule-grid,
+        .ack-grid,
+        .sidebar {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        h1 {
+          max-width: 12ch;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(calc(100% - 20px), var(--max));
+          padding-top: 16px;
+        }
+
+        .topbar,
+        .section-head {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .topbar-actions {
+          justify-content: stretch;
+        }
+
+        .topbar-actions a,
+        .topbar-actions button {
+          width: 100%;
+        }
+
+        .hero-main,
+        .hero-side,
+        .section-card,
+        .acknowledgment {
+          padding: 22px;
+        }
+
+        .stats-grid,
+        .benefits-grid,
+        .rule-grid,
+        .ack-grid,
+        .sidebar {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 2.5rem;
+          max-width: none;
+        }
+      }
+
+      @media print {
+        body {
+          background: #ffffff;
+        }
+
+        .page {
+          width: 100%;
+          padding: 0;
+        }
+
+        .topbar-actions,
+        .document-link {
+          display: none;
+        }
+
+        .topbar,
+        .panel,
+        .stat,
+        .benefit,
+        .rule,
+        .summary,
+        .sidebar-card,
+        .acknowledgment {
+          box-shadow: none;
+          background: #ffffff;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"></path>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <p class="eyebrow">Recruitment Review</p>
+            <strong>Smart Working Remote Policy</strong>
+            <span>Clear policy details, interview next steps, and acknowledgment section</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="button-secondary" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
+          <a class="button-secondary" href="#acknowledgment">Jump to acknowledgment</a>
+          <a class="button" href="#full-policy">See Remote Policy</a>
+        </div>
+      </header>
+
+      <section class="hero">
+        <article class="panel hero-main">
+          <div class="hero-badges">
+            <span class="chip">English assessment cleared</span>
+            <span class="chip">Technical interview next</span>
+            <span class="chip">Policy review required</span>
+          </div>
+          <h1>Everything shared in the Smart Working remote policy, arranged for quick review.</h1>
+          <p class="hero-lead">
+            This page turns the provided Smart Working Remote Policy and follow-up email into a structured, readable document.
+            It highlights employee benefits, working hours, compliance expectations, confidentiality terms, and the next recruitment steps.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#policy-sections">Review full policy details</a>
+            <a class="button-secondary" href="#full-policy">Open original PDF</a>
+          </div>
+          <div class="hero-note">
+            Smart Working stated that acknowledging this policy helps the recruitment process move smoothly and that the acknowledgment becomes void automatically if you decide not to continue with Smart Working.
+          </div>
+        </article>
+
+        <aside class="panel hero-side" aria-label="Quick overview">
+          <div class="metric-card">
+            <div class="metric-label">Weekly commitment</div>
+            <div class="metric-value">45 hours</div>
+            <p class="metric-copy">Full-time attention is expected during working hours, with a 30 minute break each day.</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Summer schedule</div>
+            <div class="metric-value">6:30am - 4pm BST</div>
+            <p class="metric-copy">Winter schedule changes to 7:30am - 5pm GMT.</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Recruitment flow</div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-step">1</div>
+                <div class="timeline-copy"><strong>Policy acknowledgment</strong><span>Review and acknowledge the SWRP before the technical interview stage.</span></div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-step">2</div>
+                <div class="timeline-copy"><strong>Technical interview</strong><span>The team will contact you to schedule a suitable interview time.</span></div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-step">3</div>
+                <div class="timeline-copy"><strong>Document readiness</strong><span>If successful, notice period, last working day, or relieving and experience documents may be requested.</span></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel section-card policy-reader" id="full-policy">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Full Remote Policy Text</h2>
+            <p class="section-subtitle">The complete policy content is shown below in the same dark interface so you can read it without opening the PDF viewer.</p>
+          </div>
+          <span class="tag tag-neutral">Full content</span>
+        </div>
+        <div class="policy-text">
+          <p class="policy-title">Smart Working Remote Policy</p>
+          <p>To be considered further for this role you must read,sign and agree to this “Smart Working Remote Policy” document.</p>
+          <p>At Smart Working, we embrace a fully remote working environment, allowing you to carry out your responsibilities from the comfort of your home. This allows you to save time and money by eliminating the need for daily commuting, contributing to a more efficient and healthier work-life balance. We firmly believe in the effectiveness of remote work when approached with dedication and focus, ensuring that the quality of output remains on par with traditional office settings.</p>
+          <p>Here are other employee benefits at Smart Working: working for top US &amp; EU businesses long term, fixed working hours - you will never have to work overtime, no work on weekends, we will provide you with a laptop, full medical insurance provided along with on-time salary payments every month.</p>
+          <p>As part of your commitment to this role, you will exclusively dedicate 45 hours per week to your responsibilities. The working hours are: 6:30am - 4pm BST (Summer) / 7:30am - 5pm GMT (Winters). You are entitled to a 30 minute break each day.</p>
+          <p>To maintain transparency and uphold our commitment to clients, Smart Working uses productivity software which tracks activity and hours worked. This system guarantees that Smart Working’s clients receive the agreed-upon working hours. This software is not used to micro manage. Use of remote access software (such as TeamViewer or AnyDesk) on the laptop provided by Smart Working is not possible.</p>
+          <p>It is a condition of employment at Smart Working that you give your full time &amp; attention during your working hours to Smart Working. Smart Working does not allow dual employment during your working hours. Smart Working does not allow its staff to do contractual work for other companies during your working hours. Smart Working does not allow its staff to outsource their work to third parties.</p>
+          <p>Smart Working will immediately terminate any employee engaging in dual employment during your working hours, contracting work during your working hours or any employee who is outsourcing their Smart Working work.</p>
+          <p>It is agreed between Smart Working and you that should our rules on dual employment, contracting and outsourcing of work be broken, you agree to and will recompense Smart Working for three months salary for the damage caused by you to Smart Working and its reputation.</p>
+          <p>Our robust systems swiftly identify employees who attempt to maintain dual employment during work hours or who attempt to outsource work to third parties. We use state of the art technology which cannot be bypassed.</p>
+          <p>If you do receive an offer of employment from Smart Working a thorough background verification check will be carried out. This will include checking and proving your identity, address and previous employment record.</p>
+          <p>You agree to keep the details of your compensation discussion with Smart Working confidential, including your salary expectations and any signing bonus offered. Sharing compensation details with our client(s) is a violation of this agreement and may result in your removal from the current recruitment process, withdrawal of any offer extended, or termination of your contract (if applicable).</p>
+          <p>We look after our staff very well at Smart Working. We are proud of our low staff turnover and our high Glassdoor rating. Please take a look for yourself. We wish you good luck in finding a position with Smart Working and hope that we will have a long and mutually fruitful relationship with you for many years.</p>
+          <p>By affixing your signature to this agreement, you agree to the above conditions.</p>
+          <div class="signature-block">
+            <p>Print Name: ___________________________________</p>
+            <p>Sign: ___________________________________</p>
+            <p>Date: ___________________________________</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-grid" id="policy-sections">
+        <div class="content-stack">
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">What Smart Working says it offers</h2>
+                <p class="section-subtitle">The document positions Smart Working as a fully remote employer focused on long-term placements and stable working conditions.</p>
+              </div>
+              <span class="tag tag-success">Benefits</span>
+            </div>
+            <div class="benefits-grid">
+              <div class="benefit">
+                <strong>Fully remote setup</strong>
+                <span>You can work from home, avoid daily commuting, and maintain a more efficient work-life balance.</span>
+              </div>
+              <div class="benefit">
+                <strong>Long-term client work</strong>
+                <span>The company states that its team works long term for top US and EU businesses.</span>
+              </div>
+              <div class="benefit">
+                <strong>No overtime or weekends</strong>
+                <span>The policy says working hours are fixed, overtime is not required, and weekends are not worked.</span>
+              </div>
+              <div class="benefit">
+                <strong>Company laptop</strong>
+                <span>Smart Working says it will provide a laptop for the role.</span>
+              </div>
+              <div class="benefit">
+                <strong>Medical insurance</strong>
+                <span>Full medical insurance is listed as part of the employee benefits.</span>
+              </div>
+              <div class="benefit">
+                <strong>On-time salary payments</strong>
+                <span>The policy states salary will be paid on time every month.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Working arrangement and daily schedule</h2>
+                <p class="section-subtitle">These are the commitment, hours, and break details explicitly stated in the policy.</p>
+              </div>
+              <span class="tag tag-neutral">Schedule</span>
+            </div>
+            <div class="stats-grid">
+              <div class="stat">
+                <strong>Weekly hours</strong>
+                <span>45 hours per week dedicated exclusively to Smart Working responsibilities.</span>
+              </div>
+              <div class="stat">
+                <strong>Summer timing</strong>
+                <span>6:30am to 4pm BST.</span>
+              </div>
+              <div class="stat">
+                <strong>Winter timing</strong>
+                <span>7:30am to 5pm GMT.</span>
+              </div>
+              <div class="stat">
+                <strong>Daily break</strong>
+                <span>30 minute break entitlement each day.</span>
+              </div>
+            </div>
+            <div class="muted-box">
+              The policy frames remote work as effective when approached with dedication and focus, with output quality expected to remain on par with traditional office settings.
+            </div>
+          </article>
+
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Tracking, transparency, and device limitations</h2>
+                <p class="section-subtitle">Smart Working explains that monitoring is used to verify hours worked for client transparency, while also setting restrictions on remote access tools.</p>
+              </div>
+              <span class="tag tag-warning">Monitoring</span>
+            </div>
+            <ul class="policy-list">
+              <li>Productivity software tracks activity and hours worked on the Smart Working laptop.</li>
+              <li>The stated purpose is to ensure clients receive the agreed-upon working hours.</li>
+              <li>The policy says this software is not used to micromanage employees.</li>
+              <li>Use of remote access software such as TeamViewer or AnyDesk is not possible on the laptop provided by Smart Working.</li>
+            </ul>
+          </article>
+
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Employment conditions and prohibited conduct</h2>
+                <p class="section-subtitle">These are the restrictions the policy places on attention, outside work, and third-party involvement during Smart Working hours.</p>
+              </div>
+              <span class="tag tag-danger">Strict terms</span>
+            </div>
+            <div class="rule-grid">
+              <div class="rule">
+                <strong>Full attention required</strong>
+                <span>You are expected to give your full time and attention to Smart Working during working hours.</span>
+              </div>
+              <div class="rule">
+                <strong>No dual employment</strong>
+                <span>Dual employment during working hours is not allowed.</span>
+              </div>
+              <div class="rule">
+                <strong>No contract work for others</strong>
+                <span>Contractual work for other companies during working hours is not allowed.</span>
+              </div>
+              <div class="rule">
+                <strong>No outsourcing</strong>
+                <span>Outsourcing Smart Working tasks to third parties is not allowed.</span>
+              </div>
+            </div>
+            <div class="warning-box">
+              Smart Working states that any employee engaging in dual employment during working hours, doing contract work during working hours, or outsourcing their Smart Working work will be terminated immediately.
+            </div>
+          </article>
+
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Penalty clause, detection claims, and verification checks</h2>
+                <p class="section-subtitle">The policy includes a financial recompense clause and states that both detection systems and background checks are part of the process.</p>
+              </div>
+              <span class="tag tag-danger">Compliance</span>
+            </div>
+            <ul class="policy-list">
+              <li>If the rules on dual employment, contracting, or outsourcing are broken, the document says you agree to recompense Smart Working for three months salary for the damage caused to Smart Working and its reputation.</li>
+              <li>The company claims it has robust systems that swiftly identify employees who attempt dual employment during work hours or attempt to outsource work to third parties.</li>
+              <li>The policy says the company uses state of the art technology that cannot be bypassed.</li>
+              <li>If an employment offer is made, a thorough background verification check will be carried out.</li>
+              <li>The stated checks include confirming identity, address, and previous employment record.</li>
+            </ul>
+          </article>
+
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Compensation confidentiality</h2>
+                <p class="section-subtitle">The policy also includes a confidentiality requirement around compensation-related discussions.</p>
+              </div>
+              <span class="tag tag-warning">Confidentiality</span>
+            </div>
+            <ul class="policy-list">
+              <li>You are asked to keep compensation discussions with Smart Working confidential.</li>
+              <li>This includes salary expectations and any signing bonus offered.</li>
+              <li>Sharing compensation details with Smart Working client(s) is described as a violation of the agreement.</li>
+              <li>The stated consequences can include removal from the current recruitment process, withdrawal of any offer extended, or termination of contract if applicable.</li>
+            </ul>
+          </article>
+
+          <article class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Recruitment email summary</h2>
+                <p class="section-subtitle">The follow-up email adds context to your application status and explains what happens after policy acknowledgment.</p>
+              </div>
+              <span class="tag tag-success">Next steps</span>
+            </div>
+            <div class="summary">
+              <strong>Message highlights</strong>
+              <ul class="mail-list">
+                <li>You were congratulated for clearing the English assessment.</li>
+                <li>The Smart Working team said they were happy to share the news and wanted to move ahead with you.</li>
+                <li>The next step is for the team to contact you and schedule your technical interview at a time that works best.</li>
+                <li>Before that, they requested that you review and acknowledge the Smart Working Remote Policy.</li>
+                <li>The email clarified that if you later decide not to continue with Smart Working, that acknowledgment automatically becomes void.</li>
+                <li>If you clear the technical interview, the team may ask for your notice period, last working day, or experience and relieving documents.</li>
+                <li>If those details are already available, sharing them early may help speed up the process.</li>
+                <li>The email closes by saying they look forward to continuing the journey and appreciate your time and support.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="panel acknowledgment" id="acknowledgment">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Acknowledgment block</h2>
+                <p class="section-subtitle">A clean sign-off section for personal review, printing, or saving alongside the policy details.</p>
+              </div>
+              <span class="tag tag-neutral">For sign-off</span>
+            </div>
+            <p class="section-subtitle">
+              I confirm that I have reviewed the Smart Working Remote Policy details presented above, including the stated working hours, monitoring approach, confidentiality requirements, and employment conditions. I understand that Smart Working requested this acknowledgment as part of the recruitment process and that, according to the email shared, the acknowledgment becomes void automatically if I decide not to continue with Smart Working.
+            </p>
+            <div class="ack-grid">
+              <div class="field">
+                <span class="field-label">Full name</span>
+                <div class="field-line"></div>
+              </div>
+              <div class="field">
+                <span class="field-label">Signature</span>
+                <div class="field-line"></div>
+              </div>
+              <div class="field">
+                <span class="field-label">Date</span>
+                <div class="field-line"></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="sidebar" aria-label="Policy summary sidebar">
+          <div class="sidebar-card">
+            <strong>Quick facts</strong>
+            <ul class="sidebar-list">
+              <li>Fully remote, home-based role.</li>
+              <li>Fixed working hours with no overtime and no weekends.</li>
+              <li>Laptop and full medical insurance provided.</li>
+              <li>Salary payments described as on time every month.</li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card">
+            <strong>Attention and exclusivity</strong>
+            <ul class="sidebar-list">
+              <li>Full focus must remain on Smart Working during working hours.</li>
+              <li>Dual employment, external contract work, and outsourcing are prohibited during that time.</li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card">
+            <strong>Stated consequences</strong>
+            <ul class="sidebar-list">
+              <li>Immediate termination is stated for restricted outside work or outsourcing during working hours.</li>
+              <li>The policy also includes a three months salary recompense clause.</li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card">
+            <strong>Recruitment readiness</strong>
+            <span>Prepare notice period, last working day, and experience or relieving documents in case you clear the technical interview.</span>
+            <a class="document-link" href="SWRP-PK.pdf">View source PDF</a>
+          </div>
+        </aside>
+      </section>
+
+      <footer>
+        Built as a standalone HTML summary from the Smart Working Remote Policy text and the follow-up recruitment email you provided. The wording above is organized for readability and does not replace the source document itself.
+      </footer>
+    </div>
+    <script>
+      (function () {
+        var storageKey = "remote-policy-theme";
+        var body = document.body;
+        var toggle = document.getElementById("theme-toggle");
+        var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function getPreferredTheme() {
+          var savedTheme = window.localStorage.getItem(storageKey);
+
+          if (savedTheme === "light" || savedTheme === "dark") {
+            return savedTheme;
+          }
+
+          return media.matches ? "dark" : "light";
+        }
+
+        function applyTheme(theme) {
+          body.setAttribute("data-theme", theme);
+          toggle.setAttribute("aria-pressed", String(theme === "dark"));
+          toggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+        }
+
+        applyTheme(getPreferredTheme());
+
+        toggle.addEventListener("click", function () {
+          var nextTheme = body.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          window.localStorage.setItem(storageKey, nextTheme);
+          applyTheme(nextTheme);
+        });
+
+        media.addEventListener("change", function (event) {
+          if (!window.localStorage.getItem(storageKey)) {
+            applyTheme(event.matches ? "dark" : "light");
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
