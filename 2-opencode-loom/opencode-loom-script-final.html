@@ -424,6 +424,7 @@
     <div class="brand">DAUD · HR154</div>
     <div class="tabbar">
       <button class="tab-btn on" id="t-mongo" onclick="go('mongo')">🍃 Mongo Focus</button>
+      <button class="tab-btn" id="t-topics" onclick="go('topics')">📚 Mongo Topics</button>
       <button class="tab-btn" id="t-concepts" onclick="go('concepts')">🧠 All Concepts</button>
     </div>
   </nav>
@@ -1054,6 +1055,271 @@ mongosh "$READONLY_URI" --eval 'db.events.insertOne({ shouldFail: true })'</code
           </div>
         </div>
       </section>
+    </section>
+
+    <section class="panel" id="p-topics">
+      <section class="hero">
+        <div class="eyebrow">MongoDB Atlas · Exact Scope</div>
+        <h1>Mongo Topics</h1>
+        <p>This tab is the JD-specific MongoDB Atlas knowledge map. It removes low-value detours and keeps the owner-level Atlas topics you should be able to explain, practice, and defend in interview conversation.</p>
+
+        <div class="banner">
+          <div class="banner-card">
+            <div class="k">Core Ask</div>
+            <p><strong>Production Atlas ownership</strong>: scaling, failover, backup and recovery, indexing, security, and operational judgment.</p>
+          </div>
+          <div class="banner-card">
+            <div class="k">Mindset</div>
+            <p>This is not a schema-design interview. It is mainly an infrastructure, operations, reliability, and automation conversation around MongoDB Atlas.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="alert alert-red"><strong>Priority rule:</strong> master the five mandatory Atlas themes first. Search, vector, and certification topics are lower value for this JD.</div>
+      <div class="alert alert-green"><strong>Success signal:</strong> if you can explain the cards below with one practical example each, your Mongo prep is aligned with the role.</div>
+
+      <section class="section">
+        <div class="section-label">Priority Order</div>
+        <div class="step">
+          <div class="step-body">
+            <ul class="checklist">
+              <li><span class="dot"></span><span><strong>1. Cluster architecture and scaling:</strong> sizing, replica set vs sharding, autoscaling, region choice.</span></li>
+              <li><span class="dot"></span><span><strong>2. Replication and failover:</strong> elections, write impact, lag, read/write behavior.</span></li>
+              <li><span class="dot"></span><span><strong>3. Backup and DR:</strong> snapshots, PITR, restore testing, RPO and RTO.</span></li>
+              <li><span class="dot"></span><span><strong>4. Performance and indexing:</strong> explain plans, Advisor, compound indexes, slow query analysis.</span></li>
+              <li><span class="dot"></span><span><strong>5. Security and access:</strong> least privilege, networking, TLS, encryption, auditability.</span></li>
+              <li><span class="dot"></span><span><strong>6. Atlas operations:</strong> monitoring, alerting, Terraform, cost, and incident ownership.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">JD-Aligned Mongo Topics</div>
+        <div class="grid">
+          <article class="step">
+            <div class="step-head">
+              <div class="num">1</div>
+              <div class="step-title">Atlas cluster architecture and scaling</div>
+              <div class="tag">Highest priority</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li><code>M0</code> for labs; <code>M10</code>, <code>M30+</code>, and above for real production sizing discussions.</li>
+                  <li>Replica set vs sharded cluster.</li>
+                  <li>Vertical scale vs horizontal scale.</li>
+                  <li>Region placement, cloud choice, version upgrades, storage growth, and autoscaling boundaries.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be able to answer</div>
+                <ul>
+                  <li>When is a replica set still enough, and when do you start planning sharding?</li>
+                  <li>Would you solve a performance issue by resizing the cluster, or by fixing queries and indexes first?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">2</div>
+              <div class="step-title">Replication, elections, failover, and HA</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Primary, secondaries, oplog, heartbeats, quorum, and elections.</li>
+                  <li>Write interruption during primary election.</li>
+                  <li>Replication lag, stale reads, read preference, read concern, and write concern.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Practice</div>
+                <ul>
+                  <li>Run <code>db.hello()</code> and <code>rs.status()</code>.</li>
+                  <li>Trigger Atlas test failover.</li>
+                  <li>Explain what the app sees during failover and why retry logic matters.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">3</div>
+              <div class="step-title">Backups, PITR, restore testing, and DR</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Snapshots, Point-in-Time Recovery, and oplog window.</li>
+                  <li><code>RPO</code> and <code>RTO</code>.</li>
+                  <li>Atlas restore behavior and why restore validation matters.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be able to answer</div>
+                <ul>
+                  <li>How would you design backup retention for staging vs production?</li>
+                  <li>How would you prove the restore path actually works before an incident?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">4</div>
+              <div class="step-title">Performance tuning, query analysis, and indexing</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li><code>explain("executionStats")</code>, <code>COLLSCAN</code>, and <code>IXSCAN</code>.</li>
+                  <li>Atlas Performance Advisor and slow query investigation.</li>
+                  <li>Single-field, compound, TTL, and partial indexes.</li>
+                  <li>Write cost and storage tradeoffs created by extra indexes.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Owner-level view</div>
+                <ul>
+                  <li>Index order should match real filter and sort patterns.</li>
+                  <li>Unindexed queries often fail only after scale reveals them.</li>
+                  <li>Sometimes the fix is query design, not more hardware.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">5</div>
+              <div class="step-title">Security, networking, and access control</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Least-privilege database users and separate identities for app, migrations, analytics, and operations.</li>
+                  <li>Atlas project roles, API keys, and secret handling.</li>
+                  <li>IP allowlist for labs, private networking for production, TLS, encryption at rest, KMS, and audit logs.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be able to answer</div>
+                <ul>
+                  <li>Why is <code>0.0.0.0/0</code> unsafe for production SaaS?</li>
+                  <li>When would you move from public allowlists to VPC peering or PrivateLink?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">6</div>
+              <div class="step-title">Atlas observability, alerting, and operations</div>
+              <div class="tag">Owner level</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Watch</div>
+                <ul>
+                  <li>CPU, connections, disk growth, query latency, operation throughput, and replication lag.</li>
+                  <li>Performance Advisor signals and alert policies.</li>
+                  <li>Symptoms vs root cause during database incidents.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be able to answer</div>
+                <ul>
+                  <li>What metrics would you alert on for a critical Atlas cluster?</li>
+                  <li>How would you decide between scaling up, re-indexing, or reducing noisy workloads?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">7</div>
+              <div class="step-title">Terraform, automation, and multi-environment control</div>
+              <div class="tag">Important</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li><code>mongodbatlas_advanced_cluster</code>, users, access lists, backup schedules, and private networking resources.</li>
+                  <li>Modules, remote state, per-environment separation, plan/apply safety, and reviewable change flow.</li>
+                  <li>Why Atlas should be managed as infrastructure code, not only by UI changes.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Be able to answer</div>
+                <ul>
+                  <li>How do you structure Atlas Terraform for staging and production safely?</li>
+                  <li>How do you prevent accidental or risky production changes?</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">8</div>
+              <div class="step-title">Capacity planning, cost, and incident ownership</div>
+              <div class="tag">Important</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Know</div>
+                <ul>
+                  <li>Right-sizing, autoscaling guardrails, cost vs performance tradeoffs, and when to revisit architecture.</li>
+                  <li>Runbooks, mitigation steps, RCA quality, and long-term improvements.</li>
+                  <li>How to speak clearly in a remote, async, high-ownership team.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">De-prioritize for now</div>
+                <ul>
+                  <li>Atlas Search and Vector Search.</li>
+                  <li>Certifications.</li>
+                  <li>Deep app-side schema design unless the interviewer pulls the conversation there.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Hands-On Proof</div>
+        <div class="step">
+          <div class="step-body">
+            <ul class="checklist">
+              <li><span class="dot"></span><span>Create one Atlas cluster and explain why that sizing and topology were chosen.</span></li>
+              <li><span class="dot"></span><span>Provision cluster, users, access list, and backups with Terraform.</span></li>
+              <li><span class="dot"></span><span>Run <code>rs.status()</code> and explain a failover event.</span></li>
+              <li><span class="dot"></span><span>Compare one query before and after indexing using <code>explain("executionStats")</code>.</span></li>
+              <li><span class="dot"></span><span>Show one restore drill and one access-control failure case.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <p class="foot">Derived from <code>mongo-topics.md</code> and aligned to the MongoDB Atlas ownership language in the updated JD.</p>
     </section>
 
     <section class="panel" id="p-concepts">
