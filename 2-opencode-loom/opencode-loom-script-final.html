@@ -332,6 +332,28 @@
     padding: 2px 6px;
   }
 
+  pre {
+    overflow-x: auto;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #09111d;
+    border: 1px solid var(--line2);
+    color: #cfe7ff;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+
   .quote {
     background: var(--s2);
     border: 1px solid var(--line2);
@@ -610,6 +632,413 @@ HR154</a> · Updated JD Delta
               <li><span class="dot"></span><span><strong>Day 7:</strong> Rehearse the five mandatory answers out loud until they sound natural.</span></li>
             </ul>
           </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Ubuntu Practice Runbook</div>
+        <div class="grid">
+          <article class="step">
+            <div class="step-head">
+              <div class="num">A</div>
+              <div class="step-title">Install the tools on Ubuntu</div>
+              <div class="tag">Run first</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>sudo apt update
+sudo apt install -y curl gnupg unzip jq ca-certificates software-properties-common
+
+source /etc/os-release
+echo "$VERSION_CODENAME"
+
+curl -fsSL https://pgp.mongodb.com/server-8.0.asc | \
+  sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+
+echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $VERSION_CODENAME/mongodb-org/8.0 multiverse" | \
+  sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+  sudo gpg -o /usr/share/keyrings/hashicorp-archive-keyring.gpg --dearmor
+
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $VERSION_CODENAME main" | \
+  sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+sudo apt update
+sudo apt install -y mongodb-mongosh mongodb-database-tools terraform
+
+mongosh --version
+mongodump --version
+terraform version</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">Why this matters</div>
+                <ul>
+                  <li><code>mongosh</code> is your day-to-day Atlas shell for connection, replication checks, and query tuning.</li>
+                  <li><code>mongodb-database-tools</code> lets you practice logical backup and restore using <code>mongodump</code> and <code>mongorestore</code>.</li>
+                  <li><code>terraform</code> is required because the JD explicitly expects Atlas ownership through IaC, not only UI clicking.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">B</div>
+              <div class="step-title">Create your Atlas lab workspace</div>
+              <div class="tag">Account + env</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Steps</div>
+                <ul>
+                  <li>Create an Atlas account, then create one project called <code>hr154-mongo-lab</code>.</li>
+                  <li>Generate Atlas API keys with project owner rights for practice only.</li>
+                  <li>From Atlas, copy your <code>ORG_ID</code>, <code>PROJECT_ID</code>, and later the cluster SRV connection string.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>mkdir -p ~/hr154-mongodb-atlas-lab/terraform
+cd ~/hr154-mongodb-atlas-lab
+
+read -rp "Atlas public key: " MONGODB_ATLAS_PUBLIC_KEY
+read -rsp "Atlas private key: " MONGODB_ATLAS_PRIVATE_KEY; echo
+read -rp "Atlas org id: " MONGODB_ATLAS_ORG_ID
+read -rp "Atlas project id: " MONGODB_ATLAS_PROJECT_ID
+
+export MONGODB_ATLAS_PUBLIC_KEY
+export MONGODB_ATLAS_PRIVATE_KEY
+export MONGODB_ATLAS_ORG_ID
+export MONGODB_ATLAS_PROJECT_ID</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">C</div>
+              <div class="step-title">Provision Atlas with Terraform</div>
+              <div class="tag">Core JD proof</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">main.tf</div>
+                <pre><code>terraform {
+  required_providers {
+    mongodbatlas = {
+      source  = "mongodb/mongodbatlas"
+      version = ">= 1.0.0"
+    }
+  }
+}
+
+provider "mongodbatlas" {}
+
+resource "mongodbatlas_advanced_cluster" "lab" {
+  project_id   = var.project_id
+  name         = "hr154-lab"
+  cluster_type = "REPLICASET"
+
+  replication_specs {
+    num_shards = 1
+
+    region_configs {
+      provider_name = "AWS"
+      region_name   = "EU_WEST_1"
+      priority      = 7
+
+      electable_specs {
+        instance_size = "M10"
+        node_count    = 3
+      }
+
+      analytics_specs {
+        instance_size = "M10"
+        node_count    = 0
+      }
+
+      auto_scaling {
+        disk_gb_enabled = true
+        compute {
+          enabled            = true
+          scale_down_enabled = true
+          min_instance_size  = "M10"
+          max_instance_size  = "M30"
+        }
+      }
+    }
+  }
+}
+
+resource "mongodbatlas_project_ip_access_list" "home" {
+  project_id = var.project_id
+  cidr_block = "YOUR_PUBLIC_IP/32"
+  comment    = "ubuntu practice machine"
+}
+
+resource "mongodbatlas_database_user" "app_rw" {
+  project_id         = var.project_id
+  username           = "app_rw"
+  password           = var.db_password
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readWrite"
+    database_name = "appdb"
+  }
+}
+
+resource "mongodbatlas_database_user" "ops_monitor" {
+  project_id         = var.project_id
+  username           = "ops_monitor"
+  password           = var.ops_password
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "clusterMonitor"
+    database_name = "admin"
+  }
+}
+
+resource "mongodbatlas_cloud_backup_schedule" "lab" {
+  project_id   = var.project_id
+  cluster_name = mongodbatlas_advanced_cluster.lab.name
+
+  policy_item_hourly {
+    frequency_interval = 1
+    retention_unit     = "days"
+    retention_value    = 2
+  }
+
+  policy_item_daily {
+    frequency_interval = 1
+    retention_unit     = "days"
+    retention_value    = 7
+  }
+}
+
+variable "project_id" {}
+variable "db_password" {
+  sensitive = true
+}
+
+variable "ops_password" {
+  sensitive = true
+}</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>curl ifconfig.me
+
+cd ~/hr154-mongodb-atlas-lab/terraform
+terraform init
+terraform fmt
+terraform validate
+terraform plan -var="project_id=$MONGODB_ATLAS_PROJECT_ID" -var="db_password=ChangeMe123!" -var="ops_password=MonitorMe123!"
+terraform apply -var="project_id=$MONGODB_ATLAS_PROJECT_ID" -var="db_password=ChangeMe123!" -var="ops_password=MonitorMe123!"
+terraform state list</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">What to explain out loud</div>
+                <ul>
+                  <li>Why <code>REPLICASET</code> is the right starting point before talking about sharding.</li>
+                  <li>Why auto-scaling boundaries still need owner judgment for cost and performance.</li>
+                  <li>How you would promote this into separate staging and production workspaces with remote state.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">D</div>
+              <div class="step-title">Connect and inspect the replica set</div>
+              <div class="tag">Replication + failover</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>read -rsp "Atlas app_rw password: " DB_PASSWORD; echo
+read -rsp "Atlas ops_monitor password: " OPS_PASSWORD; echo
+read -rp "Atlas SRV hostname (cluster url only): " CLUSTER_HOST
+
+export MONGODB_URI="mongodb+srv://app_rw:${DB_PASSWORD}@${CLUSTER_HOST}/appdb?retryWrites=true&w=majority&appName=hr154lab"
+export OPS_URI="mongodb+srv://ops_monitor:${OPS_PASSWORD}@${CLUSTER_HOST}/admin?retryWrites=true&w=majority&appName=hr154ops"
+
+mongosh "$MONGODB_URI" --eval 'db.runCommand({ ping: 1 })'
+mongosh "$OPS_URI" --eval 'db.hello()'
+mongosh "$OPS_URI" --eval 'rs.status()'
+mongosh "$OPS_URI" --eval 'db.adminCommand({ replSetGetStatus: 1 })'</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">Failover drill</div>
+                <ul>
+                  <li>From Atlas UI: go to the cluster, open the <code>...</code> menu, and run <strong>Test Failover</strong>.</li>
+                  <li>Keep a second terminal running the watch loop below to see primary changes.</li>
+                </ul>
+                <pre><code>watch -n 2 'mongosh "$OPS_URI" --quiet --eval "EJSON.stringify(db.hello())"'</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">What to observe</div>
+                <ul>
+                  <li>Which node is primary before and after failover.</li>
+                  <li>How long writes are briefly interrupted during election.</li>
+                  <li>How <code>optimeDate</code>, heartbeat state, and <code>isWritablePrimary</code> change.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">E</div>
+              <div class="step-title">Load sample data and tune queries</div>
+              <div class="tag">Performance + indexing</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>mongosh "$MONGODB_URI" --eval '
+use appdb
+db.events.drop()
+const docs = []
+for (let i = 0; i &lt; 50000; i++) {
+  docs.push({
+    tenantId: i % 200,
+    status: i % 3 === 0 ? "OPEN" : "CLOSED",
+    amount: i % 1000,
+    createdAt: new Date(Date.now() - i * 60000),
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60000),
+    email: `user${i}@example.com`
+  })
+}
+db.events.insertMany(docs)
+db.events.find({ tenantId: 42, status: "OPEN" }).sort({ createdAt: -1 }).limit(20).explain("executionStats")
+db.events.createIndex({ tenantId: 1, status: 1, createdAt: -1 })
+db.events.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+db.events.find({ tenantId: 42, status: "OPEN" }).sort({ createdAt: -1 }).limit(20).explain("executionStats")
+'</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">What to compare</div>
+                <ul>
+                  <li>First explain plan should show <code>COLLSCAN</code> or poor document scan behavior.</li>
+                  <li>After the compound index, the winning plan should move toward <code>IXSCAN</code>.</li>
+                  <li>Check Atlas Performance Advisor and match its index suggestion against what you created manually.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Owner-level explanation</div>
+                <ul>
+                  <li>Unindexed queries might feel acceptable with thousands of documents and then collapse under millions because scan cost grows with collection size.</li>
+                  <li>Compound index order should follow filter selectivity and sort pattern, not guesswork.</li>
+                  <li>TTL indexes are operationally useful for expiring sessions, logs, and temporary records without batch cleanup jobs.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">F</div>
+              <div class="step-title">Practice backup, restore, and DR</div>
+              <div class="tag">Snapshots + PITR</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Atlas steps</div>
+                <ul>
+                  <li>Enable Cloud Backup on the cluster if your tier supports it.</li>
+                  <li>Trigger one manual snapshot.</li>
+                  <li>Walk through the restore screen and note that Atlas restores into a new cluster rather than overwriting the current one in place.</li>
+                  <li>Record an example target <code>RPO</code> and <code>RTO</code> for interview answers.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>mkdir -p ~/hr154-mongodb-atlas-lab/backups
+cd ~/hr154-mongodb-atlas-lab/backups
+
+mongodump --uri "$MONGODB_URI" --db appdb --archive=appdb.archive --gzip
+
+mongorestore \
+  --uri "$MONGODB_URI" \
+  --nsFrom "appdb.*" \
+  --nsTo "appdb_restore.*" \
+  --archive=appdb.archive \
+  --gzip</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">What to explain out loud</div>
+                <ul>
+                  <li>Snapshots and PITR solve different recovery windows; PITR gives finer recovery targets.</li>
+                  <li>Backup is not enough; restore testing proves the backup is operationally useful.</li>
+                  <li>Production DR should include restore validation, DNS or app cutover steps, and an application smoke test.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">G</div>
+              <div class="step-title">Lock down access and test failure cases</div>
+              <div class="tag">Security</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Atlas tasks</div>
+                <ul>
+                  <li>Create one read-only user for <code>appdb</code> only.</li>
+                  <li>Keep the IP access list restricted to your Ubuntu public IP.</li>
+                  <li>Review TLS enforcement, encryption at rest, audit options, and the difference between allowlists and private networking.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>read -rsp "Readonly user password: " READONLY_PASSWORD; echo
+
+export READONLY_URI="mongodb+srv://readonly_user:${READONLY_PASSWORD}@${CLUSTER_HOST}/appdb?retryWrites=true&w=majority"
+
+mongosh "$READONLY_URI" --eval 'db.events.findOne()'
+mongosh "$READONLY_URI" --eval 'db.events.insertOne({ shouldFail: true })'</code></pre>
+              </div>
+              <div class="mini-block">
+                <div class="label">What to say in interviews</div>
+                <ul>
+                  <li><code>0.0.0.0/0</code> is acceptable only for temporary lab access, not for production SaaS.</li>
+                  <li>Production-grade connectivity should move to VPC peering or PrivateLink equivalents so Atlas is not exposed via broad public ingress.</li>
+                  <li>Least privilege means separate users for app runtime, migrations, analytics, and admin operations.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">H</div>
+              <div class="step-title">Final proof that you actually practiced</div>
+              <div class="tag">Interview ready</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Capture these screenshots or notes</div>
+                <ul>
+                  <li>Terraform plan or apply output showing Atlas resources.</li>
+                  <li><code>rs.status()</code> output before or after test failover.</li>
+                  <li>One <code>explain("executionStats")</code> result before indexing and one after indexing.</li>
+                  <li>A successful <code>mongodump</code> and <code>mongorestore</code> run.</li>
+                  <li>A failed write attempt from a read-only user.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">If you finish all of the above</div>
+                <div class="quote">You will have touched every MongoDB Atlas theme named in the JD: cluster architecture and scaling, replication and high availability, backup and disaster recovery, performance tuning and query optimisation, and security and access control, all from an Ubuntu machine with commands you can repeat.</div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
