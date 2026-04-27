@@ -362,6 +362,15 @@
     font-size: inherit;
   }
 
+  .visual-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    border: 1px solid var(--line2);
+    background: #06111f;
+  }
+
   .quote {
     background: var(--s2);
     border: 1px solid var(--line2);
@@ -435,6 +444,7 @@
       <button class="tab-btn" id="t-progress" onclick="go('progress')">📍 Progress Track</button>
       <button class="tab-btn" id="t-topics" onclick="go('topics')">📚 Mongo Topics</button>
       <button class="tab-btn" id="t-direct-command-of-mongo-for-devops-workflows" onclick="go('direct-command-of-mongo-for-devops-workflows')">direct-command-of-mongo-for-devops-workflows</button>
+      <button class="tab-btn" id="t-mongo-visuals" onclick="go('mongo-visuals')">🖼️ Mongo Visuals</button>
       <button class="tab-btn" id="t-concepts" onclick="go('concepts')">🧠 All Concepts</button>
     </div>
   </nav>
@@ -1986,6 +1996,143 @@ mongosh "$READONLY_URI" --eval 'db.events.insertOne({ shouldFail: true })'</code
       </section>
 
       <p class="foot">Concise Mongo command sheet extracted from the Mongo Focus, Mongo Topics, and Ubuntu Practice Runbook sections in this file.</p>
+    </section>
+
+    <section class="panel" id="p-mongo-visuals">
+      <section class="hero">
+        <div class="eyebrow">MongoDB Atlas · Visual Learning</div>
+        <h1>Mongo Visuals</h1>
+        <p>This tab embeds the self-contained visual learning images created from <code>prompt.md</code>. Use it when you want diagrams first, commands second, and owner-level understanding of the five core MongoDB Atlas topics.</p>
+
+        <div class="banner">
+          <div class="banner-card">
+            <div class="k">Format</div>
+            <p><strong>Five SVG infographics</strong> covering architecture, failover, backup and DR, performance and indexing, and security.</p>
+          </div>
+          <div class="banner-card">
+            <div class="k">Open Separately</div>
+            <p><a href="../opencode-imgs-gpt/index.html" target="_blank" rel="noopener noreferrer">Open the standalone visual guide</a> if you want to view the images outside this tab.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="alert alert-green"><strong>Use:</strong> study each visual until you can explain the diagram out loud without looking at the labels. That is the fastest way to turn the concepts into interview answers.</div>
+
+      <section class="section">
+        <div class="section-label">Visual Study Set</div>
+        <div class="grid">
+          <article class="step">
+            <div class="step-head">
+              <div class="num">1</div>
+              <div class="step-title">Cluster architecture and scaling</div>
+              <div class="tag">Highest priority</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">What to understand from this image</div>
+                <ul>
+                  <li>When a replica set is enough and when sharding becomes necessary.</li>
+                  <li>Why vertical scaling is usually the first step before distributed complexity.</li>
+                  <li>How Atlas tiers, regions, and autoscaling choices affect cost and performance.</li>
+                </ul>
+              </div>
+              <img class="visual-img" src="../opencode-imgs-gpt/01-atlas-cluster-architecture-scaling.svg" alt="MongoDB Atlas cluster architecture and scaling visual guide">
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">2</div>
+              <div class="step-title">Replication, elections, failover, and HA</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">What to understand from this image</div>
+                <ul>
+                  <li>How oplog replication and heartbeats keep secondaries current.</li>
+                  <li>Why failover causes a brief write interruption instead of permanent outage.</li>
+                  <li>What <code>db.hello()</code> and <code>rs.status()</code> are showing during an election.</li>
+                </ul>
+              </div>
+              <img class="visual-img" src="../opencode-imgs-gpt/02-replication-elections-failover-ha.svg" alt="MongoDB replication elections failover and high availability visual guide">
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">3</div>
+              <div class="step-title">Backups, PITR, restore testing, and DR</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">What to understand from this image</div>
+                <ul>
+                  <li>The difference between snapshots and Point-in-Time Recovery.</li>
+                  <li>Why Atlas restores into a new cluster and why restore validation matters.</li>
+                  <li>How to explain <code>RPO</code> and <code>RTO</code> in operational terms.</li>
+                </ul>
+              </div>
+              <img class="visual-img" src="../opencode-imgs-gpt/03-backups-pitr-restore-dr.svg" alt="MongoDB backups point in time recovery restore testing and disaster recovery visual guide">
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">4</div>
+              <div class="step-title">Performance, query analysis, and indexing</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">What to understand from this image</div>
+                <ul>
+                  <li>How to read the difference between <code>COLLSCAN</code> and <code>IXSCAN</code>.</li>
+                  <li>Why compound index order must match real filter and sort patterns.</li>
+                  <li>Why slow queries should be fixed with query and index design before just resizing hardware.</li>
+                </ul>
+              </div>
+              <img class="visual-img" src="../opencode-imgs-gpt/04-performance-query-analysis-indexing.svg" alt="MongoDB performance query analysis and indexing visual guide">
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">5</div>
+              <div class="step-title">Security, networking, and access control</div>
+              <div class="tag">Mandatory</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">What to understand from this image</div>
+                <ul>
+                  <li>Why production Atlas security starts with network restriction and least privilege.</li>
+                  <li>When IP allowlists are acceptable and when private networking is the better design.</li>
+                  <li>How TLS, encryption at rest, KMS, and audit logs fit into the full security model.</li>
+                </ul>
+              </div>
+              <img class="visual-img" src="../opencode-imgs-gpt/05-security-networking-access-control.svg" alt="MongoDB security networking and access control visual guide">
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">How To Study With These</div>
+        <div class="step">
+          <div class="step-body">
+            <ul>
+              <li>Start with image 1 and image 2 because architecture and failover are the most interview-critical topics.</li>
+              <li>After each image, explain the diagram out loud in your own words without reading the labels.</li>
+              <li>Then switch back to the command tab and connect the diagram to the actual Atlas and <code>mongosh</code> commands.</li>
+              <li>If you can describe the picture, the failure mode, and the operator decision, you are learning at owner level.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <p class="foot">Embedded from <code>../opencode-imgs-gpt/</code> and aligned to the five highest-priority MongoDB Atlas interview themes in this prep file.</p>
     </section>
 
     <section class="panel" id="p-concepts">

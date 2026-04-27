@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+  <title id="title">MongoDB Atlas Cluster Architecture and Scaling</title>
+  <desc id="desc">Educational infographic explaining Atlas tiers, replica sets, sharding, regions, vertical scaling, horizontal scaling, and autoscaling boundaries.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#06111f"/><stop offset="1" stop-color="#0b1020"/></linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101a2c"/><stop offset="1" stop-color="#0c1322"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"/></marker>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0v48" fill="none" stroke="#20304a" stroke-width="1" opacity="0.35"/></pattern>
+  </defs>
+  <rect width="1280" height="900" fill="url(#bg)"/>
+  <rect width="1280" height="900" fill="url(#grid)" opacity="0.55"/>
+  <text x="64" y="78" fill="#f3f7fb" font-family="Arial, sans-serif" font-size="38" font-weight="800">MongoDB Atlas: Cluster Architecture and Scaling</text>
+  <text x="64" y="115" fill="#8ca0bc" font-family="Arial, sans-serif" font-size="18">Owner-level view: choose topology, size the cluster, place it in the right region, and scale safely.</text>
+
+  <rect x="54" y="150" width="360" height="650" rx="24" fill="url(#card)" stroke="#24314a"/>
+  <text x="82" y="195" fill="#38bdf8" font-family="Arial, sans-serif" font-size="20" font-weight="700">1. Tier Growth</text>
+  <text x="82" y="225" fill="#d9e3f0" font-family="Arial, sans-serif" font-size="15">Start small for labs, then scale up for production load.</text>
+  <rect x="115" y="620" width="80" height="92" rx="12" fill="#132235" stroke="#38bdf8"/>
+  <rect x="220" y="540" width="92" height="172" rx="12" fill="#132235" stroke="#4ade80"/>
+  <rect x="330" y="420" width="92" height="292" rx="12" fill="#132235" stroke="#fbbf24" transform="translate(-30 0)"/>
+  <text x="133" y="666" fill="#f3f7fb" font-family="Arial" font-size="18" font-weight="700">M0</text>
+  <text x="130" y="690" fill="#8ca0bc" font-family="Arial" font-size="13">Free lab</text>
+  <text x="242" y="622" fill="#f3f7fb" font-family="Arial" font-size="18" font-weight="700">M10</text>
+  <text x="236" y="646" fill="#8ca0bc" font-family="Arial" font-size="13">Practice</text>
+  <text x="315" y="555" fill="#f3f7fb" font-family="Arial" font-size="18" font-weight="700">M30+</text>
+  <text x="300" y="579" fill="#8ca0bc" font-family="Arial" font-size="13">Production</text>
+  <line x1="122" y1="370" x2="337" y2="285" stroke="#38bdf8" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="115" y="345" fill="#bbf7d0" font-family="Arial" font-size="17" font-weight="700">Vertical scaling</text>
+  <text x="115" y="370" fill="#8ca0bc" font-family="Arial" font-size="14">Bigger instance, more CPU/RAM/IOPS</text>
+
+  <rect x="452" y="150" width="380" height="650" rx="24" fill="url(#card)" stroke="#24314a"/>
+  <text x="480" y="195" fill="#38bdf8" font-family="Arial" font-size="20" font-weight="700">2. Replica Set First</text>
+  <text x="480" y="225" fill="#d9e3f0" font-family="Arial" font-size="15">Good default for most production apps before sharding.</text>
+  <circle cx="642" cy="372" r="70" fill="#12263a" stroke="#4ade80" stroke-width="4" filter="url(#glow)"/>
+  <text x="608" y="366" fill="#f3f7fb" font-family="Arial" font-size="18" font-weight="700">Primary</text>
+  <text x="600" y="392" fill="#8ca0bc" font-family="Arial" font-size="13">writes here</text>
+  <circle cx="535" cy="548" r="58" fill="#101f35" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="748" cy="548" r="58" fill="#101f35" stroke="#38bdf8" stroke-width="3"/>
+  <text x="499" y="552" fill="#d9e3f0" font-family="Arial" font-size="16" font-weight="700">Secondary</text>
+  <text x="713" y="552" fill="#d9e3f0" font-family="Arial" font-size="16" font-weight="700">Secondary</text>
+  <line x1="615" y1="435" x2="565" y2="500" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="670" y1="435" x2="720" y2="500" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="544" y="677" fill="#bbf7d0" font-family="Arial" font-size="17" font-weight="700">High availability</text>
+  <text x="515" y="705" fill="#8ca0bc" font-family="Arial" font-size="14">3 nodes across availability zones</text>
+
+  <rect x="870" y="150" width="356" height="650" rx="24" fill="url(#card)" stroke="#24314a"/>
+  <text x="898" y="195" fill="#38bdf8" font-family="Arial" font-size="20" font-weight="700">3. Sharding When Needed</text>
+  <text x="898" y="225" fill="#d9e3f0" font-family="Arial" font-size="15">Horizontal scale splits data across shards.</text>
+  <rect x="918" y="300" width="105" height="120" rx="16" fill="#12263a" stroke="#fbbf24"/>
+  <rect x="1048" y="300" width="105" height="120" rx="16" fill="#12263a" stroke="#fbbf24"/>
+  <rect x="982" y="480" width="105" height="120" rx="16" fill="#12263a" stroke="#fbbf24"/>
+  <text x="946" y="366" fill="#f3f7fb" font-family="Arial" font-size="17" font-weight="700">Shard A</text>
+  <text x="1076" y="366" fill="#f3f7fb" font-family="Arial" font-size="17" font-weight="700">Shard B</text>
+  <text x="1010" y="546" fill="#f3f7fb" font-family="Arial" font-size="17" font-weight="700">Shard C</text>
+  <line x1="1023" y1="360" x2="1048" y2="360" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1075" y1="420" x2="1055" y2="480" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="982" y1="480" x2="955" y2="420" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="916" y="660" width="260" height="78" rx="14" fill="#08111d" stroke="#31415f"/>
+  <text x="938" y="690" fill="#fbbf24" font-family="Arial" font-size="16" font-weight="700">Use sharding when:</text>
+  <text x="938" y="716" fill="#d9e3f0" font-family="Arial" font-size="14">data size or write load exceeds one replica set</text>
+
+  <rect x="74" y="820" width="1130" height="42" rx="14" fill="#071424" stroke="#31415f"/>
+  <text x="96" y="847" fill="#f3f7fb" font-family="Arial" font-size="17" font-weight="700">Interview rule:</text>
+  <text x="220" y="847" fill="#d9e3f0" font-family="Arial" font-size="17">Scale up and tune queries first; shard only when workload shape and data size justify distributed complexity.</text>
+</svg>
