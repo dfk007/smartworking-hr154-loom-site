@@ -426,6 +426,7 @@
       <button class="tab-btn on" id="t-mongo" onclick="go('mongo')">🍃 Mongo Focus</button>
       <button class="tab-btn" id="t-progress" onclick="go('progress')">📍 Progress Track</button>
       <button class="tab-btn" id="t-topics" onclick="go('topics')">📚 Mongo Topics</button>
+      <button class="tab-btn" id="t-direct-command-of-mongo-for-devops-workflows" onclick="go('direct-command-of-mongo-for-devops-workflows')">direct-command-of-mongo-for-devops-workflows</button>
       <button class="tab-btn" id="t-concepts" onclick="go('concepts')">🧠 All Concepts</button>
     </div>
   </nav>
@@ -1601,6 +1602,276 @@ mongodbatlas_project_ip_access_list.home</code></pre>
       </section>
 
       <p class="foot">Progress snapshot based on your Atlas CLI setup, Terraform validate/plan/apply results, current Terraform state, and the Mongo runbook in this directory.</p>
+    </section>
+
+    <section class="panel" id="p-direct-command-of-mongo-for-devops-workflows">
+      <section class="hero">
+        <div class="eyebrow">MongoDB Atlas · Direct Commands</div>
+        <h1>Direct Command Of Mongo For DevOps Workflows</h1>
+        <p>Only the concise Mongo workflow sections, core concepts, and direct commands taken from this file. Use this tab as the repeatable command sheet for Atlas-oriented DevOps practice.</p>
+
+        <div class="banner">
+          <div class="banner-card">
+            <div class="k">Focus</div>
+            <p><strong>Mongo-only workflow view</strong>: setup, provisioning, replication, performance, backup, and security.</p>
+          </div>
+          <div class="banner-card">
+            <div class="k">Format</div>
+            <p>Each section shows a short concept list first, then the direct commands for that Mongo workflow.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="alert alert-green"><strong>Use:</strong> run the commands section by section and keep the concepts as the interview vocabulary for each workflow.</div>
+
+      <section class="section">
+        <div class="section-label">Mongo Workflow Commands</div>
+        <div class="grid">
+          <article class="step">
+            <div class="step-head">
+              <div class="num">1</div>
+              <div class="step-title">Tooling and shell setup</div>
+              <div class="tag">Foundation</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li><code>mongosh</code> shell access.</li>
+                  <li><code>mongodump</code> and <code>mongorestore</code> for logical backup and restore.</li>
+                  <li>Terraform for Atlas IaC workflows.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>sudo apt update
+sudo apt install -y curl gnupg unzip jq ca-certificates software-properties-common
+
+source /etc/os-release
+echo "$VERSION_CODENAME"
+
+curl -fsSL https://pgp.mongodb.com/server-8.0.asc | \
+  sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+
+echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $VERSION_CODENAME/mongodb-org/8.0 multiverse" | \
+  sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+  sudo gpg -o /usr/share/keyrings/hashicorp-archive-keyring.gpg --dearmor
+
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $VERSION_CODENAME main" | \
+  sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+sudo apt update
+sudo apt install -y mongodb-mongosh mongodb-database-tools terraform
+
+mongosh --version
+mongodump --version
+terraform version</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">2</div>
+              <div class="step-title">Atlas workspace and environment</div>
+              <div class="tag">Access</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li>Atlas API keys.</li>
+                  <li><code>ORG_ID</code> and <code>PROJECT_ID</code>.</li>
+                  <li>Reusable shell environment for Atlas automation.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>mkdir -p ~/hr154-mongodb-atlas-lab/terraform
+cd ~/hr154-mongodb-atlas-lab
+
+read -rp "Atlas public key: " MONGODB_ATLAS_PUBLIC_KEY
+read -rsp "Atlas private key: " MONGODB_ATLAS_PRIVATE_KEY; echo
+read -rp "Atlas org id: " MONGODB_ATLAS_ORG_ID
+read -rp "Atlas project id: " MONGODB_ATLAS_PROJECT_ID
+
+export MONGODB_ATLAS_PUBLIC_KEY
+export MONGODB_ATLAS_PRIVATE_KEY
+export MONGODB_ATLAS_ORG_ID
+export MONGODB_ATLAS_PROJECT_ID</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">3</div>
+              <div class="step-title">Cluster provisioning and scaling</div>
+              <div class="tag">Atlas IaC</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li><code>REPLICASET</code> topology.</li>
+                  <li>Tier sizing, region choice, and autoscaling bounds.</li>
+                  <li><code>mongodbatlas_advanced_cluster</code>, DB users, IP access list, backup schedule.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>curl ifconfig.me
+
+cd ~/hr154-mongodb-atlas-lab/terraform
+terraform init
+terraform fmt
+terraform validate
+terraform plan -var="project_id=$MONGODB_ATLAS_PROJECT_ID" -var="db_password=ChangeMe123!" -var="ops_password=MonitorMe123!"
+terraform apply -var="project_id=$MONGODB_ATLAS_PROJECT_ID" -var="db_password=ChangeMe123!" -var="ops_password=MonitorMe123!"
+terraform state list</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">4</div>
+              <div class="step-title">Replication, elections, and failover</div>
+              <div class="tag">HA</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li>Primary, secondary, oplog, quorum, elections.</li>
+                  <li><code>db.hello()</code>, <code>rs.status()</code>, <code>replSetGetStatus</code>.</li>
+                  <li>Election timing, writable primary change, heartbeat and lag observation.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>read -rsp "Atlas app_rw password: " DB_PASSWORD; echo
+read -rsp "Atlas ops_monitor password: " OPS_PASSWORD; echo
+read -rp "Atlas SRV hostname (cluster url only): " CLUSTER_HOST
+
+export MONGODB_URI="mongodb+srv://app_rw:${DB_PASSWORD}@${CLUSTER_HOST}/appdb?retryWrites=true&w=majority&appName=hr154lab"
+export OPS_URI="mongodb+srv://ops_monitor:${OPS_PASSWORD}@${CLUSTER_HOST}/admin?retryWrites=true&w=majority&appName=hr154ops"
+
+mongosh "$MONGODB_URI" --eval 'db.runCommand({ ping: 1 })'
+mongosh "$OPS_URI" --eval 'db.hello()'
+mongosh "$OPS_URI" --eval 'rs.status()'
+mongosh "$OPS_URI" --eval 'db.adminCommand({ replSetGetStatus: 1 })'
+
+watch -n 2 'mongosh "$OPS_URI" --quiet --eval "EJSON.stringify(db.hello())"'</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">5</div>
+              <div class="step-title">Performance tuning and indexing</div>
+              <div class="tag">Query path</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li><code>explain("executionStats")</code>.</li>
+                  <li><code>COLLSCAN</code> vs <code>IXSCAN</code>.</li>
+                  <li>Compound index and TTL index usage.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>mongosh "$MONGODB_URI" --eval '
+use appdb
+db.events.drop()
+const docs = []
+for (let i = 0; i &lt; 50000; i++) {
+  docs.push({
+    tenantId: i % 200,
+    status: i % 3 === 0 ? "OPEN" : "CLOSED",
+    amount: i % 1000,
+    createdAt: new Date(Date.now() - i * 60000),
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60000),
+    email: `user${i}@example.com`
+  })
+}
+db.events.insertMany(docs)
+db.events.find({ tenantId: 42, status: "OPEN" }).sort({ createdAt: -1 }).limit(20).explain("executionStats")
+db.events.createIndex({ tenantId: 1, status: 1, createdAt: -1 })
+db.events.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+db.events.find({ tenantId: 42, status: "OPEN" }).sort({ createdAt: -1 }).limit(20).explain("executionStats")
+'</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">6</div>
+              <div class="step-title">Backup, restore, and DR</div>
+              <div class="tag">Recovery</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li>Snapshots and PITR.</li>
+                  <li><code>RPO</code> and <code>RTO</code>.</li>
+                  <li>Logical backup and restore validation.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>mkdir -p ~/hr154-mongodb-atlas-lab/backups
+cd ~/hr154-mongodb-atlas-lab/backups
+
+mongodump --uri "$MONGODB_URI" --db appdb --archive=appdb.archive --gzip
+
+mongorestore \
+  --uri "$MONGODB_URI" \
+  --nsFrom "appdb.*" \
+  --nsTo "appdb_restore.*" \
+  --archive=appdb.archive \
+  --gzip</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-head">
+              <div class="num">7</div>
+              <div class="step-title">Security, network, and access control</div>
+              <div class="tag">Least privilege</div>
+            </div>
+            <div class="step-body mini">
+              <div class="mini-block">
+                <div class="label">Concepts</div>
+                <ul>
+                  <li>Scoped users and role separation.</li>
+                  <li>Restricted IP access instead of <code>0.0.0.0/0</code>.</li>
+                  <li>Read-only validation and failed-write testing.</li>
+                </ul>
+              </div>
+              <div class="mini-block">
+                <div class="label">Commands</div>
+                <pre><code>read -rsp "Readonly user password: " READONLY_PASSWORD; echo
+
+export READONLY_URI="mongodb+srv://readonly_user:${READONLY_PASSWORD}@${CLUSTER_HOST}/appdb?retryWrites=true&w=majority"
+
+mongosh "$READONLY_URI" --eval 'db.events.findOne()'
+mongosh "$READONLY_URI" --eval 'db.events.insertOne({ shouldFail: true })'</code></pre>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <p class="foot">Concise Mongo command sheet extracted from the Mongo Focus, Mongo Topics, and Ubuntu Practice Runbook sections in this file.</p>
     </section>
 
     <section class="panel" id="p-concepts">
